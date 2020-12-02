@@ -27,7 +27,7 @@ public class MemberService {
     public Optional<Member> getMemberById(Long id){
         return memberRepository.findById(id);
     }
-    public Iterable<Member> getAllMember(){
+    public Iterable<Member> getAllMembers(){
         return memberRepository.findAll();
     }
 }

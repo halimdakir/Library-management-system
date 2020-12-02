@@ -1,5 +1,7 @@
 package se.iths.library.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,7 +17,6 @@ public class Member {
     private Long id;
     @NotEmpty
     private String fullName;
-    @NotEmpty
     private Date dateOfBirth;
     private String address;
 

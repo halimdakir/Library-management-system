@@ -1,13 +1,10 @@
 package se.iths.library.controller;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import se.iths.library.entity.Member;
 import se.iths.library.service.MemberService;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Optional;
 
 @RestController

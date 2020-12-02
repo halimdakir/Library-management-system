@@ -1,9 +1,12 @@
 package se.iths.library.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 @Entity
@@ -12,12 +15,14 @@ public class Librarian {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String fullName;
+    @NotEmpty
+    @JsonFormat(pattern = "yyyy-mm-dd", shape = JsonFormat.Shape.STRING)
     private Date dateOfBirth;
 
     public Librarian() {
     }
 
-    public Librarian(String fullName, Date dateOfBirth) {
+    public Librarian(String fullName,@NotEmpty Date dateOfBirth) {
         this.fullName = fullName;
         this.dateOfBirth = dateOfBirth;
     }

@@ -1,13 +1,11 @@
 package se.iths.library.entity;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
-import java.util.Date;
 
 @Entity
 public class Member {
@@ -17,13 +15,15 @@ public class Member {
     private Long id;
     @NotEmpty
     private String fullName;
-    private Date dateOfBirth;
+    @JsonFormat(pattern = "yyyy-mm-dd", shape = JsonFormat.Shape.STRING)
+    @NotEmpty
+    private String dateOfBirth;
     private String address;
 
     public Member() {
     }
 
-    public Member(String fullName, Date dateOfBirth, String address) {
+    public Member(@NotEmpty String fullName,@NotEmpty String dateOfBirth, String address) {
         this.fullName = fullName;
         this.dateOfBirth = dateOfBirth;
         this.address = address;
@@ -45,11 +45,11 @@ public class Member {
         this.fullName = fullName;
     }
 
-    public Date getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

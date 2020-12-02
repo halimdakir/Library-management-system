@@ -1,7 +1,8 @@
-package se.iths.library;
+package se.iths.library.zMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import javax.faces.view.ViewScoped;
 
 @Component

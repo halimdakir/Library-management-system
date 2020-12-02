@@ -3,7 +3,6 @@ package se.iths.library.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.iths.library.entity.Librarian;
-import se.iths.library.entity.Member;
 import se.iths.library.repository.LibrarianRepository;
 
 import java.util.Optional;

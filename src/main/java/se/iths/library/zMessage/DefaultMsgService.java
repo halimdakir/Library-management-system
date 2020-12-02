@@ -1,4 +1,4 @@
-package se.iths.library;
+package se.iths.library.zMessage;
 
 import org.springframework.stereotype.Service;
 

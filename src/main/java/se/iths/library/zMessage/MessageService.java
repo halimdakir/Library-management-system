@@ -1,4 +1,4 @@
-package se.iths.library;
+package se.iths.library.zMessage;
 
 
 public interface MessageService {

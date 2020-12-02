@@ -8,7 +8,7 @@ import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 @Entity
-public class Item_Lending {
+public class ItemLending {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -19,7 +19,7 @@ public class Item_Lending {
     @NotEmpty
     private Date returnDate;
 
-    public Item_Lending() {
+    public ItemLending() {
     }
 
     public Long getId() {

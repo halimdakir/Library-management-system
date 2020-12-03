@@ -1,11 +1,12 @@
 package se.iths.library.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
-import java.util.Date;
 
 @Entity
 public class ItemLending {
@@ -13,44 +14,33 @@ public class ItemLending {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @NotEmpty
-    private Date creationDate;
+    @JsonFormat(pattern = "yyyy-mm-dd", shape = JsonFormat.Shape.STRING)
+    private String creationDate;
     @NotEmpty
-    private Date dueDate;
+    @JsonFormat(pattern = "yyyy-mm-dd", shape = JsonFormat.Shape.STRING)
+    private String dueDate;
     @NotEmpty
-    private Date returnDate;
+    @JsonFormat(pattern = "yyyy-mm-dd", shape = JsonFormat.Shape.STRING)
+    private String returnDate;
 
     public ItemLending() {
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Date getCreationDate() {
+    public String getCreationDate() {
         return creationDate;
     }
-
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
     }
-
-    public Date getDueDate() {
+    public String getDueDate() {
         return dueDate;
     }
-
-    public void setDueDate(Date dueDate) {
+    public void setDueDate(String dueDate) {
         this.dueDate = dueDate;
     }
-
-    public Date getReturnDate() {
+    public String getReturnDate() {
         return returnDate;
     }
-
-    public void setReturnDate(Date returnDate) {
+    public void setReturnDate(String returnDate) {
         this.returnDate = returnDate;
     }
 }

@@ -17,12 +17,12 @@ public class Librarian {
     private String fullName;
     @NotEmpty
     @JsonFormat(pattern = "yyyy-mm-dd", shape = JsonFormat.Shape.STRING)
-    private Date dateOfBirth;
+    private String dateOfBirth;
 
     public Librarian() {
     }
 
-    public Librarian(String fullName,@NotEmpty Date dateOfBirth) {
+    public Librarian(String fullName,@NotEmpty  String dateOfBirth) {
         this.fullName = fullName;
         this.dateOfBirth = dateOfBirth;
     }
@@ -43,11 +43,11 @@ public class Librarian {
         this.fullName = fullName;
     }
 
-    public Date getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 }

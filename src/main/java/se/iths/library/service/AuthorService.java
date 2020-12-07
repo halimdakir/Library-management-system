@@ -20,8 +20,8 @@ public class AuthorService {
         return authorRepository.save(author);
     }
     public void deleteAuthorById(Long id){
-        Optional<Author> foundMember = authorRepository.findById(id);
-        authorRepository.deleteById(foundMember.get().getId());
+        Optional<Author> foundAuthor = authorRepository.findById(id);
+        authorRepository.deleteById(foundAuthor.get().getId());
     }
     public Optional<Author> getAuthorById(Long id){
         return authorRepository.findById(id);

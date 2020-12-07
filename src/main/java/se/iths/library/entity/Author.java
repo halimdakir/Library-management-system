@@ -6,24 +6,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.NotEmpty;
 
 @Entity
-public class Librarian {
+public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String fullName;
-    @NotEmpty
     @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
     private String birthDate;
 
-    public Librarian() {
-    }
-
-    public Librarian(String fullName,@NotEmpty  String birthDate) {
-        this.fullName = fullName;
-        this.birthDate = birthDate;
+    public Author() {
     }
 
     public Long getId() {
@@ -46,7 +39,7 @@ public class Librarian {
         return birthDate;
     }
 
-    public void setBirthDate(String dateOfBirth) {
-        this.birthDate = dateOfBirth;
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 }

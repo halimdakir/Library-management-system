@@ -15,17 +15,17 @@ public class Member {
     private Long id;
     @NotEmpty
     private String fullName;
-    @JsonFormat(pattern = "yyyy-mm-dd", shape = JsonFormat.Shape.STRING)
+    @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
     @NotEmpty
-    private String dateOfBirth;
+    private String birthDate;
     private String address;
 
     public Member() {
     }
 
-    public Member(@NotEmpty String fullName,@NotEmpty String dateOfBirth, String address) {
+    public Member(@NotEmpty String fullName, @NotEmpty String birthDate, String address) {
         this.fullName = fullName;
-        this.dateOfBirth = dateOfBirth;
+        this.birthDate = birthDate;
         this.address = address;
     }
 
@@ -45,12 +45,12 @@ public class Member {
         this.fullName = fullName;
     }
 
-    public String getDateOfBirth() {
-        return dateOfBirth;
+    public String getBirthDate() {
+        return birthDate;
     }
 
-    public void setDateOfBirth(String dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setBirthDate(String dateOfBirth) {
+        this.birthDate = dateOfBirth;
     }
 
     public String getAddress() {

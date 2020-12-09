@@ -9,7 +9,10 @@ import se.iths.library.entity.Login;
 import se.iths.library.entity.Member;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 
 @Component
@@ -20,7 +23,7 @@ public class RegisterBean implements Serializable {
         private String fullName;
         private String birthDate;
         private String address;
-
+        private List<Member> memberList = new ArrayList<Member>();
         @Autowired
         MemberController memberController;
         @Autowired
@@ -36,11 +39,23 @@ public class RegisterBean implements Serializable {
                 loginController.createNewLogin(new Login(getEmail(), getPassword()));
 
         }
-        public List<Member> getMembers(){
-          return memberController.getAllMembers();
+        public List <Member> getMembers(){
+                Iterable<Member> iterable = memberController.getAllMembers();
+                memberList = StreamSupport.stream(iterable.spliterator(), false)
+                        .collect(Collectors.toList());
+
+          return memberList;
         }
         public String onFlowProcess(FlowEvent event) {
                 return event.getNewStep();
+        }
+
+        public List<Member> getMemberList() {
+                return memberList;
+        }
+
+        public void setMemberList(List<Member> memberList) {
+                this.memberList = memberList;
         }
 
         public String getEmail() {

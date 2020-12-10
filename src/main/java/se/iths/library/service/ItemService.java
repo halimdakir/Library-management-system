@@ -11,20 +11,19 @@ import java.util.Optional;
 public class ItemService {
 
     @Autowired
-   private ItemRepository itemRepository;
+    private ItemRepository itemRepository;
 
     public ItemService(ItemRepository itemRepository){
         this.itemRepository=itemRepository;
            }
 
-    public Item createItem(Item item){ return itemRepository.save(item);
+    public Item createItem(Item item){
+        return itemRepository.save(item);
     }
-
     public void deleteItemById(Long id){
         Optional<Item> foundItem = itemRepository.findById(id);
         itemRepository.deleteById(foundItem.get().getId());
     }
-
     public Optional<Item> getItemById(Long id){
         return itemRepository.findById(id);
     }

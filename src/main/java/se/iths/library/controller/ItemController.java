@@ -1,5 +1,6 @@
 package se.iths.library.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import se.iths.library.entity.Item;
 import se.iths.library.service.ItemService;
@@ -10,6 +11,7 @@ import java.util.Optional;
 @RequestMapping("/item")
 public class ItemController {
 
+    @Autowired
     private ItemService itemService;
     public ItemController(ItemService itemService){
         this.itemService=itemService;
@@ -24,7 +26,9 @@ public class ItemController {
         return itemService.getAllItems();
     }
     @PostMapping("/new")
-    public Item createNewItem(@RequestBody Item item) { return itemService.createItem(item);    }
+    public Item createNewItem(@RequestBody Item item) {
+        return itemService.createItem(item);
+    }
     @DeleteMapping("/id/{id}")
     public void deleteItemById(@PathVariable Long id){ itemService.deleteItemById(id);    }
 

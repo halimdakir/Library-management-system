@@ -9,21 +9,84 @@
     <title>Register</title>
     <h:outputStylesheet name="style.css" library="css" />
     <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+    <style type="text/css">
+        [class^="item"] {
+            text-align: center;
+        }
+        .grid {
+            font-family: Calibri, monospace;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, auto);
+            grid-template-areas:
+            "header header header header"
+            "menu menu menu menu"
+            "sidebar sidebar sidebar sidebar"
+            "footer footer footer footer";
+            grid-auto-flow: dense;
+            grid-gap: 5px;
+        }
+        .item1 {
+            grid-area: header;
+            text-align: center;
+        }
+
+        .item2 {
+            grid-area: menu;
+            background-color: darkslategray;
+            text-align: center;        }
+
+        .item3 {
+            height: auto;
+            grid-area: sidebar;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        .item4 {
+            grid-area: footer;
+            height: 25px;
+            background-color: darkslategray;
+            text-align: center;
+        }
+        .label {
+            width:20%;
+            padding:4px;
+        }
+
+        .value {
+            width:80%;
+            padding:4px;
+        }
+        .error {
+            color: red;
+        }
+
+        .outputLabel {
+            font-weight: bold;
+        }
+        h1{
+            font-family: 'Times New Roman', serif;
+            color: wheat;
+        }
+    </style>
 </h:head>
 
 <h:body styleClass="grid">
 
     <p:outputPanel styleClass="item1"></p:outputPanel>
-    <p:outputPanel styleClass="item2"></p:outputPanel>
+    <p:outputPanel styleClass="item2">
+        <h1>LIBRARY MANAGEMENT SYSTEM</h1>
+    </p:outputPanel>
     <p:outputPanel styleClass="item3">
-        <p:outputPanel styleClass="item3-body">
+        <p:outputPanel styleClass="item-body">
             <h:form onsubmit="" method="post">
 
                 <p:growl id="growl" sticky="true" showDetail="true"/>
 
                 <p:wizard flowListener="#{registerBean.onFlowProcess}">
                     <p:tab id="contact" title="Login">
-                        <p:panel header="Contact Information">
+                        <p:panel header="Contact Information" style="width: 1000px">
                             <p:messages />
                             <h:panelGrid columns="2" columnClasses="label, value">
                                 <h:outputText value="Email: *" />
@@ -34,7 +97,7 @@
                         </p:panel>
                     </p:tab>
                     <p:tab id="personal" title="Personal">
-                        <p:panel header="Personal Details">
+                        <p:panel header="Personal Details" style="width: 1000px">
                             <p:messages />
                             <h:panelGrid columns="2" columnClasses="label, value">
                                 <h:outputText value="Fullname: " />
@@ -49,7 +112,7 @@
                     </p:tab>
 
                     <p:tab id="address" title="Address">
-                        <p:panel header="Address Details">
+                        <p:panel header="Address Details" style="width: 1000px">
                             <p:messages />
                             <h:panelGrid columns="2" columnClasses="label, value">
                                 <h:outputText value="Address: " />
@@ -60,7 +123,7 @@
 
 
                     <p:tab id="confirm" title="Confirmation">
-                        <p:panel header="Confirmation">
+                        <p:panel header="Confirmation" style="width: 1000px">
                             <h:panelGrid id="confirmation" columns="3" columnClasses="grid,grid,grid">
                                 <h:panelGrid columns="2" columnClasses="label, value">
                                     <h:outputText value="Email: " />
@@ -86,7 +149,7 @@
                                 </h:panelGrid>
                             </h:panelGrid>
 
-                            <p:commandButton action="#{registerBean.addMember}" value="Submit" update="growl" process="@this"/>
+                            <p:commandButton action="#{registerBean.addMember}" value="Submit" update="growl" process="@this" icon="pi pi-check"/>
                         </p:panel>
                     </p:tab>
                 </p:wizard>

@@ -11,6 +11,7 @@ import javax.faces.view.ViewScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -18,33 +19,58 @@ import java.util.stream.StreamSupport;
 @Component
 @ViewScoped
 public class RegisterBean implements Serializable {
+        private boolean visible = false;
+        private Long id;
         private String email;
         private String password;
         private String fullName;
         private String birthDate;
         private String address;
-        private List<Member> memberList = new ArrayList<Member>();
+        private List<Member> memberList = new ArrayList<>();
+
         @Autowired
         MemberController memberController;
         @Autowired
         LoginController loginController;
 
-        /*public RegisterBean(MemberController memberController, LoginController loginController) {
-                this.memberController = memberController;
-                this.loginController = loginController;
-        }*/
 
+        public void show(){
+                visible = true;
+        }
+        public void hide(){
+                visible = false;
+        }
         public void addMember(){
                 memberController.createNewMember(new Member(getFullName(), getBirthDate(), getAddress()));
                 loginController.createNewLogin(new Login(getEmail(), getPassword()));
 
         }
-        public List <Member> getMembers(){
+        public void updateMember(Long id){
+                Optional<Member> member = memberController.getOneMemberById(id);
+                setId(member.get().getId());
+                setFullName(member.get().getFullName());
+                setBirthDate(member.get().getBirthDate());
+                setAddress(member.get().getAddress());
+                show();
+        }
+        public void saveMember(String fullName, String birthDate, String address, Long id){
+                Member member  = new Member(fullName, birthDate, address);
+                memberController.updateMember(member, id);
+                hide();
+                getMembers();
+        }
+        public void deleteMember(Long id){
+                memberController.deleteMemberById(id);
+                getMembers();
+        }
+        public void getMembers(){
                 Iterable<Member> iterable = memberController.getAllMembers();
                 memberList = StreamSupport.stream(iterable.spliterator(), false)
                         .collect(Collectors.toList());
-
-          return memberList;
+        }
+        public String moveToAdminDashboard() {
+                getMembers();
+                return "admin";
         }
         public String onFlowProcess(FlowEvent event) {
                 return event.getNewStep();
@@ -96,5 +122,21 @@ public class RegisterBean implements Serializable {
 
         public void setAddress(String address) {
                 this.address = address;
+        }
+
+        public boolean isVisible() {
+                return visible;
+        }
+
+        public void setVisible(boolean visible) {
+                this.visible = visible;
+        }
+
+        public Long getId() {
+                return id;
+        }
+
+        public void setId(Long id) {
+                this.id = id;
         }
 }

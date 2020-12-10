@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Home</title>
+    <h:outputStylesheet name="style.css" library="css" />
+    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+    <style type="text/css">
+        [class^="item"] {
+            text-align: center;
+        }
+        .grid {
+            font-family: Calibri, monospace;
+            display: grid;
+            width:100%;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, auto);
+            grid-template-areas:
+            "header header header header"
+            "menu menu menu menu"
+            "sidebar sidebar sidebar sidebar"
+            "footer footer footer footer";
+            grid-auto-flow: dense;
+            grid-gap: 5px;
+        }
+        .item1 {
+            grid-area: header;
+            text-align: center;
+        }
+
+        .item2 {
+            grid-area: menu;
+            background-color: darkslategray;
+            text-align: center;
+        }
+
+        .item3 {
+            height: auto;
+            grid-area: sidebar;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        .item4 {
+            grid-area: footer;
+            height: 25px;
+            background-color: darkslategray;
+            text-align: center;
+        }
+        h1{
+            font-family: 'Times New Roman', serif;
+            color: wheat;
+        }
+        .value {
+            font-weight: bold;
+        }
+
+    </style>
+</h:head>
+
+<h:body styleClass="grid">
+
+    <p:outputPanel styleClass="item1"></p:outputPanel>
+    <p:outputPanel styleClass="item2">
+        <h1>LIBRARY MANAGEMENT SYSTEM</h1>
+    </p:outputPanel>
+    <p:outputPanel styleClass="item3">
+            <h:form>
+                <p:growl id="growl" life="2000" />
+
+                <p:commandButton action="#{registerBean.moveToAdminDashboard()}" value="Admin" id="admin" update="growl" style="margin-right:20px;" icon="pi pi-user" title="Icon Only"/>
+
+                <p:commandButton action="#{itemBean.itemPage}" value="Item" id="item" update="growl" style="margin-right:20px;" icon="pi pi-book" title="Icon Only"/>
+
+            </h:form>
+    </p:outputPanel>
+    <p:outputPanel styleClass="item4"></p:outputPanel>
+</h:body>
+</html>
+
+

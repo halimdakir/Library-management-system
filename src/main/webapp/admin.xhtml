@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Admin Dashboard</title>
+    <h:outputStylesheet name="style.css" library="css" />
+    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+    <style type="text/css">
+        [class^="item"] {
+            text-align: center;
+        }
+        .grid {
+            font-family: Calibri, monospace;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, auto);
+            grid-template-areas:
+            "header header header header"
+            "menu menu menu menu"
+            "sidebar sidebar sidebar sidebar"
+            "footer footer footer footer";
+            grid-auto-flow: dense;
+            grid-gap: 5px;
+        }
+        .item1 {
+            grid-area: header;
+            text-align: center;
+        }
+
+        .item2 {
+            grid-area: menu;
+            background-color: darkslategray;
+            text-align: center;
+        }
+
+        .item3 {
+            grid-area: sidebar;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .item4 {
+            grid-area: footer;
+            height: 25px;
+            background-color: darkslategray;
+            text-align: center;
+        }
+        .item-body{
+
+        }
+        .grid {
+            width:100%;
+        }
+        h1{
+            font-family: 'Times New Roman', serif;
+            color: wheat;
+        }
+    </style>
+</h:head>
+
+<h:body styleClass="grid">
+
+    <p:outputPanel styleClass="item1"></p:outputPanel>
+    <p:outputPanel styleClass="item2">
+        <h1>LIBRARY MANAGEMENT SYSTEM</h1>
+    </p:outputPanel>
+    <p:outputPanel styleClass="item3">
+            <h3>Welcome to - Your admin dashboard</h3>
+            <p:tabView orientation="top">
+                    <p:tab title="Members" titleStyle="width: 200px; height: 80px">
+                        <h:panelGrid columns="1" cellpadding="10">
+                            <h:form>
+                                <h:panelGrid columns="2" columnClasses="label, value" rendered="#{registerBean.visible}">
+                                    <h:outputText value="Id: " />
+                                    <h:outputText styleClass="outputLabel" value="#{registerBean.id}"/>
+                                    <h:outputText value="Fullname: " />
+                                    <p:inputText  label="fullName" value="#{registerBean.fullName}"/>
+                                    <h:outputText value="Date of birth: " />
+                                    <p:inputText label="birthDate" value="#{registerBean.birthDate}"/>
+                                    <h:outputText value="Address: " />
+                                    <p:inputText label="address" value="#{registerBean.address}"/>
+                                    <!-- <h:outputText value="Phone: " />
+                                    <p:inputText />-->
+                                    <p:commandButton id="saveBtn" actionListener="#{registerBean.saveMember(registerBean.fullName, registerBean.birthDate, registerBean.address, registerBean.id)}" style="margin-right:20px;" icon="pi pi-save" update="@form" ajax="true">
+                                        <f:ajax execute="@form" render="@form"/>
+                                    </p:commandButton>
+                                </h:panelGrid>
+
+                                <p:dataTable var="member" value="#{registerBean.memberList}">
+                                    <p:column headerText="Id">
+                                        <h:outputText value="#{member.id}" />
+                                    </p:column>
+
+                                    <p:column headerText="FullName">
+                                        <h:outputText value="#{member.fullName}" />
+                                    </p:column>
+
+                                    <p:column headerText="Date of birth">
+                                        <h:outputText value="#{member.birthDate}" />
+                                    </p:column>
+
+                                    <p:column headerText="Address">
+                                        <h:outputText value="#{member.address}" />
+                                    </p:column>
+                                    <p:column headerText="Update" style="text-align: center">
+                                        <p:commandButton id="updateBtn" actionListener="#{registerBean.updateMember(member.id)}" style="margin-right:20px;" icon="pi pi-pencil" update="@form" ajax="true">
+                                            <f:ajax execute="@form" render="@form"/>
+                                        </p:commandButton>
+                                    </p:column>
+                                    <p:column headerText="Delete" style="text-align: center">
+                                        <p:commandButton id="deleteBtn" actionListener="#{registerBean.deleteMember(member.id)}" style="margin-right:20px;" icon="pi pi-trash" update="@form" ajax="true"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:form>
+                        </h:panelGrid>
+                    </p:tab>
+                <p:tab title="Items" titleStyle="width: 200px; height: 80px">
+                    <h:panelGrid columns="1" cellpadding="10">
+                        <h:outputText value="Francis Ford Coppola's legendary continuation and sequel to his landmark 1972 film, The_Godfather, parallels the young Vito Corleone's rise with his son Michael's spiritual fall, deepening The_Godfather's depiction of the dark side of the American dream.
+                In the early 1900s, the child Vito flees his Sicilian village for America after the local Mafia kills his family. Vito struggles to make a living, legally or illegally, for his wife and growing brood in Little Italy,
+                killing the local Black Hand Fanucci after he demands his customary cut of the tyro's business. With Fanucci gone, Vito's communal stature grows." />
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="Authors" titleStyle="width: 200px; height: 80px">
+                    <h:panelGrid columns="1" cellpadding="10">
+                        <h:outputText value="After a break of more than 15 years, director Francis Ford Coppola and writer Mario Puzo returned to the well for this third and final story of the fictional Corleone crime family.
+                    Two decades have passed, and crime kingpin Michael Corleone, now divorced from his wife Kay has nearly succeeded in keeping his promise that his family would one day be completely legitimate." />
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="Staff" titleStyle="width: 200px; height: 80px">
+                    <h:panelGrid columns="1" cellpadding="10">
+                        <h:outputText value="After a break of more than 15 years, director Francis Ford Coppola and writer Mario Puzo returned to the well for this third and final story of the fictional Corleone crime family.
+                    Two decades have passed, and crime kingpin Michael Corleone, now divorced from his wife Kay has nearly succeeded in keeping his promise that his family would one day be completely legitimate." />
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="Libraries" titleStyle="width: 200px; height: 80px">
+                    <h:panelGrid columns="1" cellpadding="10">
+                        <h:outputText value="After a break of more than 15 years, director Francis Ford Coppola and writer Mario Puzo returned to the well for this third and final story of the fictional Corleone crime family.
+                    Two decades have passed, and crime kingpin Michael Corleone, now divorced from his wife Kay has nearly succeeded in keeping his promise that his family would one day be completely legitimate." />
+                    </h:panelGrid>
+                </p:tab>
+            </p:tabView>
+
+
+
+    </p:outputPanel>
+    <p:outputPanel styleClass="item4"></p:outputPanel>
+</h:body>
+</html>

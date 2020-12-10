@@ -16,7 +16,6 @@ public class MemberService {
     public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
-
     public Member createMember(Member member){
         return memberRepository.save(member);
     }

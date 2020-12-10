@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Home</title>
+    <h:outputStylesheet name="style.css" library="css" />
+    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+    <style type="text/css">
+        [class^="item"] {
+            text-align: center;
+        }
+        .grid {
+            font-family: Calibri, monospace;
+            display: grid;
+            width:100%;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, auto);
+            grid-template-areas:
+            "header header header header"
+            "menu menu menu menu"
+            "sidebar sidebar sidebar sidebar"
+            "footer footer footer footer";
+            grid-auto-flow: dense;
+            grid-gap: 5px;
+        }
+        .item1 {
+            grid-area: header;
+            text-align: center;
+        }
+
+        .item2 {
+            grid-area: menu;
+            background-color: darkslategray;
+            text-align: center;
+        }
+
+        .item3 {
+            height: auto;
+            grid-area: sidebar;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        .item4 {
+            grid-area: footer;
+            height: 25px;
+            background-color: darkslategray;
+            text-align: center;
+        }
+        h1{
+            font-family: 'Times New Roman', serif;
+            color: wheat;
+        }
+        .value {
+            font-weight: bold;
+        }
+        /*demo*/
+        .ui-dataview-list .ui-dataview-row {
+            border-bottom: 1px solid #A8A8A8;
+            padding: 25px 10px;
+            /* with the exported variables from Nova and Luna Themes*/
+            border-bottom-color: var(--input-border-color, #A8A8A8);
+        }
+
+        .logo {
+            width: 5%;
+        }
+        .detail {
+            width: 85%;
+            padding-left: 25px;
+        }
+
+    </style>
+</h:head>
+
+<h:body styleClass="grid">
+
+    <p:outputPanel styleClass="item1"></p:outputPanel>
+    <p:outputPanel styleClass="item2">
+        <h1>LIBRARY MANAGEMENT SYSTEM</h1>
+    </p:outputPanel>
+    <p:outputPanel styleClass="item3">
+        <h:form id="form">
+            <p:dataView var="item" value="#{itemBean.itemList}"
+                        gridIcon="pi pi-th-large" listIcon="pi pi-bars">
+
+                <p:dataViewGridItem>
+                    <p:panel header="#{item.barCode}" style="text-align:center">
+                        <h:panelGrid columns="1" style="width:100%">
+                            <h:graphicImage value="resources/images/#{item.barCode}.jpg" style="width:200px; height: 270px"/>
+
+                            <h:outputText value="#{item.title}" />
+
+                            <p:commandLink update=":form:itemDetail" oncomplete="PF('itemDialog').show()" title="View Detail">
+                                <h:outputText styleClass="ui-icon pi pi-search" style="margin:0 auto;" />
+                                <f:setPropertyActionListener value="#{item}" target="#{itemBean.selectedItem}" />
+                            </p:commandLink>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:dataViewGridItem>
+
+                <p:dataViewListItem>
+                    <h:panelGrid columns="3" style="width:100%" columnClasses="logo,detail">
+                        <h:graphicImage value="resources/images/#{item.barCode}.jpg" style="width:200px; height: 270px"/>
+                        <p:outputPanel>
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <h:outputText value="title:" />
+                                <h:outputText value="#{item.title}" style="font-weight: bold"/>
+                            </h:panelGrid>
+                        </p:outputPanel>
+
+                        <p:commandLink update=":form:itemDetail" oncomplete="PF('itemDialog').show()" title="View Detail">
+                            <h:outputText styleClass="ui-icon pi pi-search" style="margin:0 auto;" />
+                            <f:setPropertyActionListener value="#{item}" target="#{itemBean.selectedItem}" />
+                        </p:commandLink>
+                    </h:panelGrid>
+                </p:dataViewListItem>
+            </p:dataView>
+
+            <p:dialog header="Item Info" widgetVar="itemDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                <p:outputPanel id="itemDetail" style="text-align:center;">
+                    <p:panelGrid  columns="2" rendered="#{not empty itemBean.selectedItem}" columnClasses="label,value">
+                        <f:facet name="header">
+                            <h:graphicImage value="resources/images/#{itemBean.selectedItem.barCode}.jpg" style="width:300px; height: 370px"/>
+                        </f:facet>
+
+                        <h:outputText value="Id:" />
+                        <h:outputText value="#{itemBean.selectedItem.id}" />
+
+                        <h:outputText value="Bar code" />
+                        <h:outputText value="#{itemBean.selectedItem.barCode}" />
+
+                        <h:outputText value="Title:" />
+                        <h:outputText value="#{itemBean.selectedItem.title}" />
+
+                    </p:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+    </p:outputPanel>
+    <p:outputPanel styleClass="item4"></p:outputPanel>
+</h:body>
+</html>

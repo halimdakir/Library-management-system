@@ -5,7 +5,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
-import java.util.Date;
 
 @Entity
 public class Item {
@@ -13,13 +12,18 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+    private String barCode;
     @NotEmpty
-    private Date title;
+    private String title;
 
 
     public Item(){
-          }
+    }
+
+    public Item(String barCode, @NotEmpty String title) {
+        this.barCode = barCode;
+        this.title = title;
+    }
 
     public Long getId() {
         return id;
@@ -29,11 +33,19 @@ public class Item {
         this.id = id;
     }
 
-    public Date getTitle() {
+    public String getBarCode() {
+        return barCode;
+    }
+
+    public void setBarCode(String barCode) {
+        this.barCode = barCode;
+    }
+
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(Date title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 }

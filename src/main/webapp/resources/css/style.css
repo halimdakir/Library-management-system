@@ -16,24 +16,28 @@
 }
 .item1 {
     grid-area: header;
+    text-align: center;
 }
 
 .item2 {
     grid-area: menu;
-    height: 100px;
-}
+    background-color: darkslategray;
+    text-align: center;        }
 
 .item3 {
+    height: auto;
     grid-area: sidebar;
-    display:flex;
+    text-align: center;
 }
 
 .item4 {
     grid-area: footer;
+    height: 25px;
+    background-color: darkslategray;
+    text-align: center;
 }
-.item3-body{
-    display: table;
-    margin: 0 auto;
+.item-body{
+
 }
 .login-form{
     border: 2px solid gray;
@@ -71,9 +75,4 @@
 
 .outputLabel {
     font-weight: bold;
-}
-
-.grid {
-    width:33%;
-    padding:4px;
 }

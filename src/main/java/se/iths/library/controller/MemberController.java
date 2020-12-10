@@ -28,6 +28,21 @@ public class MemberController {
     public Member createNewMember(@RequestBody Member member) {
         return memberService.createMember(member);
     }
+    @PutMapping("/id/{id}")
+    public Member updateMember(@RequestBody Member newMember, @PathVariable Long id) {
+
+        return memberService.getMemberById(id)
+                .map(member -> {
+                    member.setFullName(newMember.getFullName());
+                    member.setBirthDate(newMember.getBirthDate());
+                    member.setAddress(newMember.getAddress());
+                    return memberService.createMember(member);
+                })
+                .orElseGet(() -> {
+                    newMember.setId(id);
+                    return memberService.createMember(newMember);
+                });
+    }
     @DeleteMapping("/id/{id}")
     public void deleteMemberById(@PathVariable Long id){
         memberService.deleteMemberById(id);

@@ -1,0 +1,51 @@
+package se.iths.library.util;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import se.iths.library.entity.Author;
+import se.iths.library.entity.Item;
+import se.iths.library.repository.AuthorRepository;
+import se.iths.library.repository.ItemRepository;
+
+@Configuration
+public class SetUpDataBase {
+
+    @Bean
+    CommandLineRunner initDatabase(ItemRepository itemRepository, AuthorRepository authorRepository) {
+        return args -> {
+            if (itemRepository.count() == 0 && authorRepository.count() == 0) {
+                var item1 = new Item("ABC123NNM", "Wood", "Den här boken vill upphöja våra vardagliga och högtidliga stunder och göra dem vackrare och varmare...");
+                var item2 = new Item("RNM999THE", "Gå med mig till hörnet", "Elise är en bra bit över 50, hon lever i en stabil och ordnad tillvaro, gift med Henrik sedan 25...");
+                var item3 = new Item("AAA000BBB", "Mitt framgångsår", "\"Mitt framgångsår\" är en inspirerande metod- och anteckningsbok där framgångsexperten Alexander...");
+                var item4 = new Item("BAR444OBA", "Ett förlovat land", "En gripande, djupt personlig redogörelse om ögonblicken när historia skrivs - av presidenten som inspirerade...");
+                var item5 = new Item("OVE555LEV", "Överlevarna", "Han trycker telefonen hårt mot örat. Varför ingriper han inte? Han ser ner för slänten som mynnar ut i sjön. Han ser ...");
+
+                var author1 = new Author("Barack Obama", "1961/08/04");
+                var author2 = new Author("Alex Schulman", "1976/02/17");
+                var author3= new Author("Alexander Pärleros", "1985/03/09");
+                var author4 = new Author("Anneli Furmark", "1962/04/01");
+
+                item1.getAuthors().add(author3);
+                item1.getAuthors().add(author2);
+                item2.getAuthors().add(author2);
+                item4.getAuthors().add(author1);
+                item3.getAuthors().add(author4);
+                item5.getAuthors().add(author3);
+
+                author3.getItems().add(item1);
+                author2.getItems().add(item1);
+                author2.getItems().add(item2);
+                author1.getItems().add(item4);
+                author4.getItems().add(item3);
+                author3.getItems().add(item5);
+
+                itemRepository.save(item1);
+                itemRepository.save(item2);
+                itemRepository.save(item3);
+                itemRepository.save(item4);
+                itemRepository.save(item5);
+            }
+        };
+    }
+}

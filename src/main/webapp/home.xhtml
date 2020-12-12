@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title>Home</title>
@@ -70,9 +72,11 @@
             <h:form>
                 <p:growl id="growl" life="2000" />
 
-                <p:commandButton action="#{registerBean.moveToAdminDashboard()}" value="Admin" id="admin" update="growl" style="margin-right:20px;" icon="pi pi-user" title="Icon Only"/>
+                <p:commandButton action="#{registerBean.adminPage()}" value="Admin" update="growl" style="margin-right:20px;" icon="pi pi-user">
+                <f:actionListener binding="#{itemBean.getAllItems()}"/>
+                </p:commandButton>
 
-                <p:commandButton action="#{itemBean.itemPage}" value="Item" id="item" update="growl" style="margin-right:20px;" icon="pi pi-book" title="Icon Only"/>
+                <p:commandButton action="#{itemBean.itemPage()}" value="Item" update="growl" style="margin-right:20px;" icon="pi pi-book"/>
 
             </h:form>
     </p:outputPanel>

@@ -1,10 +1,9 @@
 package se.iths.library.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Item {
@@ -15,14 +14,30 @@ public class Item {
     private String barCode;
     @NotEmpty
     private String title;
+    private String description;
+
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "items_authors",
+            joinColumns = @JoinColumn(name = "item_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id"))
+    private Set<Author> authors = new HashSet<>();
 
 
     public Item(){
     }
 
-    public Item(String barCode, @NotEmpty String title) {
+    public Item(String barCode, @NotEmpty String title, String description) {
         this.barCode = barCode;
         this.title = title;
+        this.description = description;
+    }
+
+    public Item(String barCode, @NotEmpty String title, String description, Set<Author> authors) {
+        this.barCode = barCode;
+        this.title = title;
+        this.description = description;
+        this.authors = authors;
     }
 
     public Long getId() {
@@ -47,5 +62,21 @@ public class Item {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Set<Author> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(Set<Author> authors) {
+        this.authors = authors;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

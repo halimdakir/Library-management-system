@@ -30,6 +30,11 @@ public class ItemService {
     public Iterable<Item> getAllItems(){
         return itemRepository.findAll();
     }
-
+    public Iterable<Item> findItemByTitle(String title){
+        return itemRepository.findItemByTitle(title);
+    }
+    public Iterable<Item> findItemByAuthorName(String fullName){
+        return itemRepository.findItemByAuthorName(fullName);
+    }
 
 }

@@ -7,6 +7,7 @@ import se.iths.library.controller.LoginController;
 import se.iths.library.controller.MemberController;
 import se.iths.library.entity.Login;
 import se.iths.library.entity.Member;
+import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class RegisterBean implements Serializable {
         private String birthDate;
         private String address;
         private List<Member> memberList = new ArrayList<>();
+        private ItemBean itemBean;
 
         @Autowired
         MemberController memberController;
@@ -34,12 +36,19 @@ public class RegisterBean implements Serializable {
         LoginController loginController;
 
 
+
+        @PostConstruct
+        public void init(){
+                getMembers();
+        }
+
         public void show(){
                 visible = true;
         }
         public void hide(){
                 visible = false;
         }
+
         public void addMember(){
                 memberController.createNewMember(new Member(getFullName(), getBirthDate(), getAddress()));
                 loginController.createNewLogin(new Login(getEmail(), getPassword()));
@@ -68,12 +77,22 @@ public class RegisterBean implements Serializable {
                 memberList = StreamSupport.stream(iterable.spliterator(), false)
                         .collect(Collectors.toList());
         }
-        public String moveToAdminDashboard() {
+        public String adminPage() {
                 getMembers();
                 return "admin";
         }
         public String onFlowProcess(FlowEvent event) {
                 return event.getNewStep();
+        }
+
+        //<editor-fold desc="Getter & Setter">
+
+        public ItemBean getItemBean() {
+                return itemBean;
+        }
+
+        public void setItemBean(ItemBean itemBean) {
+                this.itemBean = itemBean;
         }
 
         public List<Member> getMemberList() {
@@ -139,4 +158,5 @@ public class RegisterBean implements Serializable {
         public void setId(Long id) {
                 this.id = id;
         }
+        //</editor-fold>
 }

@@ -2,10 +2,9 @@ package se.iths.library.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Author {
@@ -16,7 +15,15 @@ public class Author {
     @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
     private String birthDate;
 
+    @ManyToMany(mappedBy = "authors", cascade = { CascadeType.ALL })
+    Set<Item> items = new HashSet<>();
+
     public Author() {
+    }
+
+    public Author(String fullName, String birthDate) {
+        this.fullName = fullName;
+        this.birthDate = birthDate;
     }
 
     public Long getId() {
@@ -41,5 +48,12 @@ public class Author {
 
     public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public Set<Item> getItems() {
+        return items;
+    }
+    public void setItems(Set<Item> items) {
+        this.items = items;
     }
 }

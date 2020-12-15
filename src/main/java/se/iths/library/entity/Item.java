@@ -23,6 +23,8 @@ public class Item {
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<Author> authors = new HashSet<>();
 
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<ItemLending> itemLendingSet;
 
     public Item(){
     }
@@ -78,5 +80,13 @@ public class Item {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Set<ItemLending> getItemLendingSet() {
+        return itemLendingSet;
+    }
+
+    public void setItemLendingSet(Set<ItemLending> itemLendingSet) {
+        this.itemLendingSet = itemLendingSet;
     }
 }

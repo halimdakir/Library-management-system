@@ -24,20 +24,19 @@ public class ItemLending {
     @JoinColumn(name = "login_id", nullable = false)
     private Login login;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "item_id", nullable = false)
+    private Item item;
+
     public ItemLending() {
     }
 
-    public ItemLending(@NotEmpty String creationDate, @NotEmpty String dueDate, @NotEmpty String returnDate) {
-        this.creationDate = creationDate;
-        this.dueDate = dueDate;
-        this.returnDate = returnDate;
-    }
-
-    public ItemLending(@NotEmpty String creationDate, @NotEmpty String dueDate, @NotEmpty String returnDate, Login login) {
+    public ItemLending(@NotEmpty String creationDate, @NotEmpty String dueDate, @NotEmpty String returnDate, Login login, Item item) {
         this.creationDate = creationDate;
         this.dueDate = dueDate;
         this.returnDate = returnDate;
         this.login = login;
+        this.item = item;
     }
 
     public String getCreationDate() {
@@ -69,5 +68,13 @@ public class ItemLending {
     }
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
     }
 }

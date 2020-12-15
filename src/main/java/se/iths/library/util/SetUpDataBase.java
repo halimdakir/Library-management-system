@@ -36,12 +36,6 @@ public class SetUpDataBase {
                 var login2 = new Login("Salim@gmail.com", "654789", true);
                 var login3 = new Login("Dimo@gmail.com", "9514862", false);
 
-                var itemLending1 = new ItemLending();
-                var itemLending2 = new ItemLending();
-                var itemLending3 = new ItemLending();
-                var itemLending4 = new ItemLending();
-                var itemLending5 = new ItemLending();
-
 
                 item1.getAuthors().add(author3);
                 item1.getAuthors().add(author2);
@@ -76,9 +70,9 @@ public class SetUpDataBase {
                 userRepository.save(user2);
                 userRepository.save(user3);
 
-                itemLendingRepository.save(new ItemLending("2020/12/02", "2020/12/20", "2020/12/15", login1));
-                itemLendingRepository.save(new ItemLending("2020/12/03", "2020/12/21", "2020/12/13", login1));
-                itemLendingRepository.save(new ItemLending("2020/12/02", "2020/12/20", "2020/12/15", login2));
+                itemLendingRepository.save(new ItemLending("2020/12/02", "2020/12/20", "2020/12/15", login1, item1));
+                itemLendingRepository.save(new ItemLending("2020/12/03", "2020/12/21", "2020/12/13", login1, item2));
+                itemLendingRepository.save(new ItemLending("2020/12/02", "2020/12/20", "2020/12/15", login2, item5));
 
 
             }

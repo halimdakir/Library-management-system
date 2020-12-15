@@ -8,6 +8,9 @@ import se.iths.library.controller.UserController;
 import se.iths.library.entity.Login;
 import se.iths.library.entity.User;
 import se.iths.library.service.UserService;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -53,7 +56,9 @@ public class RegisterBean implements Serializable {
                 user.setLogin(login);
                 login.setUser(user);
                 userService.createUser(user);
-
+                FacesMessage msg = new FacesMessage("Successful", "Welcome :" + user.getFullName());
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+                emptyFields();
         }
 
         public void updateUser(Long id){
@@ -92,6 +97,15 @@ public class RegisterBean implements Serializable {
 
         public String onFlowProcess(FlowEvent event) {
                 return event.getNewStep();
+        }
+        private String emptyFields(){
+                setFullName("");
+                setBirthDate("");
+                setAddress("");
+                setEmail("");
+                setPassword("");
+                setAdmin(false);
+                return "login";
         }
 
 

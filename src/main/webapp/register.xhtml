@@ -80,7 +80,7 @@
     </p:outputPanel>
     <p:outputPanel styleClass="item3">
         <p:outputPanel styleClass="item-body">
-            <h:form onsubmit="" method="post">
+            <h:form>
 
                 <p:growl id="growl" sticky="true" showDetail="true"/>
 
@@ -90,9 +90,9 @@
                             <p:messages />
                             <h:panelGrid columns="2" columnClasses="label, value">
                                 <h:outputText value="Email: *" />
-                                <p:inputText label="Email" value="#{registerBean.email}"/>
-                                <h:outputText value="Password: " />
-                                <p:password label="Password" value="#{registerBean.password}"/>
+                                <p:inputText label="Email" value="#{registerBean.email}" required="true"/>
+                                <h:outputText value="Password: *" />
+                                <p:password label="Password" value="#{registerBean.password}" required="true"/>
                             </h:panelGrid>
                         </p:panel>
                     </p:tab>
@@ -100,9 +100,9 @@
                         <p:panel header="Personal Details" style="width: 1000px">
                             <p:messages />
                             <h:panelGrid columns="2" columnClasses="label, value">
-                                <h:outputText value="Fullname: " />
-                                <p:inputText  label="fullName" value="#{registerBean.fullName}"/>
-                                <h:outputText value="Date of birth: " />
+                                <h:outputText value="Fullname: *" />
+                                <p:inputText  label="fullName" value="#{registerBean.fullName}" required="true"/>
+                                <h:outputText value="Date of birth: *" />
                                 <p:inputText label="birthDate" value="#{registerBean.birthDate}"/>
                                 <!-- <h:outputText value="Phone: " />
                                 <p:inputText />-->
@@ -149,7 +149,7 @@
                                 </h:panelGrid>
                             </h:panelGrid>
 
-                            <p:commandButton action="#{registerBean.addUser}" value="Submit" update="growl" process="@this" icon="pi pi-check"/>
+                            <p:commandButton action="#{registerBean.addUser}" value="Submit" update="growl" process="@this" ajax="false" icon="pi pi-check"/>
                         </p:panel>
                     </p:tab>
                 </p:wizard>

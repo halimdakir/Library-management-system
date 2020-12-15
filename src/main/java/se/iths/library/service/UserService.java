@@ -41,9 +41,6 @@ public class UserService {
     public Iterable<User> getAllUsers(){
         return userRepository.findAll();
     }
-    public Iterable<User> getUserNotAdmin(){
-        return userRepository.findUsersNotAdmin();
-    }
     public Iterable<User> findUsersByLogin_IsAdmin(boolean isAdmin){
         return userRepository.findUsersByLogin_IsAdmin(isAdmin);
     }

@@ -72,10 +72,10 @@
             <h:form>
                 <p:growl id="growl" life="2000" />
 
-                <p:commandButton action="#{registerBean.adminPage()}" value="Admin" update="growl" style="margin-right:20px;" icon="pi pi-user">
+                <p:commandButton action="#{registerBean.adminPage()}" value="Admin" update="growl" style="margin-right:20px; height: 100px; width: 200px" icon="pi pi-user" >
                 </p:commandButton>
 
-                <p:commandButton action="#{itemBean.itemPage()}" value="Item" update="growl" style="margin-right:20px;" icon="pi pi-book"/>
+                <p:commandButton action="#{itemBean.itemPage()}" value="Item" update="growl" style="margin-right:20px; height: 100px; width: 200px" icon="pi pi-search"/>
 
             </h:form>
     </p:outputPanel>

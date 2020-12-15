@@ -91,46 +91,24 @@
             <p:tab title="Members" titleStyle="width: 200px; height: 80px">
                 <h:panelGrid columns="1" cellpadding="10">
                     <h:form>
-                        <h:panelGrid columns="2" columnClasses="label, value" rendered="#{registerBean.visible}">
-                            <h:outputText value="Id: " />
-                            <h:outputText styleClass="outputLabel" value="#{registerBean.id}"/>
-                            <h:outputText value="Fullname: " />
-                            <p:inputText  label="fullName" value="#{registerBean.fullName}"/>
-                            <h:outputText value="Date of birth: " />
-                            <p:inputText label="birthDate" value="#{registerBean.birthDate}"/>
-                            <h:outputText value="Address: " />
-                            <p:inputText label="address" value="#{registerBean.address}"/>
-                            <!-- <h:outputText value="Phone: " />
-                            <p:inputText />-->
-                            <p:commandButton id="saveBtn" actionListener="#{registerBean.saveUser(registerBean.fullName, registerBean.birthDate, registerBean.address, registerBean.id)}" style="margin-right:20px;" icon="pi pi-save" update="@form" ajax="true">
-                                <f:ajax execute="@form" render="@form"/>
-                            </p:commandButton>
-                        </h:panelGrid>
+                        <p>
+                            <p:inputText label="id" value="#{userBean.id}"/>
+                            <p:commandButton id="getItems" actionListener="#{userBean.getLendingItems(id)}" style="margin-right:20px;" icon="pi pi-search" update="@form" ajax="true"/>
+                        </p>
 
-                        <p:dataTable var="user" value="#{registerBean.userList}">
+                        <p:dataTable var="item" value="#{userBean.lendingItemsList}">
                             <p:column headerText="Id">
-                                <h:outputText value="#{user.id}" />
+                                <h:outputText value="#{item.id}" />
                             </p:column>
 
-                            <p:column headerText="FullName">
-                                <h:outputText value="#{user.fullName}" />
+                            <p:column headerText="ISBN">
+                                <h:outputText value="#{item.barCode}" />
                             </p:column>
 
-                            <p:column headerText="Date of birth">
-                                <h:outputText value="#{user.birthDate}" />
+                            <p:column headerText="Title">
+                                <h:outputText value="#{item.title}" />
                             </p:column>
 
-                            <p:column headerText="Address">
-                                <h:outputText value="#{user.address}" />
-                            </p:column>
-                            <p:column headerText="Update" style="text-align: center">
-                                <p:commandButton id="updateBtn" actionListener="#{registerBean.updateUser(user.id)}" style="margin-right:20px;" icon="pi pi-pencil" update="@form" ajax="true">
-                                    <f:ajax execute="@form" render="@form"/>
-                                </p:commandButton>
-                            </p:column>
-                            <p:column headerText="Delete" style="text-align: center">
-                                <p:commandButton id="deleteBtn" actionListener="#{registerBean.deleteUser(user.id)}" style="margin-right:20px;" icon="pi pi-trash" update="@form" ajax="true"/>
-                            </p:column>
                         </p:dataTable>
                     </h:form>
                 </h:panelGrid>

@@ -18,6 +18,6 @@ public interface ItemRepository extends CrudRepository <Item,Long> {
     Iterable<Item> findItemByAuthorName(@Param("fullName") String fullName);
 
     @Query("SELECT DISTINCT i FROM Item i INNER JOIN FETCH i.itemLendingSet il INNER JOIN FETCH il.login l INNER JOIN FETCH l.user u WHERE u.id =: id")
-    Iterable<Item> findLendingItemsByUserId();
+    Iterable<Item> findLendingItemsByUserId(@Param("id") Long id);
 
 }

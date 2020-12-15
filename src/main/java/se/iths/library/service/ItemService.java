@@ -36,5 +36,7 @@ public class ItemService {
     public Iterable<Item> findItemByAuthorName(String fullName){
         return itemRepository.findItemByAuthorName(fullName);
     }
-
+    public Iterable<Item>findLendingItemsByUserId(Long id){
+        return itemRepository.findLendingItemsByUserId(id);
+    }
 }

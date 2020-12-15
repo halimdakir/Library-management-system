@@ -8,4 +8,5 @@ import se.iths.library.entity.User;
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
         Iterable<User> findUsersByLogin_IsAdmin(boolean isAdmin);
+
 }

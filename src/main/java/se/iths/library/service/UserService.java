@@ -18,6 +18,19 @@ public class UserService {
     public User createUser(User user){
         return userRepository.save(user);
     }
+    public User updateUser(User newUser, Long id){
+        return userRepository.findById(id)
+                .map(user -> {
+                    user.setFullName(newUser.getFullName());
+                    user.setBirthDate(newUser.getBirthDate());
+                    user.setAddress(newUser.getAddress());
+                    return userRepository.save(user);
+                })
+                .orElseGet(() -> {
+                    newUser.setId(id);
+                    return userRepository.save(newUser);
+                });
+    }
     public void deleteUserById(Long id){
         Optional<User> foundMember = userRepository.findById(id);
         userRepository.deleteById(foundMember.get().getId());

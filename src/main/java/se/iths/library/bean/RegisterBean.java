@@ -29,7 +29,7 @@ public class RegisterBean implements Serializable {
         private String birthDate;
         private String address;
         private List<User> userList = new ArrayList<>();
-        private ItemBean itemBean;
+
 
         @Autowired
         UserController userController;
@@ -55,36 +55,45 @@ public class RegisterBean implements Serializable {
                 userService.createUser(user);
 
         }
+
         public void updateUser(Long id){
-                Optional<User> member = userService.getUserById(id);
-                setId(member.get().getId());
-                setFullName(member.get().getFullName());
-                setBirthDate(member.get().getBirthDate());
-                setAddress(member.get().getAddress());
-                show();
+                Optional<User> user = userService.getUserById(id);
+                if (user.isPresent()){
+                        setId(user.get().getId());
+                        setFullName(user.get().getFullName());
+                        setBirthDate(user.get().getBirthDate());
+                        setAddress(user.get().getAddress());
+                        show();
+                }
         }
+
         public void saveUser(String fullName, String birthDate, String address, Long id){
                 User user = new User(fullName, birthDate, address);
-                userController.updateUser(user, id);
-                hide();
+                userService.updateUser(user, id);
                 getUsers();
+                hide();
         }
+
         public void deleteUser(Long id){
                 userService.deleteUserById(id);
                 getUsers();
         }
+
         public void getUsers(){
                 Iterable<User> iterable = userService.findUsersByLogin_IsAdmin(false);//.getUserNotAdmin();//userService.getAllUsers();
                 userList = StreamSupport.stream(iterable.spliterator(), false)
                         .collect(Collectors.toList());
         }
+
         public String adminPage() {
                 getUsers();
                 return "admin";
         }
+
         public String onFlowProcess(FlowEvent event) {
                 return event.getNewStep();
         }
+
 
         //<editor-fold desc="Getter & Setter">
 

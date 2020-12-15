@@ -4,10 +4,10 @@ import org.primefaces.event.FlowEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import se.iths.library.controller.LoginController;
-import se.iths.library.controller.MemberController;
+import se.iths.library.controller.UserController;
 import se.iths.library.entity.Login;
-import se.iths.library.entity.Member;
-import javax.annotation.PostConstruct;
+import se.iths.library.entity.User;
+import se.iths.library.service.UserService;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -24,23 +24,21 @@ public class RegisterBean implements Serializable {
         private Long id;
         private String email;
         private String password;
+        private boolean isAdmin;
         private String fullName;
         private String birthDate;
         private String address;
-        private List<Member> memberList = new ArrayList<>();
+        private List<User> userList = new ArrayList<>();
         private ItemBean itemBean;
 
         @Autowired
-        MemberController memberController;
+        UserController userController;
+        @Autowired
+        UserService userService;
         @Autowired
         LoginController loginController;
 
 
-
-        @PostConstruct
-        public void init(){
-                getMembers();
-        }
 
         public void show(){
                 visible = true;
@@ -49,36 +47,39 @@ public class RegisterBean implements Serializable {
                 visible = false;
         }
 
-        public void addMember(){
-                memberController.createNewMember(new Member(getFullName(), getBirthDate(), getAddress()));
-                loginController.createNewLogin(new Login(getEmail(), getPassword()));
+        public void addUser(){
+                var user = new User(getFullName(), getBirthDate(), getAddress());
+                var login = new Login(getEmail(), getPassword(), isAdmin());
+                user.setLogin(login);
+                login.setUser(user);
+                userService.createUser(user);
 
         }
-        public void updateMember(Long id){
-                Optional<Member> member = memberController.getOneMemberById(id);
+        public void updateUser(Long id){
+                Optional<User> member = userService.getUserById(id);
                 setId(member.get().getId());
                 setFullName(member.get().getFullName());
                 setBirthDate(member.get().getBirthDate());
                 setAddress(member.get().getAddress());
                 show();
         }
-        public void saveMember(String fullName, String birthDate, String address, Long id){
-                Member member  = new Member(fullName, birthDate, address);
-                memberController.updateMember(member, id);
+        public void saveUser(String fullName, String birthDate, String address, Long id){
+                User user = new User(fullName, birthDate, address);
+                userController.updateUser(user, id);
                 hide();
-                getMembers();
+                getUsers();
         }
-        public void deleteMember(Long id){
-                memberController.deleteMemberById(id);
-                getMembers();
+        public void deleteUser(Long id){
+                userService.deleteUserById(id);
+                getUsers();
         }
-        public void getMembers(){
-                Iterable<Member> iterable = memberController.getAllMembers();
-                memberList = StreamSupport.stream(iterable.spliterator(), false)
+        public void getUsers(){
+                Iterable<User> iterable = userService.findUsersByLogin_IsAdmin(false);//.getUserNotAdmin();//userService.getAllUsers();
+                userList = StreamSupport.stream(iterable.spliterator(), false)
                         .collect(Collectors.toList());
         }
         public String adminPage() {
-                getMembers();
+                getUsers();
                 return "admin";
         }
         public String onFlowProcess(FlowEvent event) {
@@ -87,20 +88,13 @@ public class RegisterBean implements Serializable {
 
         //<editor-fold desc="Getter & Setter">
 
-        public ItemBean getItemBean() {
-                return itemBean;
+
+        public List<User> getMemberList() {
+                return userList;
         }
 
-        public void setItemBean(ItemBean itemBean) {
-                this.itemBean = itemBean;
-        }
-
-        public List<Member> getMemberList() {
-                return memberList;
-        }
-
-        public void setMemberList(List<Member> memberList) {
-                this.memberList = memberList;
+        public void setMemberList(List<User> userList) {
+                this.userList = userList;
         }
 
         public String getEmail() {
@@ -157,6 +151,22 @@ public class RegisterBean implements Serializable {
 
         public void setId(Long id) {
                 this.id = id;
+        }
+
+        public boolean isAdmin() {
+                return isAdmin;
+        }
+
+        public void setAdmin(boolean admin) {
+                isAdmin = admin;
+        }
+
+        public List<User> getUserList() {
+                return userList;
+        }
+
+        public void setUserList(List<User> userList) {
+                this.userList = userList;
         }
         //</editor-fold>
 }

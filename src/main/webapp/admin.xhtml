@@ -103,100 +103,41 @@
                                     <p:inputText label="address" value="#{registerBean.address}"/>
                                     <!-- <h:outputText value="Phone: " />
                                     <p:inputText />-->
-                                    <p:commandButton id="saveBtn" actionListener="#{registerBean.saveMember(registerBean.fullName, registerBean.birthDate, registerBean.address, registerBean.id)}" style="margin-right:20px;" icon="pi pi-save" update="@form" ajax="true">
+                                    <p:commandButton id="saveBtn" actionListener="#{registerBean.saveUser(registerBean.fullName, registerBean.birthDate, registerBean.address, registerBean.id)}" style="margin-right:20px;" icon="pi pi-save" update="@form" ajax="true">
                                         <f:ajax execute="@form" render="@form"/>
                                     </p:commandButton>
                                 </h:panelGrid>
 
-                                <p:dataTable var="member" value="#{registerBean.memberList}">
+                                <p:dataTable var="user" value="#{registerBean.userList}">
                                     <p:column headerText="Id">
-                                        <h:outputText value="#{member.id}" />
+                                        <h:outputText value="#{user.id}" />
                                     </p:column>
 
                                     <p:column headerText="FullName">
-                                        <h:outputText value="#{member.fullName}" />
+                                        <h:outputText value="#{user.fullName}" />
                                     </p:column>
 
                                     <p:column headerText="Date of birth">
-                                        <h:outputText value="#{member.birthDate}" />
+                                        <h:outputText value="#{user.birthDate}" />
                                     </p:column>
 
                                     <p:column headerText="Address">
-                                        <h:outputText value="#{member.address}" />
+                                        <h:outputText value="#{user.address}" />
                                     </p:column>
                                     <p:column headerText="Update" style="text-align: center">
-                                        <p:commandButton id="updateBtn" actionListener="#{registerBean.updateMember(member.id)}" style="margin-right:20px;" icon="pi pi-pencil" update="@form" ajax="true">
+                                        <p:commandButton id="updateBtn" actionListener="#{registerBean.updateUser(user.id)}" style="margin-right:20px;" icon="pi pi-pencil" update="@form" ajax="true">
                                             <f:ajax execute="@form" render="@form"/>
                                         </p:commandButton>
                                     </p:column>
                                     <p:column headerText="Delete" style="text-align: center">
-                                        <p:commandButton id="deleteBtn" actionListener="#{registerBean.deleteMember(member.id)}" style="margin-right:20px;" icon="pi pi-trash" update="@form" ajax="true"/>
+                                        <p:commandButton id="deleteBtn" actionListener="#{registerBean.deleteUser(user.id)}" style="margin-right:20px;" icon="pi pi-trash" update="@form" ajax="true"/>
                                     </p:column>
                                 </p:dataTable>
                             </h:form>
                         </h:panelGrid>
                     </p:tab>
                 <p:tab title="Items" titleStyle="width: 200px; height: 80px">
-                    <h:panelGrid columns="1" cellpadding="10">
 
-                        <h:form id="form">
-                            <p:dataView var="item" value="#{itemBean.itemList}"
-                                        gridIcon="pi pi-th-large" listIcon="pi pi-bars">
-
-                                <p:dataViewGridItem>
-                                    <p:panel header="#{item.barCode}" style="text-align:center">
-                                        <h:panelGrid columns="1" style="width:100%">
-                                            <h:graphicImage value="resources/images/#{item.barCode}.jpg" style="width:200px; height: 270px"/>
-
-                                            <h:outputText value="#{item.title}" />
-
-                                            <p:commandLink update=":form:itemDetail" oncomplete="PF('itemDialog').show()" title="View Detail">
-                                                <h:outputText styleClass="ui-icon pi pi-search" style="margin:0 auto;" />
-                                                <f:setPropertyActionListener value="#{item}" target="#{itemBean.selectedItem}" />
-                                            </p:commandLink>
-                                        </h:panelGrid>
-                                    </p:panel>
-                                </p:dataViewGridItem>
-
-                                <p:dataViewListItem>
-                                    <h:panelGrid columns="3" style="width:100%" columnClasses="logo,detail">
-                                        <h:graphicImage value="resources/images/#{item.barCode}.jpg" style="width:200px; height: 270px"/>
-                                        <p:outputPanel>
-                                            <h:panelGrid columns="2" cellpadding="5">
-                                                <h:outputText value="title:" />
-                                                <h:outputText value="#{item.title}" style="font-weight: bold"/>
-                                            </h:panelGrid>
-                                        </p:outputPanel>
-
-                                        <p:commandLink update=":form:itemDetail" oncomplete="PF('itemDialog').show()" title="View Detail">
-                                            <h:outputText styleClass="ui-icon pi pi-search" style="margin:0 auto;" />
-                                            <f:setPropertyActionListener value="#{item}" target="#{itemBean.selectedItem}" />
-                                        </p:commandLink>
-                                    </h:panelGrid>
-                                </p:dataViewListItem>
-                            </p:dataView>
-
-                            <p:dialog header="Item Info" widgetVar="itemDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                                <p:outputPanel id="itemDetail" style="text-align:center;">
-                                    <p:panelGrid  columns="2" rendered="#{not empty itemBean.selectedItem}" columnClasses="label,value">
-                                        <f:facet name="header">
-                                            <h:graphicImage value="resources/images/#{itemBean.selectedItem.barCode}.jpg" style="width:300px; height: 370px"/>
-                                        </f:facet>
-
-                                        <h:outputText value="Id:" />
-                                        <h:outputText value="#{itemBean.selectedItem.id}" />
-
-                                        <h:outputText value="Bar code" />
-                                        <h:outputText value="#{itemBean.selectedItem.barCode}" />
-
-                                        <h:outputText value="Title:" />
-                                        <h:outputText value="#{itemBean.selectedItem.title}" />
-
-                                    </p:panelGrid>
-                                </p:outputPanel>
-                            </p:dialog>
-                        </h:form>
-                    </h:panelGrid>
                 </p:tab>
                 <p:tab title="Authors" titleStyle="width: 200px; height: 80px">
                     <h:panelGrid columns="1" cellpadding="10">

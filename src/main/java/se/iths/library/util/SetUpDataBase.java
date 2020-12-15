@@ -3,11 +3,9 @@ package se.iths.library.util;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import se.iths.library.entity.Author;
-import se.iths.library.entity.Item;
-import se.iths.library.entity.Login;
-import se.iths.library.entity.User;
+import se.iths.library.entity.*;
 import se.iths.library.repository.AuthorRepository;
+import se.iths.library.repository.ItemLendingRepository;
 import se.iths.library.repository.ItemRepository;
 import se.iths.library.repository.UserRepository;
 
@@ -15,9 +13,9 @@ import se.iths.library.repository.UserRepository;
 public class SetUpDataBase {
 
     @Bean
-    CommandLineRunner initDatabase(ItemRepository itemRepository, AuthorRepository authorRepository, UserRepository userRepository) {
+    CommandLineRunner initDatabase(ItemRepository itemRepository, AuthorRepository authorRepository, UserRepository userRepository, ItemLendingRepository itemLendingRepository) {
         return args -> {
-            if (itemRepository.count() == 0 && authorRepository.count() == 0 && userRepository.count() == 0) {
+            if (itemRepository.count() == 0 && authorRepository.count() == 0 && userRepository.count() == 0 && itemLendingRepository.count()==0) {
                 var item1 = new Item("ABC123NNM", "Wood", "Den här boken vill upphöja våra vardagliga och högtidliga stunder och göra dem vackrare och varmare...");
                 var item2 = new Item("RNM999THE", "Gå med mig till hörnet", "Elise är en bra bit över 50, hon lever i en stabil och ordnad tillvaro, gift med Henrik sedan 25...");
                 var item3 = new Item("AAA000BBB", "Mitt framgångsår", "\"Mitt framgångsår\" är en inspirerande metod- och anteckningsbok där framgångsexperten Alexander...");
@@ -37,6 +35,13 @@ public class SetUpDataBase {
                 var login1 = new Login("Halim@gmail.com", "123456", false);
                 var login2 = new Login("Salim@gmail.com", "654789", true);
                 var login3 = new Login("Dimo@gmail.com", "9514862", false);
+
+                var itemLending1 = new ItemLending();
+                var itemLending2 = new ItemLending();
+                var itemLending3 = new ItemLending();
+                var itemLending4 = new ItemLending();
+                var itemLending5 = new ItemLending();
+
 
                 item1.getAuthors().add(author3);
                 item1.getAuthors().add(author2);
@@ -70,6 +75,10 @@ public class SetUpDataBase {
                 userRepository.save(user1);
                 userRepository.save(user2);
                 userRepository.save(user3);
+
+                itemLendingRepository.save(new ItemLending("2020/12/02", "2020/12/20", "2020/12/15", login1));
+                itemLendingRepository.save(new ItemLending("2020/12/03", "2020/12/21", "2020/12/13", login1));
+                itemLendingRepository.save(new ItemLending("2020/12/02", "2020/12/20", "2020/12/15", login2));
 
 
             }

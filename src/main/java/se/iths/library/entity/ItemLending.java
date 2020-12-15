@@ -2,10 +2,7 @@ package se.iths.library.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
@@ -23,8 +20,26 @@ public class ItemLending {
     @JsonFormat(pattern = "yyyy-mm-dd", shape = JsonFormat.Shape.STRING)
     private String returnDate;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "login_id", nullable = false)
+    private Login login;
+
     public ItemLending() {
     }
+
+    public ItemLending(@NotEmpty String creationDate, @NotEmpty String dueDate, @NotEmpty String returnDate) {
+        this.creationDate = creationDate;
+        this.dueDate = dueDate;
+        this.returnDate = returnDate;
+    }
+
+    public ItemLending(@NotEmpty String creationDate, @NotEmpty String dueDate, @NotEmpty String returnDate, Login login) {
+        this.creationDate = creationDate;
+        this.dueDate = dueDate;
+        this.returnDate = returnDate;
+        this.login = login;
+    }
+
     public String getCreationDate() {
         return creationDate;
     }
@@ -42,5 +57,17 @@ public class ItemLending {
     }
     public void setReturnDate(String returnDate) {
         this.returnDate = returnDate;
+    }
+    public Login getLogin() {
+        return login;
+    }
+    public void setLogin(Login login) {
+        this.login = login;
+    }
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
     }
 }

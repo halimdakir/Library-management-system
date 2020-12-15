@@ -2,6 +2,7 @@ package se.iths.library.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.Set;
 
 @Entity
 public class Login {
@@ -12,11 +13,14 @@ public class Login {
     private String email;
     @NotEmpty
     private String password;
-    private Boolean isAdmin;
+    private boolean isAdmin;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "login", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<ItemLending> itemLendingSet;
 
     public Login() {
     }
@@ -72,5 +76,13 @@ public class Login {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Set<ItemLending> getItemLendingSet() {
+        return itemLendingSet;
+    }
+
+    public void setItemLendingSet(Set<ItemLending> itemLendingSet) {
+        this.itemLendingSet = itemLendingSet;
     }
 }

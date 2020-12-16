@@ -13,7 +13,7 @@ public class Library {
     private String name;
     private String address;
 
-    @OneToMany(mappedBy = "Library", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "library", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Stock> stockSet;
 
     public Library() {
@@ -22,12 +22,6 @@ public class Library {
     public Library(@NotEmpty String name, String address) {
         this.name = name;
         this.address = address;
-    }
-
-    public Library(@NotEmpty String name, String address, Set<Stock> stockSet) {
-        this.name = name;
-        this.address = address;
-        this.stockSet = stockSet;
     }
 
     public Long getId() {

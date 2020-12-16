@@ -72,6 +72,9 @@ public class SetUpDataBase {
                 itemLendingRepository.save(new ItemLending("2020/12/03", "2020/12/21", "2020/12/13", login1, item2));
                 itemLendingRepository.save(new ItemLending("2020/12/02", "2020/12/20", "2020/12/15", login2, item5));
 
+                libraryRepository.save(library1);
+                libraryRepository.save(library2);
+
                 stockRepository.save(new Stock(20, item1, library1));
                 stockRepository.save(new Stock(10, item1, library2));
                 stockRepository.save(new Stock(15, item2, library2));

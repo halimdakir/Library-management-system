@@ -2,17 +2,14 @@ package se.iths.library.bean;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import se.iths.library.controller.ItemController;
 import se.iths.library.entity.Author;
 import se.iths.library.entity.Item;
 import se.iths.library.service.AuthorService;
 import se.iths.library.service.ItemService;
 
-import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 

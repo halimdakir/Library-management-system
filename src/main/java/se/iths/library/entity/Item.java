@@ -47,14 +47,6 @@ public class Item {
         this.authors = authors;
     }
 
-    public Item(@NotEmpty String barCode, @NotEmpty String title, String description, Set<Author> authors, Set<ItemLending> itemLendingSet, Set<Stock> stockSet) {
-        this.barCode = barCode;
-        this.title = title;
-        this.description = description;
-        this.authors = authors;
-        this.itemLendingSet = itemLendingSet;
-        this.stockSet = stockSet;
-    }
 
     public Long getId() {
         return id;

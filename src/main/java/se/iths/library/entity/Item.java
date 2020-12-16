@@ -11,6 +11,7 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @NotEmpty
     private String barCode;
     @NotEmpty
     private String title;
@@ -26,20 +27,33 @@ public class Item {
     @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<ItemLending> itemLendingSet;
 
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Stock> stockSet;
+
+
     public Item(){
     }
 
-    public Item(String barCode, @NotEmpty String title, String description) {
+    public Item(@NotEmpty String barCode, @NotEmpty String title, String description) {
         this.barCode = barCode;
         this.title = title;
         this.description = description;
     }
 
-    public Item(String barCode, @NotEmpty String title, String description, Set<Author> authors) {
+    public Item(@NotEmpty String barCode, @NotEmpty String title, String description, Set<Author> authors) {
         this.barCode = barCode;
         this.title = title;
         this.description = description;
         this.authors = authors;
+    }
+
+    public Item(@NotEmpty String barCode, @NotEmpty String title, String description, Set<Author> authors, Set<ItemLending> itemLendingSet, Set<Stock> stockSet) {
+        this.barCode = barCode;
+        this.title = title;
+        this.description = description;
+        this.authors = authors;
+        this.itemLendingSet = itemLendingSet;
+        this.stockSet = stockSet;
     }
 
     public Long getId() {
@@ -82,11 +96,4 @@ public class Item {
         this.description = description;
     }
 
-    public Set<ItemLending> getItemLendingSet() {
-        return itemLendingSet;
-    }
-
-    public void setItemLendingSet(Set<ItemLending> itemLendingSet) {
-        this.itemLendingSet = itemLendingSet;
-    }
 }

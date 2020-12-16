@@ -92,21 +92,19 @@
                 <h:panelGrid columns="1" cellpadding="10">
                     <h:form>
                         <p>
-                            <p:inputText label="id" value="#{userBean.id}"/>
-                            <p:commandButton id="getItems" actionListener="#{userBean.getLendingItems(id)}" style="margin-right:20px;" icon="pi pi-search" update="@form" ajax="true"/>
+                            <h:outputText value="Id: " />
+                            <p:inputText  label="id" value="#{userBean.id}"/>
+                            <p:commandButton id="getItems" actionListener="#{userBean.getLendingItems()}" style="margin-right:20px;" icon="pi pi-search" update="@form" ajax="true"/>
                         </p>
 
                         <p:dataTable var="item" value="#{userBean.lendingItemsList}">
-                            <p:column headerText="Id">
-                                <h:outputText value="#{item.id}" />
+
+                            <p:column headerText="Creation Date">
+                                <h:outputText value="#{item.creationDate}" />
                             </p:column>
 
-                            <p:column headerText="ISBN">
-                                <h:outputText value="#{item.barCode}" />
-                            </p:column>
-
-                            <p:column headerText="Title">
-                                <h:outputText value="#{item.title}" />
+                            <p:column headerText="Due Date">
+                                <h:outputText value="#{item.dueDate}" />
                             </p:column>
 
                         </p:dataTable>

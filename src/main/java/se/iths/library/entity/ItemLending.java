@@ -1,7 +1,6 @@
 package se.iths.library.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 

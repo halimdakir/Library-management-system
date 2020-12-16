@@ -4,18 +4,15 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import se.iths.library.entity.*;
-import se.iths.library.repository.AuthorRepository;
-import se.iths.library.repository.ItemLendingRepository;
-import se.iths.library.repository.ItemRepository;
-import se.iths.library.repository.UserRepository;
+import se.iths.library.repository.*;
 
 @Configuration
 public class SetUpDataBase {
 
     @Bean
-    CommandLineRunner initDatabase(ItemRepository itemRepository, AuthorRepository authorRepository, UserRepository userRepository, ItemLendingRepository itemLendingRepository) {
+    CommandLineRunner initDatabase(ItemRepository itemRepository, AuthorRepository authorRepository, UserRepository userRepository, ItemLendingRepository itemLendingRepository, StockRepository stockRepository, LibraryRepository libraryRepository) {
         return args -> {
-            if (itemRepository.count() == 0 && authorRepository.count() == 0 && userRepository.count() == 0 && itemLendingRepository.count()==0) {
+            if (itemRepository.count() == 0 && authorRepository.count() == 0 && userRepository.count() == 0 && itemLendingRepository.count()==0 && stockRepository.count()==0 && libraryRepository.count()==0) {
                 var item1 = new Item("ABC123NNM", "Wood", "Den här boken vill upphöja våra vardagliga och högtidliga stunder och göra dem vackrare och varmare...");
                 var item2 = new Item("RNM999THE", "Gå med mig till hörnet", "Elise är en bra bit över 50, hon lever i en stabil och ordnad tillvaro, gift med Henrik sedan 25...");
                 var item3 = new Item("AAA000BBB", "Mitt framgångsår", "\"Mitt framgångsår\" är en inspirerande metod- och anteckningsbok där framgångsexperten Alexander...");
@@ -36,6 +33,9 @@ public class SetUpDataBase {
                 var login2 = new Login("Salim@gmail.com", "654789", true);
                 var login3 = new Login("Dimo@gmail.com", "9514862", false);
 
+                var library1 = new Library("The big library", "Strängnäsgatan 3,41871 Göteborg");
+                var library2 = new Library("The 300m2 library", "Brunnsparken 12, 44160 Göteborg");
+
 
                 item1.getAuthors().add(author3);
                 item1.getAuthors().add(author2);
@@ -53,10 +53,8 @@ public class SetUpDataBase {
 
                 user1.setLogin(login1);
                 login1.setUser(user1);
-
                 user2.setLogin(login2);
                 login2.setUser(user2);
-
                 user3.setLogin(login3);
                 login3.setUser(user3);
 
@@ -74,6 +72,14 @@ public class SetUpDataBase {
                 itemLendingRepository.save(new ItemLending("2020/12/03", "2020/12/21", "2020/12/13", login1, item2));
                 itemLendingRepository.save(new ItemLending("2020/12/02", "2020/12/20", "2020/12/15", login2, item5));
 
+                stockRepository.save(new Stock(20, item1, library1));
+                stockRepository.save(new Stock(10, item1, library2));
+                stockRepository.save(new Stock(15, item2, library2));
+                stockRepository.save(new Stock(30, item3, library1));
+                stockRepository.save(new Stock(30, item3, library2));
+                stockRepository.save(new Stock(8, item4, library1));
+                stockRepository.save(new Stock(11, item5, library1));
+                stockRepository.save(new Stock(16, item5, library2));
 
             }
         };

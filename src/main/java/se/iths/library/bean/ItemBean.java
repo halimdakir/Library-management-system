@@ -36,11 +36,6 @@ public class ItemBean {
     AuthorService authorService;
 
 
-    @PostConstruct
-    public void init(){
-        getAllItems();
-    }
-
     public void getAllItems(){
         Iterable<Item> iterable = itemService.getAllItems();
         itemList = StreamSupport.stream(iterable.spliterator(), false)

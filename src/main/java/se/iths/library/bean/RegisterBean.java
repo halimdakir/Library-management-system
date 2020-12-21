@@ -90,9 +90,9 @@ public class RegisterBean implements Serializable {
                         .collect(Collectors.toList());
         }
 
-        public String adminPage() {
+        public void adminPage() {
                 getUsers();
-                return "admin";
+                //return "admin";
         }
 
         public String onFlowProcess(FlowEvent event) {

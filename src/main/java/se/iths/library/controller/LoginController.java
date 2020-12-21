@@ -1,19 +1,21 @@
 package se.iths.library.controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import se.iths.library.entity.Login;
 import se.iths.library.service.LoginService;
 
 @RestController
 @RequestMapping("/login")
 public class LoginController {
-    private LoginService loginService;
+    @Autowired
+    LoginService loginService;
 
-    public LoginController(LoginService loginService) {
-        this.loginService = loginService;
+
+
+    @GetMapping("")
+    public String login(){
+        return "login";
     }
 
     @PostMapping("/create")

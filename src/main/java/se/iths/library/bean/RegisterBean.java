@@ -10,6 +10,7 @@ import se.iths.library.entity.Login;
 import se.iths.library.entity.User;
 import se.iths.library.service.UserService;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -42,6 +43,10 @@ public class RegisterBean implements Serializable {
         @Autowired
         LoginController loginController;
 
+        @PostConstruct
+        public void init(){
+                getUsers();
+        }
 
 
 
@@ -92,9 +97,9 @@ public class RegisterBean implements Serializable {
                         .collect(Collectors.toList());
         }
 
-        public void adminPage() {
+        public String adminPage() {
                 getUsers();
-                //return "admin";
+                return "admin";
         }
 
         public String onFlowProcess(FlowEvent event) {

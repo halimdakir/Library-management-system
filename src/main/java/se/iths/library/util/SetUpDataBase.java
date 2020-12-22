@@ -30,9 +30,9 @@ public class SetUpDataBase {
                 var user2 = new User("Salim Salim", "2000/11/11", "Maroc");
                 var user3 = new User("Dimo Simo", "2000/11/11", "Maroc");
 
-                var login1 = new Login("Halim@gmail.com", "123456", Roles.ROLE_USER);
-                var login2 = new Login("Salim@gmail.com", "654789", Roles.ROLE_ADMIN);
-                var login3 = new Login("Dimo@gmail.com", "9514862", Roles.ROLE_USER);
+                var login1 = new Login("Halim@gmail.com", "123456",true, Roles.ROLE_USER);
+                var login2 = new Login("Salim@gmail.com", "654789", true, Roles.ROLE_ADMIN);
+                var login3 = new Login("Dimo@gmail.com", "9514862", false, Roles.ROLE_USER);
 
                 var library1 = new Library("The big library", "Strängnäsgatan 3,41871 Göteborg");
                 var library2 = new Library("The 300m2 library", "Brunnsparken 12, 44160 Göteborg");

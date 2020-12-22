@@ -3,14 +3,10 @@ package se.iths.library.security;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import se.iths.library.domain.Roles;
 import se.iths.library.entity.Login;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class MyUserDetails implements UserDetails {
@@ -26,10 +22,9 @@ public class MyUserDetails implements UserDetails {
         this.password = userLogin.getPassword();
         this.active = userLogin.isActive();
 
-        this.authorities = Arrays.stream(userLogin.getRoles().toString().split(""))
+        this.authorities = Arrays.stream(userLogin.getRoles().toString().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
-
     }
 
     @Override

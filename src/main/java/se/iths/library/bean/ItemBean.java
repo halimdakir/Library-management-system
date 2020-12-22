@@ -7,6 +7,7 @@ import se.iths.library.entity.Item;
 import se.iths.library.service.AuthorService;
 import se.iths.library.service.ItemService;
 
+import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,12 @@ public class ItemBean {
     AuthorService authorService;
 
 
+    @PostConstruct
+    public void init(){
+        getAllItems();
+    }
+
+
     public void getAllItems(){
         Iterable<Item> iterable = itemService.getAllItems();
         itemList = StreamSupport.stream(iterable.spliterator(), false)
@@ -41,6 +48,7 @@ public class ItemBean {
     public String itemPage(){
         getAllItems();
         return "item";
+
     }
     public void getItemByTitle(String word){
         switch (search) {

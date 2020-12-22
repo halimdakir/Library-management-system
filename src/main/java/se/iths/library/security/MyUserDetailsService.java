@@ -1,15 +1,23 @@
 package se.iths.library.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import se.iths.library.entity.Login;
+import se.iths.library.repository.LoginRepository;
+import java.util.Optional;
 
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
+    @Autowired
+    LoginRepository loginRepository;
+
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return null;
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Login userLogin = loginRepository.findByEmail(email);
+        return new MyUserDetails(userLogin);
     }
 }

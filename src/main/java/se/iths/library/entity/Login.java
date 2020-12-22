@@ -1,5 +1,7 @@
 package se.iths.library.entity;
 
+import se.iths.library.domain.Roles;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.Set;
@@ -13,7 +15,8 @@ public class Login {
     private String email;
     @NotEmpty
     private String password;
-    private boolean isAdmin;
+    private boolean active;
+    private Roles roles;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
@@ -25,18 +28,19 @@ public class Login {
     public Login() {
     }
 
-    public Login(@NotEmpty String email, @NotEmpty String password, boolean isAdmin) {
+    public Login(@NotEmpty String email, @NotEmpty String password, Roles roles) {
         this.email = email;
         this.password = password;
-        this.isAdmin = isAdmin;
+        this.roles = roles;
     }
 
-    public Login(@NotEmpty String email, @NotEmpty String password, boolean isAdmin, User user) {
+    public Login(@NotEmpty String email, @NotEmpty String password, Roles roles, User user) {
         this.email = email;
         this.password = password;
-        this.isAdmin = isAdmin;
+        this.roles = roles;
         this.user = user;
     }
+
 
     public Long getId() {
         return id;
@@ -62,12 +66,20 @@ public class Login {
         this.password = password;
     }
 
-    public boolean isAdmin() {
-        return isAdmin;
+    public boolean isActive() {
+        return active;
     }
 
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public Roles getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Roles roles) {
+        this.roles = roles;
     }
 
     public User getUser() {

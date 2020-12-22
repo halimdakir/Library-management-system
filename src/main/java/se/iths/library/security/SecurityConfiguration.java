@@ -1,4 +1,4 @@
-package se.iths.library.jwt;
+package se.iths.library.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -36,15 +36,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     }
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 
-        auth.inMemoryAuthentication()
-                .withUser("user").password("{noop}1234").roles("USER").and()
-                .withUser("admin").password("{noop}1234").credentialsExpired(true)
-                .accountExpired(true).accountLocked(true)
-                .authorities("WRITE_PRIVILEGES", "READ_PRIVILEGES")
-                .roles("ADMIN");
-
-    }
 }

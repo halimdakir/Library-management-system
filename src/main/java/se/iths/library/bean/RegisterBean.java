@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import se.iths.library.controller.LoginController;
 import se.iths.library.controller.UserController;
+import se.iths.library.domain.Roles;
 import se.iths.library.entity.Login;
 import se.iths.library.entity.User;
 import se.iths.library.service.UserService;
@@ -27,7 +28,7 @@ public class RegisterBean implements Serializable {
         private Long id;
         private String email;
         private String password;
-        private boolean isAdmin;
+        private boolean active;
         private String fullName;
         private String birthDate;
         private String address;
@@ -43,6 +44,7 @@ public class RegisterBean implements Serializable {
 
 
 
+
         public void show(){
                 visible = true;
         }
@@ -52,7 +54,7 @@ public class RegisterBean implements Serializable {
 
         public void addUser(){
                 var user = new User(getFullName(), getBirthDate(), getAddress());
-                var login = new Login(getEmail(), getPassword(), isAdmin());
+                var login = new Login(getEmail(), getPassword(), Roles.ROLE_USER);
                 user.setLogin(login);
                 login.setUser(user);
                 userService.createUser(user);
@@ -104,7 +106,6 @@ public class RegisterBean implements Serializable {
                 setAddress("");
                 setEmail("");
                 setPassword("");
-                setAdmin(false);
                 return "login";
         }
 
@@ -174,14 +175,6 @@ public class RegisterBean implements Serializable {
 
         public void setId(Long id) {
                 this.id = id;
-        }
-
-        public boolean isAdmin() {
-                return isAdmin;
-        }
-
-        public void setAdmin(boolean admin) {
-                isAdmin = admin;
         }
 
         public List<User> getUserList() {

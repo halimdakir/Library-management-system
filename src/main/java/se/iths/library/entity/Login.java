@@ -18,6 +18,7 @@ public class Login {
     private boolean active;
     private Roles roles;
 
+
     @OneToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

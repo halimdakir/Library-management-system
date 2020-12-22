@@ -87,7 +87,7 @@ public class RegisterBean implements Serializable {
         }
 
         public void getUsers(){
-                Iterable<User> iterable = userService.findUsersByLogin_IsAdmin(false);//.getUserNotAdmin();//userService.getAllUsers();
+                Iterable<User> iterable = userService.findUsersByLogin_Roles(Roles.ROLE_USER);
                 userList = StreamSupport.stream(iterable.spliterator(), false)
                         .collect(Collectors.toList());
         }

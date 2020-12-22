@@ -2,6 +2,7 @@ package se.iths.library.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.iths.library.domain.Roles;
 import se.iths.library.entity.User;
 import se.iths.library.repository.UserRepository;
 import java.util.Optional;
@@ -41,7 +42,7 @@ public class UserService {
     public Iterable<User> getAllUsers(){
         return userRepository.findAll();
     }
-    public Iterable<User> findUsersByLogin_IsAdmin(boolean isAdmin){
-        return userRepository.findUsersByLogin_IsAdmin(isAdmin);
+    public Iterable<User> findUsersByLogin_Roles(Roles roles){
+        return userRepository.findUsersByLogin_Roles(roles);
     }
 }

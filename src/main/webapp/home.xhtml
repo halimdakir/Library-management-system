@@ -73,8 +73,7 @@
             <h:form>
                 <p:growl id="growl" life="2000" />
 
-                <p:commandButton action="#{registerBean.adminPage()}" value="Admin" ajax="false" style="margin-right:20px; height: 100px; width: 200px" icon="pi pi-user" >
-                </p:commandButton>
+                <p:commandButton action="/login" value="Login" ajax="false" style="margin-right:20px; height: 100px; width: 200px" icon="pi pi-user"/>
                 <p:commandButton action="#{itemBean.itemPage()}" value="Item" ajax="false" style="margin-right:20px; height: 100px; width: 200px" icon="pi pi-search"/>
 
             </h:form>

@@ -3,12 +3,15 @@ package se.iths.library.util;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import se.iths.library.domain.Roles;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import se.iths.library.bean.ItemBean;
+import se.iths.library.models.Roles;
 import se.iths.library.entity.*;
 import se.iths.library.repository.*;
 
 @Configuration
 public class SetUpDataBase {
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Bean
     CommandLineRunner initDatabase(ItemRepository itemRepository, AuthorRepository authorRepository, UserRepository userRepository, ItemLendingRepository itemLendingRepository, StockRepository stockRepository, LibraryRepository libraryRepository) {
@@ -52,6 +55,11 @@ public class SetUpDataBase {
                 author4.getItems().add(item3);
                 author3.getItems().add(item5);
 
+                login1.setPassword(passwordEncoder.encode(login1.getPassword()));
+                login2.setPassword(passwordEncoder.encode(login2.getPassword()));
+                login3.setPassword(passwordEncoder.encode(login3.getPassword()));
+
+
                 user1.setLogin(login1);
                 login1.setUser(user1);
                 user2.setLogin(login2);
@@ -69,9 +77,9 @@ public class SetUpDataBase {
                 userRepository.save(user2);
                 userRepository.save(user3);
 
-                itemLendingRepository.save(new ItemLending("2020/12/02", "2020/12/20", "2020/12/15", login1, item1));
-                itemLendingRepository.save(new ItemLending("2020/12/03", "2020/12/21", "2020/12/13", login1, item2));
-                itemLendingRepository.save(new ItemLending("2020/12/02", "2020/12/20", "2020/12/15", login2, item5));
+                itemLendingRepository.save(new ItemLending("2020/12/02", "2020/12/20", "2020/12/15", user1, item1));
+                itemLendingRepository.save(new ItemLending("2020/12/03", "2020/12/21", "2020/12/13", user1, item2));
+                itemLendingRepository.save(new ItemLending("2020/12/02", "2020/12/20", "2020/12/15", user3, item5));
 
                 libraryRepository.save(library1);
                 libraryRepository.save(library2);

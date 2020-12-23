@@ -2,7 +2,7 @@ package se.iths.library.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import se.iths.library.domain.Roles;
+import se.iths.library.models.Roles;
 import se.iths.library.entity.User;
 import se.iths.library.repository.UserRepository;
 import java.util.Optional;

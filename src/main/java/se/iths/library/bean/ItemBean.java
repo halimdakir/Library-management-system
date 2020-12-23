@@ -34,11 +34,10 @@ public class ItemBean {
     AuthorService authorService;
 
 
-    @PostConstruct
-    public void init(){
+    public ItemBean(ItemService itemService) {
+        this.itemService = itemService;
         getAllItems();
     }
-
 
     public void getAllItems(){
         Iterable<Item> iterable = itemService.getAllItems();
@@ -80,7 +79,7 @@ public class ItemBean {
         }
     }
     public void getAuthors(Long id){
-        Iterable<Author> iterable = authorService.findAuthorByItemsTitle(id);
+        Iterable<Author> iterable = authorService.findAuthorByItemsId(id);
         authorList = StreamSupport.stream(iterable.spliterator(), false)
                 .collect(Collectors.toList());
     }

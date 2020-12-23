@@ -86,18 +86,25 @@
         <h1>LIBRARY MANAGEMENT SYSTEM</h1>
     </p:outputPanel>
     <p:outputPanel styleClass="item3">
-        <h3>Welcome to - Your User dashboard</h3>
-        <p:tabView orientation="top">
-            <p:tab title="Members" titleStyle="width: 200px; height: 80px">
+        <p:tabView orientation="center">
+            <p:tab title="BORROWED ITEM BY USER" titleStyle="width: 250px; height: 40px">
                 <h:panelGrid columns="1" cellpadding="10">
                     <h:form>
                         <p>
-                            <h:outputText value="Id: " />
+                            <h:outputText value="User ID: " />
                             <p:inputText  label="id" value="#{userBean.id}"/>
-                            <p:commandButton id="getItems" actionListener="#{userBean.getLendingItems()}" style="margin-right:20px;" icon="pi pi-search" update="@form" ajax="true"/>
+                            <p:commandButton id="getItems" actionListener="#{userBean.getBorrowedItems(userBean.id)}" style="margin-right:20px;" icon="pi pi-search" update="@form" ajax="true"/>
                         </p>
 
-                        <p:dataTable var="item" value="#{userBean.lendingItemsList}">
+                        <p:dataTable var="item" value="#{userBean.borrowedItemList}">
+
+                            <p:column headerText="ISBN">
+                                <h:outputText value="#{item.barCode}" />
+                            </p:column>
+
+                            <p:column headerText="Title">
+                                <h:outputText value="#{item.title}" />
+                            </p:column>
 
                             <p:column headerText="Creation Date">
                                 <h:outputText value="#{item.creationDate}" />

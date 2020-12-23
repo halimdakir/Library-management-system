@@ -1,4 +1,4 @@
-package se.iths.library.domain;
+package se.iths.library.models;
 
 public class LendingItemsDomain {
     private String barCode;

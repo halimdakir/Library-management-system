@@ -29,7 +29,7 @@ public class AuthorService {
     public Iterable<Author> getAllAuthors(){
         return authorRepository.findAll();
     }
-    public Iterable<Author> findAuthorByItemsTitle(Long id){
-        return authorRepository.findAuthorByItemsTitle(id);
+    public Iterable<Author> findAuthorByItemsId(Long id){
+        return authorRepository.findAuthorByItems_Id(id);
     }
 }

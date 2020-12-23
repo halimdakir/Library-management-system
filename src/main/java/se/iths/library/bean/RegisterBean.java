@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import se.iths.library.controller.LoginController;
 import se.iths.library.controller.UserController;
-import se.iths.library.domain.Roles;
+import se.iths.library.models.Roles;
 import se.iths.library.entity.Login;
 import se.iths.library.entity.User;
 import se.iths.library.service.UserService;
@@ -100,6 +100,9 @@ public class RegisterBean implements Serializable {
         public String adminPage() {
                 getUsers();
                 return "admin";
+        }
+        public String loginPage() {
+                return "login";
         }
 
         public String onFlowProcess(FlowEvent event) {

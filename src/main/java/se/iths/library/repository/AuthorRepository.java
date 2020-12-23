@@ -10,7 +10,7 @@ import se.iths.library.entity.Author;
 @Repository
 public interface AuthorRepository extends CrudRepository<Author, Long> {
 
-    @Query("SELECT DISTINCT a FROM Author a INNER JOIN FETCH a.items i WHERE i.id = :id")
-    Iterable<Author> findAuthorByItemsTitle(@Param("id") Long id);
+    @Query("SELECT DISTINCT a FROM Author a INNER JOIN FETCH a.items i WHERE i.id=:id")
+    Iterable<Author> findAuthorByItems_Id(@Param("id") Long id);
 
 }

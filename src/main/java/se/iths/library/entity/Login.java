@@ -1,6 +1,6 @@
 package se.iths.library.entity;
 
-import se.iths.library.domain.Roles;
+import se.iths.library.models.Roles;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -16,6 +16,7 @@ public class Login {
     @NotEmpty
     private String password;
     private boolean active;
+    @Enumerated(EnumType.STRING)
     private Roles roles;
 
 
@@ -23,8 +24,7 @@ public class Login {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "login", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<ItemLending> itemLendingSet;
+
 
     public Login() {
     }
@@ -98,11 +98,5 @@ public class Login {
         this.user = user;
     }
 
-    public Set<ItemLending> getItemLendingSet() {
-        return itemLendingSet;
-    }
 
-    public void setItemLendingSet(Set<ItemLending> itemLendingSet) {
-        this.itemLendingSet = itemLendingSet;
-    }
 }

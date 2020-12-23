@@ -20,8 +20,8 @@ public class ItemLending {
     private String returnDate;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "login_id", nullable = false)
-    private Login login;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "item_id", nullable = false)
@@ -30,11 +30,11 @@ public class ItemLending {
     public ItemLending() {
     }
 
-    public ItemLending(@NotEmpty String creationDate, @NotEmpty String dueDate, @NotEmpty String returnDate, Login login, Item item) {
+    public ItemLending(@NotEmpty String creationDate, @NotEmpty String dueDate, @NotEmpty String returnDate, User user, Item item) {
         this.creationDate = creationDate;
         this.dueDate = dueDate;
         this.returnDate = returnDate;
-        this.login = login;
+        this.user = user;
         this.item = item;
     }
 
@@ -56,11 +56,11 @@ public class ItemLending {
     public void setReturnDate(String returnDate) {
         this.returnDate = returnDate;
     }
-    public Login getLogin() {
-        return login;
+    public User getUser() {
+        return user;
     }
-    public void setLogin(Login login) {
-        this.login = login;
+    public void setUser(User user) {
+        this.user = user;
     }
     public Long getId() {
         return id;

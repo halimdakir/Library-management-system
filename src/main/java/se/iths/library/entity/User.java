@@ -3,6 +3,7 @@ package se.iths.library.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -21,6 +22,9 @@ public class User {
             cascade =  CascadeType.ALL,
             mappedBy = "user")
     private Login login;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<ItemLending> itemLendingSet;
 
     public User() {
     }
@@ -69,5 +73,13 @@ public class User {
 
     public void setLogin(Login login) {
         this.login = login;
+    }
+
+    public Set<ItemLending> getItemLendingSet() {
+        return itemLendingSet;
+    }
+
+    public void setItemLendingSet(Set<ItemLending> itemLendingSet) {
+        this.itemLendingSet = itemLendingSet;
     }
 }

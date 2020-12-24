@@ -23,8 +23,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/", "/home", "/home.xhtml", "/item", "/item.xhtml", "/register","/register.xhtml").permitAll()
+                .antMatchers("/item/all", "/item/id/**").permitAll()
+                .antMatchers("/user/all","/user/id/**").hasRole("ADMIN")
                 .antMatchers("/user", "/user.xhtml").hasRole( "USER")
-                .antMatchers("/admin", "/admin.xhtml").hasRole("ADMIN")
+                .antMatchers("/admin", "/admin.xhtml", "/users", "/users.xhtml", "/adminregister.xhtml").hasRole("ADMIN")
                 .and()
                 .formLogin().successHandler(successHandler).permitAll().and().logout().permitAll();
         http.csrf().disable();

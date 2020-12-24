@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Register User</title>
+    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+    <style type="text/css">
+        [class^="item"] {
+            text-align: center;
+        }
+        .grid {
+            font-family: Calibri, monospace;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, auto);
+            grid-template-areas:
+            "header header header header"
+            "menu menu menu menu"
+            "sidebar sidebar sidebar sidebar"
+            "footer footer footer footer";
+            grid-auto-flow: dense;
+            grid-gap: 5px;
+        }
+        .item1 {
+            grid-area: header;
+            text-align: center;
+            background-color: darkslategray;
+        }
+
+        .item2 {
+            grid-area: menu;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .item3 {
+            grid-area: sidebar;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .item4 {
+            grid-area: footer;
+            height: 25px;
+            background-color: darkslategray;
+            text-align: center;
+        }
+        .grid {
+            width:100%;
+        }
+        h1{
+            font-family: 'Times New Roman', serif;
+            color: wheat;
+        }
+        .value {
+            font-weight: bold;
+        }
+        /*demo*/
+        .ui-dataview-list .ui-dataview-row {
+            border-bottom: 1px solid #A8A8A8;
+            padding: 25px 10px;
+            /* with the exported variables from Nova and Luna Themes*/
+            border-bottom-color: var(--input-border-color, #A8A8A8);
+        }
+
+        .outerPanelGrid>tbody>tr{
+            border: none !important;
+        }
+        .outerPanelGrid>tbody>tr>td{
+            border: none !important;
+        }
+        .MenuItem{
+            width: 200px;
+        }
+    </style>
+</h:head>
+
+<h:body styleClass="grid">
+
+    <p:outputPanel styleClass="item1"><h1>LIBRARY MANAGEMENT SYSTEM</h1></p:outputPanel>
+
+    <p:outputPanel styleClass="item2">
+        <h:form>
+            <p:tabMenu activeIndex="#{param.i}">
+                <p:menuitem value="Members" icon="pi pi-caret-right" url="admin" styleClass="MenuItem">
+                    <f:param name="i" value="0" />
+                </p:menuitem>
+                <p:menuitem value="Lend" icon="pi pi-caret-right" url="users" styleClass="MenuItem">
+                    <f:param name="i" value="1" />
+                </p:menuitem>
+                <p:menuitem value="Items" icon="pi pi-caret-right" url="item.xhtml" styleClass="MenuItem">
+                    <f:param name="i" value="2" />
+                </p:menuitem>
+                <p:menuitem value="Infos" icon="pi pi-caret-right" styleClass="MenuItem">
+                    <f:param name="i" value="3" />
+                </p:menuitem>
+                <p:menuitem value="Register" icon="pi pi-caret-right" url="#" styleClass="MenuItem">
+                    <f:param name="i" value="4" />
+                </p:menuitem>
+            </p:tabMenu>
+        </h:form>
+    </p:outputPanel>
+
+    <p:outputPanel styleClass="item3" style="width: 100%">
+        <p:tabView orientation="center">
+            <p:tab title="CREATE NEW ADMIN / USER" titleStyle="width: 250px; height: 40px">
+                <h:panelGrid columns="1" cellpadding="10" style="margin: 0 auto;">
+                    <h:form>
+                        <p:messages />
+                        <p:panelGrid columns="2"  columnClasses="label , value" styleClass="outerPanelGrid">
+                                <h:outputText value="Email " />
+                                <p:inputText  label="email" value="#{registerBean.email}"/>
+                                <h:outputText value="Password " />
+                                <p:password  label="password" value="#{registerBean.password}"/>
+                                <h:outputText value="Role " />
+                                <p:selectOneRadio id="search" value="#{registerBean.role}" unselectable="true">
+                                    <div class="ui-g ui-fluid">
+                                        <div class="ui-g-12 ui-md-6">
+                                            <div class="ui-inputgroup">
+                                                <f:selectItem itemLabel="User" itemValue="User" />
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-6">
+                                            <div class="ui-inputgroup">
+                                                <f:selectItem itemLabel="Admin" itemValue="Admin" />
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </p:selectOneRadio>
+
+                                <h:outputText value="Fullname " />
+                                <p:inputText  label="fullName" value="#{registerBean.fullName}"/>
+                                <h:outputText value="Date of birth " />
+                                <p:inputText label="birthDate" value="#{registerBean.birthDate}"/>
+                                <h:outputText value="Address " />
+                                <p:inputText label="address" value="#{registerBean.address}"/>
+
+
+                            <p:commandButton id="saveBtn" value="Save" action="#{registerBean.addUserByAdmin()}" process="@this" ajax="false" style="margin-right:20px; background-color: #0378dc; color: black" icon="pi pi-save"/>
+                        </p:panelGrid>
+
+
+                    </h:form>
+                </h:panelGrid>
+            </p:tab>
+        </p:tabView>
+
+
+
+    </p:outputPanel>
+    <p:outputPanel styleClass="item4"></p:outputPanel>
+</h:body>
+</html>

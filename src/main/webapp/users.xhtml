@@ -6,7 +6,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 <h:head>
-    <title>User Dashboard</title>
+    <title>Manage Borrowed Items</title>
     <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
     <style type="text/css">
         [class^="item"] {
@@ -28,11 +28,11 @@
         .item1 {
             grid-area: header;
             text-align: center;
+            background-color: darkslategray;
         }
 
         .item2 {
             grid-area: menu;
-            background-color: darkslategray;
             text-align: center;
         }
 
@@ -76,20 +76,46 @@
             width: 85%;
             padding-left: 25px;
         }
+        .MenuItem{
+            width: 200px;
+        }
     </style>
 </h:head>
 
 <h:body styleClass="grid">
 
-    <p:outputPanel styleClass="item1"></p:outputPanel>
+    <p:outputPanel styleClass="item1"><h1>LIBRARY MANAGEMENT SYSTEM</h1></p:outputPanel>
     <p:outputPanel styleClass="item2">
-        <h1>LIBRARY MANAGEMENT SYSTEM</h1>
+        <h:form>
+            <p:tabMenu activeIndex="#{param.i}">
+                <p:menuitem value="Members" icon="pi pi-caret-right" url="admin" styleClass="MenuItem">
+                    <f:param name="i" value="0" />
+                </p:menuitem>
+                <p:menuitem value="Lend" icon="pi pi-caret-right" url="#" styleClass="MenuItem">
+                    <f:param name="i" value="1" />
+                </p:menuitem>
+                <p:menuitem value="Items" icon="pi pi-caret-right" url="item.xhtml" styleClass="MenuItem">
+                    <f:param name="i" value="2" />
+                </p:menuitem>
+                <p:menuitem value="Infos" icon="pi pi-caret-right" styleClass="MenuItem">
+                    <f:param name="i" value="3" />
+                </p:menuitem>
+                <p:menuitem value="Register" icon="pi pi-caret-right" url="adminregister" styleClass="MenuItem">
+                    <f:param name="i" value="4" />
+                </p:menuitem>
+            </p:tabMenu>
+        </h:form>
     </p:outputPanel>
     <p:outputPanel styleClass="item3">
         <p:tabView orientation="center">
-            <p:tab title="YOUR BORROWED ITEM LIST" titleStyle="width: 250px; height: 40px">
+            <p:tab title="BORROWED ITEM BY USER" titleStyle="width: 250px; height: 40px">
                 <h:panelGrid columns="1" cellpadding="10">
                     <h:form>
+                        <p>
+                            <h:outputText value="User ID: " />
+                            <p:inputText  label="id" value="#{userBean.id}"/>
+                            <p:commandButton id="getItems" actionListener="#{userBean.getBorrowedItems(userBean.id)}" style="margin-right:20px;" icon="pi pi-search" update="@form" ajax="true"/>
+                        </p>
 
                         <p:dataTable var="item" value="#{userBean.borrowedItemList}">
 

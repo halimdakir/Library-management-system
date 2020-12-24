@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import se.iths.library.entity.Login;
 import se.iths.library.repository.LoginRepository;
 
+import java.util.Optional;
+
 
 @Service
 public class LoginService {
@@ -22,6 +24,14 @@ public class LoginService {
     public Login createLogin(Login login){
         login.setPassword(passwordEncoder.encode(login.getPassword()));
         return loginRepository.save(login);
+    }
+    public boolean checkEmailIfExist(String email){
+        Optional<Login> login = loginRepository.findByEmail(email);
+        if (login.isPresent()){
+            return true;
+        }else {
+            return false;
+        }
     }
 
 }

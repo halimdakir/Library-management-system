@@ -2,12 +2,14 @@ package se.iths.library.bean;
 
 import org.primefaces.event.FlowEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import se.iths.library.controller.LoginController;
 import se.iths.library.controller.UserController;
 import se.iths.library.models.Roles;
 import se.iths.library.entity.Login;
 import se.iths.library.entity.User;
+import se.iths.library.service.LoginService;
 import se.iths.library.service.UserService;
 
 import javax.annotation.PostConstruct;
@@ -29,19 +31,20 @@ public class RegisterBean implements Serializable {
         private Long id;
         private String email;
         private String password;
-        private boolean active;
+        private String role;
         private String fullName;
         private String birthDate;
         private String address;
         private List<User> userList = new ArrayList<>();
 
-
+        private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         @Autowired
         UserController userController;
         @Autowired
         UserService userService;
         @Autowired
-        LoginController loginController;
+        LoginService loginService;
+
 
         @PostConstruct
         public void init(){
@@ -57,15 +60,57 @@ public class RegisterBean implements Serializable {
                 visible = false;
         }
 
+        //Add User by user
         public void addUser(){
                 var user = new User(getFullName(), getBirthDate(), getAddress());
-                var login = new Login(getEmail(), getPassword(), Roles.ROLE_USER);
-                user.setLogin(login);
-                login.setUser(user);
-                userService.createUser(user);
-                FacesMessage msg = new FacesMessage("Successful", "Welcome :" + user.getFullName());
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-                emptyFields();
+                String encodePassword = passwordEncoder.encode(getPassword());
+                boolean exist = loginService.checkEmailIfExist(getEmail());
+                if (!exist){
+                        var login = new Login(getEmail(), encodePassword, false, Roles.ROLE_USER);
+                        user.setLogin(login);
+                        login.setUser(user);
+                        userService.createUser(user);
+                        FacesMessage msg = new FacesMessage("Successful", "Welcome :" + user.getFullName());
+                        FacesContext.getCurrentInstance().addMessage(null, msg);
+                        emptyFields();
+                }else {
+                        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email already exist", "");
+                        FacesContext.getCurrentInstance().addMessage(null, msg);
+                }
+
+        }
+        public void emptyInputs(){
+                setEmail("");
+                setPassword("");
+                setRole("");
+                setFullName("");
+                setBirthDate("");
+                setAddress("");
+        }
+        //Add Admin or User by admin
+        public void addUserByAdmin(){
+                User user = new User(getFullName(), getBirthDate(), getAddress());
+                Login login;
+                String encodePassword = passwordEncoder.encode(getPassword());
+                boolean exist = loginService.checkEmailIfExist(getEmail());
+                if (!exist){
+                        if (role.equals("User")){
+                                login = new Login(getEmail(), encodePassword, true, Roles.ROLE_USER);
+
+                        }else {
+                                login = new Login(getEmail(), encodePassword, true, Roles.ROLE_ADMIN);
+                        }
+                        user.setLogin(login);
+                        login.setUser(user);
+                        userService.createUser(user);
+                        FacesMessage msg = new FacesMessage("Successful", "Welcome :" + user.getFullName());
+                        FacesContext.getCurrentInstance().addMessage(null, msg);
+                        emptyInputs();
+                }else {
+                        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email already exist", "");
+                        FacesContext.getCurrentInstance().addMessage(null, msg);
+                }
+
         }
 
         public void updateUser(Long id){
@@ -85,6 +130,14 @@ public class RegisterBean implements Serializable {
                 getUsers();
                 hide();
         }
+        public void cancelUpdate(){
+                setId(null);
+                setFullName("");
+                setBirthDate("");
+                setAddress("");
+                hide();
+        }
+
 
         public void deleteUser(Long id){
                 userService.deleteUserById(id);
@@ -192,5 +245,13 @@ public class RegisterBean implements Serializable {
         public void setUserList(List<User> userList) {
                 this.userList = userList;
         }
-        //</editor-fold>
+
+        public String getRole() {
+                return role;
+        }
+
+        public void setRole(String role) {
+                this.role = role;
+        }
+//</editor-fold>
 }

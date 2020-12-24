@@ -7,7 +7,7 @@ import se.iths.library.service.UserService;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/member")
+@RequestMapping("/user")
 public class UserController {
 
     private UserService userService;

@@ -33,6 +33,7 @@
 
         .item2 {
             grid-area: menu;
+            margin: 0 auto;
             text-align: center;
         }
 
@@ -76,6 +77,19 @@
             width: 85%;
             padding-left: 25px;
         }
+        .motherPanelGrid{
+            margin: 0 auto;
+        }
+        .outerPanelGrid{
+            width: 50%;
+            margin: 0 auto;
+        }
+        .outerPanelGrid>tbody>tr{
+            border: none !important;
+        }
+        .outerPanelGrid>tbody>tr>td{
+            border: none !important;
+        }
         .MenuItem{
             width: 200px;
         }
@@ -109,13 +123,12 @@
     <p:outputPanel styleClass="item3">
         <p:tabView orientation="center">
             <p:tab title="BORROWED ITEM BY USER" titleStyle="width: 250px; height: 40px">
-                <h:panelGrid columns="1" cellpadding="10">
+                <h:panelGrid columns="1" cellpadding="10" styleClass="motherPanelGrid">
                     <h:form>
-                        <p>
-                            <h:outputText value="User ID: " />
-                            <p:inputText  label="id" value="#{userBean.id}"/>
-                            <p:commandButton id="getItems" actionListener="#{userBean.getBorrowedItems(userBean.id)}" style="margin-right:20px;" icon="pi pi-search" update="@form" ajax="true"/>
-                        </p>
+                        <p:panelGrid columns="2" styleClass="outerPanelGrid">
+                            <p:inputText  label="id" value="#{userBean.email}" placeholder="user email" style="width: 100%"/>
+                            <p:commandButton id="getItems" actionListener="#{userBean.getBorrowedItems(userBean.email)}" style="margin-right:20px;" icon="pi pi-search" update="@form" ajax="true"/>
+                        </p:panelGrid>
 
                         <p:dataTable var="item" value="#{userBean.borrowedItemList}">
 

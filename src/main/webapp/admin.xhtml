@@ -33,6 +33,7 @@
 
         .item2 {
             grid-area: menu;
+            margin: 0 auto;
             text-align: center;
         }
 
@@ -65,7 +66,13 @@
             /* with the exported variables from Nova and Luna Themes*/
             border-bottom-color: var(--input-border-color, #A8A8A8);
         }
-
+        .motherPanelGrid{
+            margin: 0 auto;
+        }
+        .outerPanelGrid{
+            width: 50%;
+            margin: 0 auto;
+        }
         .outerPanelGrid>tbody>tr{
             border: none !important;
         }
@@ -105,53 +112,74 @@
     <p:outputPanel styleClass="item3">
             <p:tabView orientation="center">
                     <p:tab title="MANAGE MEMBERS" titleStyle="width: 250px; height: 40px">
-                        <h:panelGrid columns="1" cellpadding="10">
+                        <h:panelGrid columns="1" cellpadding="10" styleClass="motherPanelGrid">
                             <h:form>
+
+                                <p:panelGrid columns="2" styleClass="outerPanelGrid">
+                                    <p:selectOneMenu id="roleSelected" value="#{registerBean.roleSelected}" style="width: 96%">
+                                        <f:selectItem itemLabel="" itemValue="" />
+                                        <p:separator />
+                                        <f:selectItem itemLabel="Users" itemValue="Users" />
+                                        <f:selectItem itemLabel="Admins" itemValue="Admins" />
+                                        <f:selectItem itemLabel="All" itemValue="All" />
+                                    </p:selectOneMenu>
+                                    <p:commandButton id="getItems" actionListener="#{registerBean.getUsers()}" style="margin-right:20px;" icon="pi pi-search" update="@form" ajax="true"/>
+                                </p:panelGrid>
+
+                                <p:dialog header="UPDATE USER" widgetVar="dlg3" showEffect="explode" hideEffect="bounce" height="450" width="500">
                                 <p:panelGrid columns="2"  columnClasses="label , value" rendered="#{registerBean.visible}" styleClass="outerPanelGrid">
-                                    <h:outputText value="Id: " />
-                                    <h:outputText styleClass="outputLabel" value="#{registerBean.id}"/>
+                                    <p:inputText  label="userId" value="#{registerBean.id}" type="hidden"/>
+                                    <p:inputText  label="loginId" value="#{registerBean.loginId}" type="hidden"/>
+                                    <h:outputText value="Status: " />
+                                    <p:selectBooleanCheckbox value="#{registerBean.active}" itemLabel="Active"/>
                                     <h:outputText value="Fullname: " />
                                     <p:inputText  label="fullName" value="#{registerBean.fullName}"/>
+                                    <h:outputText value="Email: " />
+                                    <p:inputText  label="email" value="#{registerBean.email}"/>
+                                    <h:outputText value="Password: " />
+                                    <p:password label="email" value="#{registerBean.password}"/>
                                     <h:outputText value="Date of birth: " />
                                     <p:inputText label="birthDate" value="#{registerBean.birthDate}"/>
                                     <h:outputText value="Address: " />
                                     <p:inputText label="address" value="#{registerBean.address}"/>
+
                                     <p:commandButton id="cancelBtn" value="Cancel" actionListener="#{registerBean.cancelUpdate()}" style="margin-right:20px; background-color: #f60723; color: black" icon="pi pi-times-circle" update="@form" ajax="true">
                                         <f:ajax execute="@form" render="@form"/>
                                     </p:commandButton>
-                                    <p:commandButton id="saveBtn" value="Save" actionListener="#{registerBean.saveUser(registerBean.fullName, registerBean.birthDate, registerBean.address, registerBean.id)}" style="margin-right:20px; background-color: #0378dc; color: black" icon="pi pi-save" update="@form" ajax="true">
+                                    <p:commandButton id="saveBtn" value="Save" actionListener="#{registerBean.saveUser(registerBean.id, registerBean.loginId)}" style="margin-right:20px; background-color: #0378dc; color: black" icon="pi pi-save" update="@form" ajax="true">
                                         <f:ajax execute="@form" render="@form"/>
                                     </p:commandButton>
 
-                                    <!--<h:outputText value="Active: " />
-                                    <p:checkbox  label="active" value="#{registerBean.active}"/>-->
-                                    <!-- <h:outputText value="Phone: " />
-                                    <p:inputText />-->
                                 </p:panelGrid>
+                                </p:dialog>
 
                                 <p:dataTable var="user" value="#{registerBean.userList}">
-                                    <p:column headerText="Id">
-                                        <h:outputText value="#{user.id}" />
+                                    <p:column headerText="Active">
+                                        <p:selectBooleanCheckbox value="#{user.active}" disabled="true"/>
+                                        <h:outputText value="#{user.active}" />
                                     </p:column>
 
                                     <p:column headerText="FullName">
                                         <h:outputText value="#{user.fullName}" />
                                     </p:column>
+                                    <p:column headerText="Email">
+                                        <h:outputText value="#{user.email}" />
+                                    </p:column>
 
+                                    <p:column headerText="Roles">
+                                        <h:outputText value="#{user.roles}" />
+                                    </p:column>
                                     <p:column headerText="Date of birth">
                                         <h:outputText value="#{user.birthDate}" />
                                     </p:column>
 
-                                    <p:column headerText="Address">
-                                        <h:outputText value="#{user.address}" />
-                                    </p:column>
                                     <p:column headerText="Update" style="text-align: center">
-                                        <p:commandButton id="updateBtn" actionListener="#{registerBean.updateUser(user.id)}" style="margin-right:20px;" icon="pi pi-pencil" update="@form" ajax="true">
+                                        <p:commandButton id="updateBtn" oncomplete="PF('dlg3').show();" actionListener="#{registerBean.updateUser(user.userId, user.loginId)}" style="margin-right:20px;" icon="pi pi-pencil" update="@form" ajax="true">
                                             <f:ajax execute="@form" render="@form"/>
                                         </p:commandButton>
                                     </p:column>
                                     <p:column headerText="Delete" style="text-align: center">
-                                        <p:commandButton id="deleteBtn" actionListener="#{registerBean.deleteUser(user.id)}" style="margin-right:20px;" icon="pi pi-trash" update="@form" ajax="true"/>
+                                        <p:commandButton id="deleteBtn" actionListener="#{registerBean.deleteUser(user.userId, user.loginId)}" style="margin-right:20px;" icon="pi pi-trash" update="@form" ajax="true"/>
                                     </p:column>
                                 </p:dataTable>
                             </h:form>

@@ -13,6 +13,7 @@ import java.util.List;
 @Component
 @ViewScoped
 public class UserBean {
+    private String email;
     private Long id;
     private List<BorrowedItemsDTO> borrowedItemList = new ArrayList<>();
 
@@ -21,8 +22,8 @@ public class UserBean {
      ItemLendingService itemLendingService;
 
 
-    public void getBorrowedItems(Long id){
-        borrowedItemList = itemLendingService.findBorrowedItemsAndCreationDueDateByUserId(id);
+    public void getBorrowedItems(String email){
+        borrowedItemList = itemLendingService.findBorrowedItemsAndCreationDueDateByUserId(email);
     }
 
 
@@ -40,5 +41,13 @@ public class UserBean {
 
     public void setBorrowedItemList(List<BorrowedItemsDTO> borrowedItemList) {
         this.borrowedItemList = borrowedItemList;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

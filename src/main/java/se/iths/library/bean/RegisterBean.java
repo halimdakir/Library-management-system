@@ -4,14 +4,12 @@ import org.primefaces.event.FlowEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-import se.iths.library.controller.LoginController;
-import se.iths.library.controller.UserController;
-import se.iths.library.models.Roles;
+import se.iths.library.dto.UserInfoDTO;
 import se.iths.library.entity.Login;
 import se.iths.library.entity.User;
+import se.iths.library.models.Roles;
 import se.iths.library.service.LoginService;
 import se.iths.library.service.UserService;
-
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -20,8 +18,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 
 @Component
@@ -29,27 +25,24 @@ import java.util.stream.StreamSupport;
 public class RegisterBean implements Serializable {
         private boolean visible = false;
         private Long id;
+        private Long loginId;
         private String email;
         private String password;
-        private String role;
+        private boolean active;
+        private Roles role;
+        private String roleSelected;
         private String fullName;
         private String birthDate;
         private String address;
-        private List<User> userList = new ArrayList<>();
-
+        private List<UserInfoDTO> userList = new ArrayList<>();
         private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        @Autowired
-        UserController userController;
+
+
         @Autowired
         UserService userService;
         @Autowired
         LoginService loginService;
 
-
-        @PostConstruct
-        public void init(){
-                getUsers();
-        }
 
 
 
@@ -82,7 +75,7 @@ public class RegisterBean implements Serializable {
         public void emptyInputs(){
                 setEmail("");
                 setPassword("");
-                setRole("");
+                setRole(null);
                 setFullName("");
                 setBirthDate("");
                 setAddress("");
@@ -113,41 +106,48 @@ public class RegisterBean implements Serializable {
 
         }
 
-        public void updateUser(Long id){
-                Optional<User> user = userService.getUserById(id);
-                if (user.isPresent()){
+        public void updateUser(Long userId, Long loginId){
+                Optional<User> user = userService.getUserById(userId);
+                Optional<Login> login = loginService.getLoginById(loginId);
+                if (user.isPresent() && login.isPresent()){
                         setId(user.get().getId());
+                        setLoginId(login.get().getId());
+                        setActive(login.get().isActive());
                         setFullName(user.get().getFullName());
+                        setEmail(login.get().getEmail());
+                        setPassword(login.get().getPassword());
+                        setRole(login.get().getRoles());
                         setBirthDate(user.get().getBirthDate());
                         setAddress(user.get().getAddress());
                         show();
                 }
         }
 
-        public void saveUser(String fullName, String birthDate, String address, Long id){
-                User user = new User(fullName, birthDate, address);
-                userService.updateUser(user, id);
+        public void saveUser(Long userId, Long loginId){
+                User user = new User(getFullName(), getBirthDate(), getAddress());
+                var login = new Login(getEmail(), getPassword(), isActive(), getRole());
+                userService.updateUser(user, userId);
+                loginService.updateLogin(login, loginId);
                 getUsers();
                 hide();
         }
         public void cancelUpdate(){
-                setId(null);
-                setFullName("");
-                setBirthDate("");
-                setAddress("");
                 hide();
         }
 
 
-        public void deleteUser(Long id){
-                userService.deleteUserById(id);
+        public void deleteUser(Long userId, Long loginId){
+                userService.deleteUserById(userId);
+                loginService.deleteLoginById(loginId);
                 getUsers();
         }
 
         public void getUsers(){
-                Iterable<User> iterable = userService.findUsersByLogin_Roles(Roles.ROLE_USER);
-                userList = StreamSupport.stream(iterable.spliterator(), false)
-                        .collect(Collectors.toList());
+                switch (roleSelected) {
+                        case "Users" -> userList = userService.findUsersByLogin_Roles(Roles.ROLE_USER);
+                        case "Admins" -> userList = userService.findUsersByLogin_Roles(Roles.ROLE_ADMIN);
+                        case "All" -> userList = userService.getAllUserInfos();
+                }
         }
 
         public String adminPage() {
@@ -174,11 +174,27 @@ public class RegisterBean implements Serializable {
         //<editor-fold desc="Getter & Setter">
 
 
-        public List<User> getMemberList() {
+        public Long getLoginId() {
+                return loginId;
+        }
+
+        public void setLoginId(Long loginId) {
+                this.loginId = loginId;
+        }
+
+        public boolean isActive() {
+                return active;
+        }
+
+        public void setActive(boolean active) {
+                this.active = active;
+        }
+
+        public List<UserInfoDTO> getUserList() {
                 return userList;
         }
 
-        public void setMemberList(List<User> userList) {
+        public void setUserList(List<UserInfoDTO> userList) {
                 this.userList = userList;
         }
 
@@ -238,20 +254,21 @@ public class RegisterBean implements Serializable {
                 this.id = id;
         }
 
-        public List<User> getUserList() {
-                return userList;
-        }
 
-        public void setUserList(List<User> userList) {
-                this.userList = userList;
-        }
-
-        public String getRole() {
+        public Roles getRole() {
                 return role;
         }
 
-        public void setRole(String role) {
+        public void setRole(Roles role) {
                 this.role = role;
         }
-//</editor-fold>
+
+        public String getRoleSelected() {
+                return roleSelected;
+        }
+
+        public void setRoleSelected(String roleSelected) {
+                this.roleSelected = roleSelected;
+        }
+        //</editor-fold>
 }

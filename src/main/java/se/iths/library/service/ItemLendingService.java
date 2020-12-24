@@ -12,7 +12,7 @@ public class ItemLendingService {
     @Autowired
     ItemLendingRepository itemLendingRepository;
 
-    public List<BorrowedItemsDTO> findBorrowedItemsAndCreationDueDateByUserId(Long id){
-        return itemLendingRepository.findByItem_Id(id);
+    public List<BorrowedItemsDTO> findBorrowedItemsAndCreationDueDateByUserId(String email){
+        return itemLendingRepository.findByItem_Id(email);
     }
 }

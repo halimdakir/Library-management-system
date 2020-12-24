@@ -139,21 +139,6 @@
             <p:dataView var="item" value="#{itemBean.itemList}"
                         gridIcon="pi pi-th-large" listIcon="pi pi-bars">
 
-                <p:dataViewGridItem>
-                    <p:panel header="#{item.barCode}" style="text-align:center">
-                        <h:panelGrid columns="1" style="width:auto">
-                            <h:graphicImage value="resources/images/#{item.barCode}.jpg" style="width:200px; height: 270px"/>
-
-                            <h:outputText value="#{item.title}" />
-
-                            <p:commandLink action="#{itemBean.getAuthors(item.id)}" update=":form:itemDetail" oncomplete="PF('itemDialog').show()" title="View Detail">
-                                <h:outputText styleClass="ui-icon pi pi-search" style="margin:0 auto;" />
-                                <f:setPropertyActionListener value="#{item}" target="#{itemBean.selectedItem}" />
-                            </p:commandLink>
-                        </h:panelGrid>
-                    </p:panel>
-                </p:dataViewGridItem>
-
                 <p:dataViewListItem>
                     <h:panelGrid columns="3" style="width:100%" columnClasses="logo,detail">
                         <h:graphicImage value="resources/images/#{item.barCode}.jpg" style="width:200px; height: 270px"/>
@@ -170,6 +155,23 @@
                         </p:commandLink>
                     </h:panelGrid>
                 </p:dataViewListItem>
+
+                <p:dataViewGridItem>
+                    <p:panel header="#{item.barCode}" style="text-align:center">
+                        <h:panelGrid columns="1" style="width:auto">
+                            <h:graphicImage value="resources/images/#{item.barCode}.jpg" style="width:200px; height: 270px"/>
+
+                            <h:outputText value="#{item.title}" />
+
+                            <p:commandLink action="#{itemBean.getAuthors(item.id)}" update=":form:itemDetail" oncomplete="PF('itemDialog').show()" title="View Detail">
+                                <h:outputText styleClass="ui-icon pi pi-search" style="margin:0 auto;" />
+                                <f:setPropertyActionListener value="#{item}" target="#{itemBean.selectedItem}" />
+                            </p:commandLink>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:dataViewGridItem>
+
+
             </p:dataView>
 
             <p:dialog header="Item Info" widgetVar="itemDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">

@@ -45,7 +45,6 @@ public class ItemBean {
                 .collect(Collectors.toList());
     }
     public String itemPage(){
-        getAllItems();
         return "item";
 
     }

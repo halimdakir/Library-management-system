@@ -59,6 +59,60 @@
         .value {
             font-weight: bold;
         }
+        .MenuItem{
+            margin-right:50px;
+            margin-left:50px;
+            margin-top: 50px;
+            width: 150px;
+            height: 80px;
+        }
+
+
+        .btn{
+            position: relative;
+            border: 3px solid rgb(0, 10, 10);
+            margin-bottom: 10px;
+            margin-top: 10px;
+            width: 200px;
+            background-color: #0f122d;
+            font-family: Calibri, monospace;
+            font-size: larger;
+            font-weight: bold;
+            color: #02b3b3;
+            height: 200px;
+            text-align: center;
+        }
+        .btn:hover {
+            border: 3px solid #0a7272;
+            background-color: #000000;
+            color: wheat;
+            cursor: pointer;
+        }
+        .btn .btnPanelGrid{
+            bottom: 0;
+            left: 0;
+            position: absolute;
+            background: black;
+            color: #02b3b3;
+            margin: auto;
+            font-family: sans-serif;
+            opacity: 0;
+            visibility: hidden;
+            -webkit-transition: visibility 0s, opacity 0.5s linear;
+            transition: visibility 0s, opacity 0.5s linear;
+        }
+
+        /* Hover on Parent Container */
+        .btn:hover{
+            cursor: pointer;
+        }
+
+        .btn:hover .btnPanelGrid{
+            width: 200px;
+            padding: 6px 6px;
+            visibility: visible;
+            opacity: 0.6;
+        }
 
     </style>
 </h:head>
@@ -70,13 +124,28 @@
         <h1>LIBRARY MANAGEMENT SYSTEM</h1>
     </p:outputPanel>
     <p:outputPanel styleClass="item3">
-            <h:form>
-                <p:growl id="growl" life="2000" />
 
-                <p:commandButton action="/login" value="Login" ajax="false" style="margin-right:20px; height: 100px; width: 200px" icon="pi pi-user"/>
-                <p:commandButton action="#{itemBean.itemPage()}" value="Item" ajax="false" style="margin-right:20px; height: 100px; width: 200px" icon="pi pi-search"/>
 
-            </h:form>
+        <a href="${pageContext.request.contextPath}/item">
+            <button class="btn">
+                <img class="icon-desktop" src="resources/images/icon/search.png" alt="search"/>
+                <h:panelGrid styleClass="btnPanelGrid">SEARCH</h:panelGrid>
+            </button>
+        </a>
+        <a href="${pageContext.request.contextPath}/login">
+            <button class="btn" onclick="login">
+                <img class="icon-desktop" src="resources/images/icon/login.png" alt="login"/>
+                <h:panelGrid styleClass="btnPanelGrid">LOG IN</h:panelGrid>
+            </button>
+        </a>
+        <a href="${pageContext.request.contextPath}/register">
+            <button class="btn" onclick="register">
+                <img class="icon-desktop" src="resources/images/icon/register.png" alt="search"/>
+                <h:panelGrid styleClass="btnPanelGrid">REGISTER</h:panelGrid>
+            </button>
+        </a>
+
+
     </p:outputPanel>
     <p:outputPanel styleClass="item4"></p:outputPanel>
 </h:body>

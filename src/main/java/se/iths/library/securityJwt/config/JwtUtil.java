@@ -20,24 +20,24 @@ public class JwtUtil {
     @Value("${jwt.expiration.ms}")
     private int expiration;
 
-    public String getUsernameFromToken(String token) {
-        return getClaimFromToken(token, Claims::getSubject);
+    public String extractUsernameFromToken(String token) {
+        return extractClaimFromToken(token, Claims::getSubject);
     }
 
-    public Date getExpirationDateFromToken(String token) {
-        return getClaimFromToken(token, Claims::getExpiration);
+    public Date extractExpirationDateFromToken(String token) {
+        return extractClaimFromToken(token, Claims::getExpiration);
     }
 
-    public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = getAllClaimsFromToken(token);
+    public <T> T extractClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
     }
-    private Claims getAllClaimsFromToken(String token) {
+    private Claims extractAllClaimsFromToken(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 
     private Boolean isTokenExpired(String token) {
-        final Date expiration = getExpirationDateFromToken(token);
+        final Date expiration = extractExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
 
@@ -53,7 +53,7 @@ public class JwtUtil {
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = getUsernameFromToken(token);
+        final String username = extractUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 }

@@ -10,7 +10,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import se.iths.library.securityJwt.filter.JwtRequestFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -20,12 +23,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private MyUserDetailsService userDetailsService;
     @Autowired
     private UserAuthenticationSuccessHandler successHandler;
+    @Autowired
+    private JwtRequestFilter jwtRequestFilter;
 
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         //TODO Spring security without JWT
-        http.authorizeRequests()
+        /*http.authorizeRequests()
                 .antMatchers("/", "/home", "/home.xhtml", "/item", "/item.xhtml", "/register","/register.xhtml").permitAll()
                 .antMatchers("/item/all", "/item/id/**").permitAll()
                 .antMatchers("/user/all","/user/id/**").hasRole("ADMIN")
@@ -33,14 +38,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin", "/admin.xhtml", "/users", "/users.xhtml", "/adminregister.xhtml").hasRole("ADMIN")
                 .and()
                 .formLogin().successHandler(successHandler).permitAll().and().logout().permitAll();
-        http.csrf().disable();
+        http.csrf().disable();*/
 
-        //TODO JSON WEB TOKEN
+        //TODO Spring security with JSON WEB TOKEN
             http.csrf().disable()
                     .authorizeRequests()
+                    .antMatchers("/", "/home", "/home.xhtml", "/item", "/item.xhtml", "/register","/register.xhtml").permitAll()
+                    .antMatchers("/item/all", "/item/id/**").permitAll()
                     .antMatchers("/auth").permitAll().anyRequest().authenticated()
+                    .antMatchers("/user/all","/user/id/**").hasRole("ADMIN")
+                    .antMatchers("/user", "/user.xhtml").hasRole( "USER")
+                    .antMatchers("/admin", "/admin.xhtml", "/users", "/users.xhtml", "/adminregister.xhtml").hasRole("ADMIN")
                     .and()
-                    .formLogin().successHandler(successHandler).permitAll().and().logout().permitAll();;
+                    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and()
+                    .formLogin().successHandler(successHandler).permitAll()
+                    .and().logout().invalidateHttpSession(true).clearAuthentication(true).permitAll();
+            http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

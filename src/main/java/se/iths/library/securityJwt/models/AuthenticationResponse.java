@@ -1,4 +1,4 @@
-package se.iths.library.securityJwt;
+package se.iths.library.securityJwt.models;
 
 public class AuthenticationResponse {
     private final String jwt;

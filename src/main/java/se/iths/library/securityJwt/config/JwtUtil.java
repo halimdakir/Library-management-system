@@ -1,4 +1,4 @@
-package se.iths.library.securityJwt;
+package se.iths.library.securityJwt.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

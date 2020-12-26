@@ -3,9 +3,11 @@ package se.iths.library.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,8 +21,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserAuthenticationSuccessHandler successHandler;
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        //TODO Spring security without JWT
         http.authorizeRequests()
                 .antMatchers("/", "/home", "/home.xhtml", "/item", "/item.xhtml", "/register","/register.xhtml").permitAll()
                 .antMatchers("/item/all", "/item/id/**").permitAll()
@@ -30,11 +34,27 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin().successHandler(successHandler).permitAll().and().logout().permitAll();
         http.csrf().disable();
+
+        //TODO JSON WEB TOKEN
+            http.csrf().disable()
+                    .authorizeRequests()
+                    .antMatchers("/auth").permitAll().anyRequest().authenticated()
+                    .and()
+                    .formLogin().successHandler(successHandler).permitAll().and().logout().permitAll();;
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        super.configure(auth);
+        //super.configure(auth);
+        //TODO JSON WEB TOKEN
+        auth.userDetailsService(userDetailsService);
+
+    }
+
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
     @Bean

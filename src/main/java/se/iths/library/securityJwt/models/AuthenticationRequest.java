@@ -1,4 +1,4 @@
-package se.iths.library.securityJwt;
+package se.iths.library.securityJwt.models;
 
 public class AuthenticationRequest {
     private String username;

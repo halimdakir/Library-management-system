@@ -2,7 +2,7 @@ package se.iths.library.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import se.iths.library.models.BorrowedItemsDTO;
+import se.iths.library.dto.BorrowedItemsDTO;
 import se.iths.library.repository.ItemLendingRepository;
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package se.iths.library.models;
+package se.iths.library.dto;
 
 public class BorrowedItemsDTO {
     private String title;

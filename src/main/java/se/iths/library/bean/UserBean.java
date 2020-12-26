@@ -2,10 +2,9 @@ package se.iths.library.bean;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import se.iths.library.models.BorrowedItemsDTO;
+import se.iths.library.dto.BorrowedItemsDTO;
 import se.iths.library.service.ItemLendingService;
 
-import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import java.util.ArrayList;
 import java.util.List;

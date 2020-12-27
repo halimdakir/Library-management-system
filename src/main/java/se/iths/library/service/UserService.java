@@ -51,4 +51,7 @@ public class UserService {
     public List<UserInfoDTO> getAllUserInfos(){
         return userRepository.getAllUserInfos();
     }
+    public List<User> findUserByLoginEmail(String email){
+        return userRepository.findByLogin_Email(email);
+    }
 }

@@ -1,11 +1,11 @@
 package se.iths.library.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import se.iths.library.entity.Login;
-import se.iths.library.entity.User;
 import se.iths.library.repository.LoginRepository;
 
 import java.util.Optional;
@@ -53,6 +53,19 @@ public class LoginService {
                         newLogin.setId(id);
                         return loginRepository.save(newLogin);
                     });
+    }
+    public void updateLoginByUser(String password, Long id){
+        loginRepository.findById(id)
+                .map(login -> {
+                    login.setPassword(password);
+                    return loginRepository.save(login);
+                });
+    }
+    public Optional <Login> getAuthenticatedUserEmail() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String authenticatedUsername = authentication.getName();
+
+        return loginRepository.findByEmail(authenticatedUsername);
     }
 
 }

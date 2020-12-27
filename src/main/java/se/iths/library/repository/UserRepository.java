@@ -18,5 +18,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
         @Query("SELECT new se.iths.library.dto.UserInfoDTO(l.active, u.fullName, l.email, l.password, l.roles, u.birthDate, u.address, u.id, l.id) FROM User u INNER JOIN u.login l")
         List<UserInfoDTO> getAllUserInfos();
 
+        List<User> findByLogin_Email(String email);
+
 
 }

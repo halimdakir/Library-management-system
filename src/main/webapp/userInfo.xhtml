@@ -80,6 +80,19 @@
         .MenuItem{
             width: 200px;
         }
+        .motherPanelGrid{
+            margin: 0 auto;
+        }
+        .outerPanelGrid{
+            width: 50%;
+            margin: 0 auto;
+        }
+        .outerPanelGrid>tbody>tr{
+            border: none !important;
+        }
+        .outerPanelGrid>tbody>tr>td{
+            border: none !important;
+        }
     </style>
 </h:head>
 
@@ -89,10 +102,10 @@
     <p:outputPanel styleClass="item2">
         <h:form>
             <p:tabMenu activeIndex="#{param.i}" style="text-align: center">
-                <p:menuitem value="Borrowed List" icon="pi pi-caret-right" url="#" styleClass="MenuItem">
+                <p:menuitem value="Borrowed List" icon="pi pi-caret-right" url="user" styleClass="MenuItem">
                     <f:param name="i" value="0" />
                 </p:menuitem>
-                <p:menuitem value="Personal Infos" icon="pi pi-caret-right" url="userInfo" styleClass="MenuItem" action="#{userBean.getAuthenticatedUserInfo()}">
+                <p:menuitem value="Personal Infos" icon="pi pi-caret-right" url="#" styleClass="MenuItem">
                     <f:param name="i" value="1" />
                 </p:menuitem>
                 <p:menuitem value="Items" icon="pi pi-caret-right" url="item" styleClass="MenuItem">
@@ -103,32 +116,47 @@
     </p:outputPanel>
     <p:outputPanel styleClass="item3">
         <p:tabView orientation="center">
-            <p:tab title="YOUR BORROWED ITEM LIST" titleStyle="width: 280px; height: 40px">
+            <p:tab title="YOUR PERSONAL INFORMATION" titleStyle="width: 300px; height: 40px">
+                <h:panelGrid columns="1" cellpadding="10" styleClass="motherPanelGrid">
 
-                <h:panelGrid columns="1" cellpadding="10">
-                    <h:form>
-                        <p:commandButton value="refresh" action="#{userBean.getBorrowedItemsByUserId()}" icon="pi pi-refresh" update="@form" ajax="true"/>
+                    <h:form style="width: 100%">
+                        <p:commandButton value="refresh" action="#{userBean.getAuthenticatedUserInfo()}" icon="pi pi-refresh" update="@form" ajax="true"/>
                         <p:separator/>
+                        <p:messages />
+                        <p:panelGrid columns="2"  columnClasses="label , value" styleClass="outerPanelGrid">
 
-                        <p:dataTable var="item" value="#{userBean.borrowedItemListByUser}">
+                            <p:inputText  label="userId" value="#{userBean.userId}" type="hidden"/>
+                            <p:inputText  label="loginId" value="#{userBean.loginId}" type="hidden"/>
 
-                            <p:column headerText="ISBN">
-                                <h:outputText value="#{item.barCode}" />
-                            </p:column>
 
-                            <p:column headerText="Title">
-                                <h:outputText value="#{item.title}" />
-                            </p:column>
+                            <h:outputText value="Fullname: " />
+                            <p:inputText  label="fullName" value="#{userBean.fullName}"/>
 
-                            <p:column headerText="Creation Date">
-                                <h:outputText value="#{item.creationDate}" />
-                            </p:column>
 
-                            <p:column headerText="Due Date">
-                                <h:outputText value="#{item.dueDate}" />
-                            </p:column>
+                            <h:outputText value="Email: " />
+                            <p:inputText  label="email" value="#{userBean.mail}" />
 
-                        </p:dataTable>
+                            <h:outputText value="Old Password: " />
+                            <p:password  label="oldPassword" value="#{userBean.oldPassword}"/>
+
+                            <h:outputText value="New Password: " />
+                            <p:password  label="newPassword" value="#{userBean.newPassword}"/>
+
+                            <h:outputText value="Confirm Password: " />
+                            <p:password  label="newPassword" value="#{userBean.confirmPassword}"/>
+
+
+                            <h:outputText value="Date of birth: " />
+                            <p:inputText label="birthDate" value="#{userBean.birthDate}"/>
+                            <h:outputText value="Address: " />
+                            <p:inputText label="address" value="#{userBean.address}"/>
+
+                            <p:commandButton id="saveBtn" value="Save" actionListener="#{userBean.saveUser(userBean.userId, userBean.loginId)}" style="margin-right:20px; background-color: #0378dc; color: black" icon="pi pi-save" update="@form" ajax="true">
+                                <f:ajax execute="@form" render="@form"/>
+                            </p:commandButton>
+
+                        </p:panelGrid>
+
                     </h:form>
                 </h:panelGrid>
             </p:tab>

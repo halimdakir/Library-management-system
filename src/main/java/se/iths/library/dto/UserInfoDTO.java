@@ -25,6 +25,18 @@ public class UserInfoDTO {
         this.loginId = loginId;
     }
 
+    public UserInfoDTO(Long userId, Long loginId, boolean active, String fullName, String email, String password, Roles roles, String birthDate, String address) {
+        this.userId = userId;
+        this.loginId = loginId;
+        this.active = active;
+        this.fullName = fullName;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+        this.birthDate = birthDate;
+        this.address = address;
+    }
+
     public String getPassword() {
         return password;
     }

@@ -55,6 +55,9 @@ public class Login {
         this.user = user;
     }
 
+    public Login(@NotEmpty String password) {
+        this.password = password;
+    }
 
     public Long getId() {
         return id;

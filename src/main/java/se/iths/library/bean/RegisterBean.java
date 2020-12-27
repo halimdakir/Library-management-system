@@ -10,7 +10,6 @@ import se.iths.library.entity.User;
 import se.iths.library.models.Roles;
 import se.iths.library.service.LoginService;
 import se.iths.library.service.UserService;
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -29,13 +28,14 @@ public class RegisterBean implements Serializable {
         private String email;
         private String password;
         private boolean active;
-        private Roles role;
-        private String roleSelected;
+        private String role;
+        private String usersRoleSelected;
         private String fullName;
         private String birthDate;
         private String address;
         private List<UserInfoDTO> userList = new ArrayList<>();
         private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
 
 
         @Autowired
@@ -115,8 +115,13 @@ public class RegisterBean implements Serializable {
                         setActive(login.get().isActive());
                         setFullName(user.get().getFullName());
                         setEmail(login.get().getEmail());
-                        setPassword(login.get().getPassword());
-                        setRole(login.get().getRoles());
+                        //setPassword(login.get().getPassword());
+                        if (login.get().getRoles() == Roles.ROLE_USER){
+                                setRole("User");
+                        }else {
+                                setRole("Admin");
+
+                        }
                         setBirthDate(user.get().getBirthDate());
                         setAddress(user.get().getAddress());
                         show();
@@ -125,7 +130,14 @@ public class RegisterBean implements Serializable {
 
         public void saveUser(Long userId, Long loginId){
                 User user = new User(getFullName(), getBirthDate(), getAddress());
-                var login = new Login(getEmail(), getPassword(), isActive(), getRole());
+                Login login;
+                String encodePassword = passwordEncoder.encode(getPassword());
+                if (role.equals("User")){
+                        login = new Login(getEmail(), encodePassword, isActive(), Roles.ROLE_USER);
+                }else {
+                        login = new Login(getEmail(), encodePassword, isActive(), Roles.ROLE_ADMIN);
+                }
+
                 userService.updateUser(user, userId);
                 loginService.updateLogin(login, loginId);
                 getUsers();
@@ -143,7 +155,7 @@ public class RegisterBean implements Serializable {
         }
 
         public void getUsers(){
-                switch (roleSelected) {
+                switch (usersRoleSelected) {
                         case "Users" -> userList = userService.findUsersByLogin_Roles(Roles.ROLE_USER);
                         case "Admins" -> userList = userService.findUsersByLogin_Roles(Roles.ROLE_ADMIN);
                         case "All" -> userList = userService.getAllUserInfos();
@@ -255,20 +267,23 @@ public class RegisterBean implements Serializable {
         }
 
 
-        public Roles getRole() {
+        public String getRole() {
                 return role;
         }
 
-        public void setRole(Roles role) {
+        public void setRole(String role) {
                 this.role = role;
         }
 
-        public String getRoleSelected() {
-                return roleSelected;
+        public String getUsersRoleSelected() {
+                return usersRoleSelected;
         }
 
-        public void setRoleSelected(String roleSelected) {
-                this.roleSelected = roleSelected;
+        public void setUsersRoleSelected(String usersRoleSelected) {
+                this.usersRoleSelected = usersRoleSelected;
         }
+
+
+
         //</editor-fold>
 }

@@ -35,6 +35,11 @@ public class Login {
         this.roles = roles;
     }
 
+    public Login(@NotEmpty String email, boolean active, Roles roles) {
+        this.email = email;
+        this.active = active;
+        this.roles = roles;
+    }
 
     public Login(@NotEmpty String email, @NotEmpty String password, boolean active, Roles roles) {
         this.email = email;

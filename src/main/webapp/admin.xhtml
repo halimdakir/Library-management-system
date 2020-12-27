@@ -100,7 +100,7 @@
                 <p:menuitem value="Items" icon="pi pi-caret-right" url="item" styleClass="MenuItem">
                     <f:param name="i" value="2" />
                 </p:menuitem>
-                <p:menuitem value="Infos" icon="pi pi-caret-right" styleClass="MenuItem">
+                <p:menuitem value="Infos" icon="pi pi-caret-right" url="info" styleClass="MenuItem">
                     <f:param name="i" value="3" />
                 </p:menuitem>
                 <p:menuitem value="Register" icon="pi pi-caret-right" url="adminregister" styleClass="MenuItem">
@@ -116,7 +116,7 @@
                             <h:form>
 
                                 <p:panelGrid columns="2" styleClass="outerPanelGrid">
-                                    <p:selectOneMenu id="roleSelected" value="#{registerBean.roleSelected}" style="width: 96%">
+                                    <p:selectOneMenu id="roleSelected" value="#{registerBean.usersRoleSelected}" style="width: 96%">
                                         <f:selectItem itemLabel="" itemValue="" />
                                         <p:separator />
                                         <f:selectItem itemLabel="Users" itemValue="Users" />
@@ -136,8 +136,24 @@
                                     <p:inputText  label="fullName" value="#{registerBean.fullName}"/>
                                     <h:outputText value="Email: " />
                                     <p:inputText  label="email" value="#{registerBean.email}"/>
-                                    <h:outputText value="Password: " />
-                                    <p:password label="email" value="#{registerBean.password}"/>
+
+                                    <h:outputText value="Role: " />
+                                    <p:selectOneRadio id="roles" value="#{registerBean.role}" unselectable="false">
+                                        <div class="ui-g ui-fluid">
+                                            <div class="ui-g-12 ui-md-6">
+                                                <div class="ui-inputgroup">
+                                                    <f:selectItem itemLabel="Admin" itemValue="Admin" />
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-12 ui-md-6">
+                                                <div class="ui-inputgroup">
+                                                    <f:selectItem itemLabel="User" itemValue="User" />
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </p:selectOneRadio>
+
                                     <h:outputText value="Date of birth: " />
                                     <p:inputText label="birthDate" value="#{registerBean.birthDate}"/>
                                     <h:outputText value="Address: " />

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Login</title>
+    <h:outputStylesheet name="style.css" library="css" />
+    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+    <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+    <style type="text/css">
+        [class^="item"] {
+            text-align: center;
+        }
+        .grid {
+            font-family: Calibri, monospace;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, auto);
+            grid-template-areas:
+            "header header header header"
+            "menu menu menu menu"
+            "sidebar sidebar sidebar sidebar"
+            "footer footer footer footer";
+            grid-auto-flow: dense;
+            grid-gap: 5px;
+        }
+        .item1 {
+            grid-area: header;
+            text-align: center;
+        }
+
+        .item2 {
+            grid-area: menu;
+            background-color: darkslategray;
+            text-align: center;
+        }
+
+        .item3 {
+            height: auto;
+            grid-area: sidebar;
+            margin: 0 auto;
+            display: block;
+
+        }
+
+        .item4 {
+            grid-area: footer;
+            height: 25px;
+            background-color: darkslategray;
+            text-align: center;
+        }
+
+        .login-form{
+            border: 2px solid gray;
+            border-radius: 5px
+        }
+        .blue-button {
+            width: 100%;
+            background-color: #5c68b8;
+            border-color: #5c68b8;
+            color: #fff;
+        }
+
+        .blue-button:enabled:hover,
+        .blue-button:focus {
+            background-color: #0622d7;
+            border-color: #0622d7;
+        }
+        h1{
+            font-family: 'Times New Roman', serif;
+            color: wheat;
+        }
+    </style>
+    <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.js"></script>
+    <script type="application/javascript">
+        $(function() {
+            $("#btnSave").click(function () {
+                const username = $("#userName").val();
+                const password = $("#password").val();
+                $.ajax({
+                    cache: true,
+                    type: "POST",
+                    url: "/auth",
+                    contentType: "application/json;charset=UTF-8",
+                    data:JSON.stringify({"username":username ,"password" : password}),
+                    dataType: "json",
+                    async: false,
+                    error: function (request) {
+                        console.log("Connection error");
+                    },
+                    success: function (data) {
+                        //save token
+                        localStorage.setItem("token",data.jwt);
+                    }
+                });
+            });
+        });
+    </script>
+</h:head>
+
+<h:body styleClass="grid">
+
+    <p:outputPanel styleClass="item1"></p:outputPanel>
+    <p:outputPanel styleClass="item2">
+        <h1>LIBRARY MANAGEMENT SYSTEM</h1>
+    </p:outputPanel>
+    <p:outputPanel styleClass="item3">
+        <p:outputPanel styleClass="item3-body">
+            <h:form styleClass="login-form" prependId="false">
+                <h:panelGrid columns="2">
+                    <div class="ui-g ui-fluid">
+                        <div class="ui-g-12 ui-md-4">
+                            <div class="ui-inputgroup">
+                                <span class="ui-inputgroup-addon"><i class="pi pi-user"></i></span>
+                                <p:inputText placeholder="Username" id="userName"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-g ui-fluid">
+                        <div class="ui-g-12 ui-md-4">
+                            <div class="ui-inputgroup">
+                                <span class="ui-inputgroup-addon"><i class="pi pi-lock"></i></span>
+                                <p:password placeholder="*******" id="password"/>
+                            </div>
+                        </div>
+                    </div>
+                    <p:outputLabel value="Login failed!" styleClass="red"
+                                   rendered="${!empty param['error']}" />
+                    <div class="ui-g ui-fluid">
+                        <div class="ui-g-12 ui-md-4">
+                            <div class="ui-inputgroup">
+                                    <p:commandButton id="btnSave" value="Login" styleClass="blue-button" ajax="false"/>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </h:panelGrid>
+            </h:form>
+        </p:outputPanel>
+    </p:outputPanel>
+    <p:outputPanel styleClass="item4"></p:outputPanel>
+</h:body>
+</html>

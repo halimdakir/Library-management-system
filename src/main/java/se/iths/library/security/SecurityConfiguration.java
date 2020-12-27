@@ -7,12 +7,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import se.iths.library.securityJwt.config.JwtAuthenticationEntryPoint;
 import se.iths.library.securityJwt.filter.JwtRequestFilter;
 
 @Configuration
@@ -25,6 +26,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private UserAuthenticationSuccessHandler successHandler;
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
+    @Autowired
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
 
     @Override
@@ -41,28 +44,30 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable();*/
 
         //TODO Spring security with JSON WEB TOKEN
-            http.csrf().disable()
-                    .authorizeRequests()
-                    .antMatchers("/", "/home", "/home.xhtml", "/item", "/item.xhtml", "/register","/register.xhtml").permitAll()
-                    .antMatchers("/item/all", "/item/id/**").permitAll()
-                    .antMatchers("/auth").permitAll().anyRequest().authenticated()
-                    .antMatchers("/user/all","/user/id/**").hasRole("ADMIN")
-                    .antMatchers("/user", "/user.xhtml").hasRole( "USER")
-                    .antMatchers("/admin", "/admin.xhtml", "/users", "/users.xhtml", "/adminregister.xhtml").hasRole("ADMIN")
-                    .and()
-                    .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .and()
-                    .formLogin().successHandler(successHandler).permitAll()
-                    .and().logout().invalidateHttpSession(true).clearAuthentication(true).permitAll();
+
+
+        http
+                .csrf().disable()
+                .authorizeRequests()
+                //.antMatchers("/auth", "/", "/home", "/login").permitAll()
+                .antMatchers("/admin", "/users", "/adminregister").hasRole("ADMIN")
+                .antMatchers("/user").hasRole( "USER")
+                .anyRequest().permitAll()
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
             http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        //super.configure(auth);
+        super.configure(auth);
         //TODO JSON WEB TOKEN
-        auth.userDetailsService(userDetailsService);
+        //auth.userDetailsService(userDetailsService);
+        //auth.authenticationProvider(authProvider());
 
     }
 
@@ -79,5 +84,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         authProvider.setPasswordEncoder(new BCryptPasswordEncoder());
         return authProvider;
     }
-
+    @Bean
+    public SecurityEvaluationContextExtension securityEvaluationContextExtension() {
+        return new SecurityEvaluationContextExtension();
+    }
 }

@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -53,6 +55,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin", "/users", "/adminregister").hasRole("ADMIN")
                 .antMatchers("/user", "/userInfo").hasRole( "USER")
                 .anyRequest().permitAll()
+
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .successHandler(successHandler)
+                .failureHandler((req,res,exp)->{
+                    String errMsg="";
+                    if(exp.getClass().isAssignableFrom(BadCredentialsException.class)){
+                        errMsg="Invalid username or password.";
+                    }else{
+                        errMsg="Unknown error - "+exp.getMessage();
+                    }
+                    req.getSession().setAttribute("message", errMsg);
+                    res.sendRedirect("/login");
+                })
+
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)

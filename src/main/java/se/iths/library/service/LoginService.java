@@ -61,11 +61,10 @@ public class LoginService {
                     return loginRepository.save(login);
                 });
     }
-    public Optional <Login> getAuthenticatedUserEmail() {
+    public Login getAuthenticatedUserEmail() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String authenticatedUsername = authentication.getName();
-
-        return loginRepository.findByEmail(authenticatedUsername);
+        return loginRepository.findLoginByEmail(authenticatedUsername);
     }
 
 }

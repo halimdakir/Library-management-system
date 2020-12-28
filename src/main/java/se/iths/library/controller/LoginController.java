@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.*;
 import se.iths.library.entity.Login;
 import se.iths.library.service.LoginService;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/login")
 public class LoginController {
@@ -22,4 +24,5 @@ public class LoginController {
     public Login createNewLogin(@RequestBody Login login){
         return loginService.createLogin(login);
     }
+
 }

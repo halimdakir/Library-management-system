@@ -7,9 +7,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import se.iths.library.security.MyUserDetailsService;
 import se.iths.library.securityJwt.config.JwtUtil;
 import se.iths.library.securityJwt.models.AuthenticationRequest;
@@ -18,7 +16,6 @@ import se.iths.library.securityJwt.models.AuthenticationResponse;
 
 @RestController
 public class AuthenticationController {
-
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -43,4 +40,8 @@ public class AuthenticationController {
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
 
+    @GetMapping("/admin")
+    public String redirectToAdminDashboard(){
+        return "admin";
+    }
 }

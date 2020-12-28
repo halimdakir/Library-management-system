@@ -4,25 +4,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import se.iths.library.dto.BorrowedItemsDTO;
-import se.iths.library.dto.UserInfoDTO;
 import se.iths.library.entity.Login;
 import se.iths.library.entity.User;
-import se.iths.library.models.Roles;
 import se.iths.library.service.ItemLendingService;
 import se.iths.library.service.LoginService;
 import se.iths.library.service.UserService;
-
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 @ViewScoped
-public class UserBean {
+public class UserBean implements Serializable {
+    private String loginUsername;
+    private String loginPassword;
+    private boolean Logged = false;
+    private String authenticatedUserFullName;
+    private Long loggedId;
     private String email;
     private Long id;
     private List<BorrowedItemsDTO> borrowedItemList = new ArrayList<>();
@@ -42,33 +44,36 @@ public class UserBean {
 
 
 
-    @Autowired
+
     private ItemLendingService itemLendingService;
-    @Autowired
     private LoginService loginService;
-    @Autowired
     private UserService userService;
 
+    public UserBean(ItemLendingService itemLendingService, LoginService loginService, UserService userService) {
+        this.itemLendingService = itemLendingService;
+        this.loginService = loginService;
+        this.userService = userService;
+    }
 
     public void getBorrowedItems(String email){
         borrowedItemList = itemLendingService.findBorrowedItemsAndCreationDueDateByUserEmail(email);
     }
     public void getBorrowedItemsByUserId(){
-        Optional<Login> authenticatedUser = loginService.getAuthenticatedUserEmail();
-        if (authenticatedUser.isPresent()){
-            List<User> userInfo = userService.findUserByLoginEmail(authenticatedUser.get().getEmail());
-            borrowedItemListByUser = itemLendingService.findBorrowedItemsAndCreationDueDateByUserId(userInfo.get(0).getId());
+        Login authenticatedUser = loginService.getAuthenticatedUserEmail();
+        if (authenticatedUser!=null){
+            User userInfo = userService.findUserByLoginEmail(authenticatedUser.getEmail());
+            borrowedItemListByUser = itemLendingService.findBorrowedItemsAndCreationDueDateByUserId(userInfo.getId());
         }
 
     }
     public void getAuthenticatedUserInfo(){
         Long idLogin = null;
         Long idUser = null;
-        Optional<Login> authenticatedUser = loginService.getAuthenticatedUserEmail();
-        if (authenticatedUser.isPresent()){
-            idLogin = authenticatedUser.get().getId();
-            List<User> userInfo = userService.findUserByLoginEmail(authenticatedUser.get().getEmail());
-            idUser = userInfo.get(0).getId();
+        Login authenticatedUser = loginService.getAuthenticatedUserEmail();
+        if (authenticatedUser!=null){
+            idLogin = authenticatedUser.getId();
+            User userInfo = userService.findUserByLoginEmail(authenticatedUser.getEmail());
+            idUser = userInfo.getId();
         }
 
         var user = userService.getUserById(idUser);
@@ -109,12 +114,35 @@ public class UserBean {
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
-    public void redirectToHome() throws IOException {
+    public void login() throws IOException {
+        Login authenticatedUser = loginService.getAuthenticatedUserEmail();
+        if (authenticatedUser != null){
+            User user = userService.findUserByLoginEmail(authenticatedUser.getEmail());
+            setAuthenticatedUserFullName(user.getFullName());
+        }
+        setLogged(true);
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().redirect("/home");
     }
+    public void logout() throws IOException {
+        setAuthenticatedUserFullName("");
+        setLogged(false);
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "You are successfully logged out", "");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().redirect("/logout");
+
+    }
 
     //<editor-fold desc="Getter & Setter">
+
+    public String getAuthenticatedUserFullName() {
+        return authenticatedUserFullName;
+    }
+
+    public void setAuthenticatedUserFullName(String authenticatedUserFullName) {
+        this.authenticatedUserFullName = authenticatedUserFullName;
+    }
 
     public String getPassword() {
         return password;
@@ -226,6 +254,38 @@ public class UserBean {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getLoginUsername() {
+        return loginUsername;
+    }
+
+    public void setLoginUsername(String loginUsername) {
+        this.loginUsername = loginUsername;
+    }
+
+    public String getLoginPassword() {
+        return loginPassword;
+    }
+
+    public void setLoginPassword(String loginPassword) {
+        this.loginPassword = loginPassword;
+    }
+
+    public boolean isLogged() {
+        return Logged;
+    }
+
+    public void setLogged(boolean logged) {
+        Logged = logged;
+    }
+
+    public Long getLoggedId() {
+        return loggedId;
+    }
+
+    public void setLoggedId(Long loggedId) {
+        this.loggedId = loggedId;
     }
     //</editor-fold>
 }

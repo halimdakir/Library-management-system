@@ -73,12 +73,13 @@
             font-family: 'Times New Roman', serif;
             color: wheat;
         }
+
     </style>
     <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.js"></script>
     <script type="application/javascript">
         $(function() {
             $("#btnSave").click(function () {
-                const username = $("#userName").val();
+                const username = $("#username").val();
                 const password = $("#password").val();
                 $.ajax({
                     cache: true,
@@ -93,11 +94,20 @@
                     },
                     success: function (data) {
                         //save token
-                        localStorage.setItem("token",data.jwt);
+                        localStorage.setItem("token",JSON.stringify(data.jwt));
                     }
                 });
             });
         });
+        /*$(function() {
+            $("#redirect").click(function () {
+                $.ajax({
+                    url: "http://localhost:8080/admin",
+                    type: 'GET',
+                    headers: {Authorization: $`Bearer ${localStorage.getItem("token")}`}
+                });
+            });
+        });*/
     </script>
 </h:head>
 
@@ -110,12 +120,13 @@
     <p:outputPanel styleClass="item3">
         <p:outputPanel styleClass="item3-body">
             <h:form styleClass="login-form" prependId="false">
+                <p:messages/>
                 <h:panelGrid columns="2">
                     <div class="ui-g ui-fluid">
                         <div class="ui-g-12 ui-md-4">
                             <div class="ui-inputgroup">
                                 <span class="ui-inputgroup-addon"><i class="pi pi-user"></i></span>
-                                <p:inputText placeholder="Username" id="userName"/>
+                                <p:inputText placeholder="Username" id="username" value="#{userBean.loginUsername}"/>
                             </div>
                         </div>
                     </div>
@@ -123,7 +134,7 @@
                         <div class="ui-g-12 ui-md-4">
                             <div class="ui-inputgroup">
                                 <span class="ui-inputgroup-addon"><i class="pi pi-lock"></i></span>
-                                <p:password placeholder="*******" id="password"/>
+                                <p:password placeholder="*******" id="password" value="#{userBean.loginPassword}"/>
                             </div>
                         </div>
                     </div>
@@ -132,11 +143,10 @@
                     <div class="ui-g ui-fluid">
                         <div class="ui-g-12 ui-md-4">
                             <div class="ui-inputgroup">
-                                    <p:commandButton id="btnSave" value="Login" styleClass="blue-button" ajax="false" action="#{userBean.redirectToHome()}"/>
+                                    <p:commandButton id="btnSave" value="Login" styleClass="blue-button" update="@this" ajax="false" actionListener="#{userBean.login()}" />
                             </div>
                         </div>
                     </div>
-
 
                 </h:panelGrid>
             </h:form>

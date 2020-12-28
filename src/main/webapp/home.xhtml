@@ -56,6 +56,18 @@
             font-family: 'Times New Roman', serif;
             color: wheat;
         }
+        .outputText{
+            font-family: 'Garamond', serif;
+            color: wheat;
+        }
+        .form{
+            position:absolute;
+            top:0;
+            right:0;
+            margin-top: 15px;
+            margin-right: 4px
+        }
+
         .value {
             font-weight: bold;
         }
@@ -122,6 +134,10 @@
     <p:outputPanel styleClass="item1"></p:outputPanel>
     <p:outputPanel styleClass="item2">
         <h1>LIBRARY MANAGEMENT SYSTEM</h1>
+        <h:form styleClass="form" style="" rendered="#{userBean.logged}">
+            <h:outputText styleClass="outputText" value="Hi: "/> <h:outputLabel styleClass="outputText" value="#{userBean.authenticatedUserFullName}"/><h:outputText value=" "/>
+            <p:commandButton actionListener="#{userBean.logout()}" style="width: 25px; height: 30px; color: darkslategray" icon="pi pi-sign-out" update="@this" ajax="false" />
+        </h:form>
     </p:outputPanel>
     <p:outputPanel styleClass="item3">
 

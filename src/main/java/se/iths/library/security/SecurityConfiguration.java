@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -26,6 +25,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private MyUserDetailsService userDetailsService;
     @Autowired
     private UserAuthenticationSuccessHandler successHandler;
+    @Autowired
+    private UserAuthenticationFailureHandler failureHandler;
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
     @Autowired
@@ -60,17 +61,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/login")
                 .successHandler(successHandler)
-                .failureHandler((req,res,exp)->{
-                    String errMsg="";
-                    if(exp.getClass().isAssignableFrom(BadCredentialsException.class)){
-                        errMsg="Invalid username or password.";
-                    }else{
-                        errMsg="Unknown error - "+exp.getMessage();
-                    }
-                    req.getSession().setAttribute("message", errMsg);
-                    res.sendRedirect("/login");
-                })
-
+                .failureHandler(failureHandler)
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)

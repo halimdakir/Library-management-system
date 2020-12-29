@@ -14,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import se.iths.library.securityJwt.config.JwtAuthenticationEntryPoint;
 import se.iths.library.securityJwt.filter.JwtRequestFilter;
 
@@ -56,12 +57,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin", "/users", "/adminregister").hasRole("ADMIN")
                 .antMatchers("/user", "/userInfo").hasRole( "USER")
                 .anyRequest().permitAll()
-
                 .and()
                 .formLogin()
                 .loginPage("/login")
                 .successHandler(successHandler)
                 .failureHandler(failureHandler)
+                .and()
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/login")
+                .deleteCookies("JSESSIONID")
+                .permitAll()
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)

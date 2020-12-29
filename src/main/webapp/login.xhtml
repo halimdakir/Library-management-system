@@ -4,7 +4,8 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui" xmlns:form="http://java.sun.com/jsf/html"
+      xmlns:th="https://www.thymeleaf.org">
 <h:head>
     <title>Login</title>
     <h:outputStylesheet name="style.css" library="css" />
@@ -55,60 +56,31 @@
 
         .login-form{
             border: 2px solid gray;
-            border-radius: 5px
+            border-radius: 5px;
+            margin-top: 20px;
         }
         .blue-button {
             width: 100%;
-            background-color: #5c68b8;
+            background-color: #50a9f6;
             border-color: #5c68b8;
             color: #fff;
         }
 
         .blue-button:enabled:hover,
         .blue-button:focus {
-            background-color: #0622d7;
-            border-color: #0622d7;
+            background-color: #0484f1;
+            border-color: black;
         }
         h1{
             font-family: 'Times New Roman', serif;
             color: wheat;
         }
+        .logout{
+            font-family: 'Georgia', cursive;
+            color: #b10526;
+        }
 
     </style>
-    <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.js"></script>
-    <script type="application/javascript">
-        $(function() {
-            $("#btnSave").click(function () {
-                const username = $("#username").val();
-                const password = $("#password").val();
-                $.ajax({
-                    cache: true,
-                    type: "POST",
-                    url: "/auth",
-                    contentType: "application/json;charset=UTF-8",
-                    data:JSON.stringify({"username":username ,"password" : password}),
-                    dataType: "json",
-                    async: false,
-                    error: function (request) {
-                        console.log("Connection error");
-                    },
-                    success: function (data) {
-                        //save token
-                        localStorage.setItem("token",JSON.stringify(data.jwt));
-                    }
-                });
-            });
-        });
-        /*$(function() {
-            $("#redirect").click(function () {
-                $.ajax({
-                    url: "http://localhost:8080/admin",
-                    type: 'GET',
-                    headers: {Authorization: $`Bearer ${localStorage.getItem("token")}`}
-                });
-            });
-        });*/
-    </script>
 </h:head>
 
 <h:body styleClass="grid">
@@ -119,6 +91,9 @@
     </p:outputPanel>
     <p:outputPanel styleClass="item3">
         <p:outputPanel styleClass="item3-body">
+            <h:outputLabel styleClass="logout" rendered="#{userBean.loggedOut}">
+                 You have been logged out!
+            </h:outputLabel>
             <h:form styleClass="login-form" prependId="false">
                 <p:messages/>
                 <h:panelGrid columns="2">
@@ -126,7 +101,8 @@
                         <div class="ui-g-12 ui-md-4">
                             <div class="ui-inputgroup">
                                 <span class="ui-inputgroup-addon"><i class="pi pi-user"></i></span>
-                                <p:inputText placeholder="Username" id="username" value="#{userBean.loginUsername}"/>
+                                <p:inputText placeholder="Username" id="username" value="#{userBean.loginUsername}" required="true" requiredMessage="Enter your username"/>
+
                             </div>
                         </div>
                     </div>
@@ -134,7 +110,8 @@
                         <div class="ui-g-12 ui-md-4">
                             <div class="ui-inputgroup">
                                 <span class="ui-inputgroup-addon"><i class="pi pi-lock"></i></span>
-                                <p:password placeholder="*******" id="password" value="#{userBean.loginPassword}"/>
+                                <p:password placeholder="*******" id="password" value="#{userBean.loginPassword}" required="true" requiredMessage="Enter your password" />
+
                             </div>
                         </div>
                     </div>
@@ -143,7 +120,8 @@
                     <div class="ui-g ui-fluid">
                         <div class="ui-g-12 ui-md-4">
                             <div class="ui-inputgroup">
-                                    <p:commandButton id="btnSave" value="Login" styleClass="blue-button" update="@this" ajax="false" actionListener="#{userBean.login()}" />
+                                <p:commandButton value="Login" styleClass="blue-button" update="@this" ajax="false" actionListener="#{userBean.loginAction()}" />
+                                <a href="register.xhtml" style="font-family: 'Garamond', serif; color: #0622d7">Register</a>
                             </div>
                         </div>
                     </div>

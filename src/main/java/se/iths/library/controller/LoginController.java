@@ -25,4 +25,9 @@ public class LoginController {
         return loginService.createLogin(login);
     }
 
+    @PostMapping("authenticated")
+    public Login getAuthenticatedUser(){
+        return loginService.getAuthenticatedUserEmail();
+    }
+
 }

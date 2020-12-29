@@ -1,17 +1,38 @@
 package se.iths.library.bean;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.methods.RequestBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.DefaultRedirectStrategy;
+import org.springframework.security.web.RedirectStrategy;
 import org.springframework.stereotype.Component;
 import se.iths.library.dto.BorrowedItemsDTO;
 import se.iths.library.entity.Login;
 import se.iths.library.entity.User;
+import se.iths.library.securityJwt.controller.AuthenticationController;
+import se.iths.library.securityJwt.models.AuthenticationRequest;
+import se.iths.library.securityJwt.models.AuthenticationResponse;
 import se.iths.library.service.ItemLendingService;
 import se.iths.library.service.LoginService;
 import se.iths.library.service.UserService;
+
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,6 +44,7 @@ public class UserBean implements Serializable {
     private String loginUsername;
     private String loginPassword;
     private boolean Logged = false;
+    private boolean LoggedOut = false;
     private String authenticatedUserFullName;
     private Long loggedId;
     private String email;
@@ -40,6 +62,7 @@ public class UserBean implements Serializable {
     private String fullName;
     private String birthDate;
     private String address;
+    private String token;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
@@ -114,27 +137,53 @@ public class UserBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
-    public void login() throws IOException {
-        Login authenticatedUser = loginService.getAuthenticatedUserEmail();
-        if (authenticatedUser != null){
-            User user = userService.findUserByLoginEmail(authenticatedUser.getEmail());
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private AuthenticationController authenticationController;
+
+    public void loginAction() throws Exception {
+        /*try {
+            Authentication request = new UsernamePasswordAuthenticationToken(this.getLoginUsername(), this.getLoginPassword());
+            Authentication result = authenticationManager.authenticate(request);
+            SecurityContextHolder.getContext().setAuthentication(result);
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.getExternalContext().redirect("/home");
+
+        } catch (AuthenticationException e) {
+            e.printStackTrace();
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Bad Credentials!", "");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }*/
+
+
+        try {
+            token = authenticationController.createAuthenticationToken(new AuthenticationRequest(this.getLoginUsername(), this.getLoginPassword()));
+            System.out.println(" TOKEN :" +token);
+            setLoggedOut(false);
+            setLogged(true);
+            User user = userService.findUserByLoginEmail(this.getLoginUsername());
             setAuthenticatedUserFullName(user.getFullName());
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.getExternalContext().redirect("/home");
+
+        } catch (Exception e){
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), "");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         }
-        setLogged(true);
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.getExternalContext().redirect("/home");
+
     }
     public void logout() throws IOException {
         setAuthenticatedUserFullName("");
         setLogged(false);
-        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "You are successfully logged out", "");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        setLoggedOut(true);
+        authenticationController.logout();
         FacesContext context = FacesContext.getCurrentInstance();
-        context.getExternalContext().redirect("/logout");
-
+        context.getExternalContext().redirect("/login");
     }
 
     //<editor-fold desc="Getter & Setter">
+
 
     public String getAuthenticatedUserFullName() {
         return authenticatedUserFullName;
@@ -280,12 +329,28 @@ public class UserBean implements Serializable {
         Logged = logged;
     }
 
+    public boolean isLoggedOut() {
+        return LoggedOut;
+    }
+
+    public void setLoggedOut(boolean loggedOut) {
+        LoggedOut = loggedOut;
+    }
+
     public Long getLoggedId() {
         return loggedId;
     }
 
     public void setLoggedId(Long loggedId) {
         this.loggedId = loggedId;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
     //</editor-fold>
 }

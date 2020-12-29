@@ -3,9 +3,8 @@ package se.iths.library.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import se.iths.library.entity.Login;
+import se.iths.library.models.EmailJsonFormat;
 import se.iths.library.service.LoginService;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/login")
@@ -26,8 +25,9 @@ public class LoginController {
     }
 
     @PostMapping("authenticated")
-    public Login getAuthenticatedUser(){
-        return loginService.getAuthenticatedUserEmail();
+    public EmailJsonFormat getAuthenticatedUser(){
+        Login login =  loginService.getAuthenticatedUserEmail();
+        return new EmailJsonFormat(login.getEmail());
     }
 
 }

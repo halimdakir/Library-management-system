@@ -42,7 +42,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/item/all", "/item/id/**").permitAll()
                 .antMatchers("/user/all","/user/id/**").hasRole("ADMIN")
                 .antMatchers("/user", "/user.xhtml").hasRole( "USER")
-                .antMatchers("/admin", "/admin.xhtml", "/users", "/users.xhtml", "/adminregister.xhtml").hasRole("ADMIN")
+                .antMatchers("/admin", "/admin.xhtml", "/users", "/users.xhtml", "/registerAdmin.xhtml").hasRole("ADMIN")
                 .and()
                 .formLogin().successHandler(successHandler).permitAll().and().logout().permitAll();
         http.csrf().disable();*/
@@ -53,10 +53,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                //.antMatchers("/auth", "/", "/home", "/login").permitAll()
-                .antMatchers("/admin", "/users", "/adminregister").hasRole("ADMIN")
+                .antMatchers("/", "/home", "/register", "/login").permitAll()
+                .antMatchers("/admin", "/users", "/registerAdmin").hasRole("ADMIN")
                 .antMatchers("/user", "/userInfo").hasRole( "USER")
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
@@ -67,7 +67,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login")
                 .deleteCookies("JSESSIONID")
-                .permitAll()
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
@@ -79,10 +78,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        super.configure(auth);
-        //TODO JSON WEB TOKEN
-        //auth.userDetailsService(userDetailsService);
-        //auth.authenticationProvider(authProvider());
+        //TODO LEARN ABOUT EACH OPTION HERE
+        //super.configure(auth);
+        auth.authenticationProvider(authProvider());
 
     }
 

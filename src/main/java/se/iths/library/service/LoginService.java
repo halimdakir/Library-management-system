@@ -40,19 +40,19 @@ public class LoginService {
             return false;
         }
     }
-    public Login updateLogin(Login newLogin, Long id){
-            return loginRepository.findById(id)
-                    .map(login -> {
-                        login.setEmail(newLogin.getEmail());
-                        login.setPassword(newLogin.getPassword());
-                        login.setActive(newLogin.isActive());
-                        login.setRoles(newLogin.getRoles());
-                        return loginRepository.save(login);
-                    })
-                    .orElseGet(() -> {
-                        newLogin.setId(id);
-                        return loginRepository.save(newLogin);
-                    });
+    public void updateLogin(Login newLogin, Long id){
+        loginRepository.findById(id)
+                .map(login -> {
+                    login.setEmail(newLogin.getEmail());
+                    login.setPassword(newLogin.getPassword());
+                    login.setActive(newLogin.isActive());
+                    login.setRoles(newLogin.getRoles());
+                    return loginRepository.save(login);
+                })
+                .orElseGet(() -> {
+                    newLogin.setId(id);
+                    return loginRepository.save(newLogin);
+                });
     }
     public void updateLoginByUser(String password, Long id){
         loginRepository.findById(id)

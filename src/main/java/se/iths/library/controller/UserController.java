@@ -1,24 +1,24 @@
 package se.iths.library.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import se.iths.library.entity.User;
 import se.iths.library.exception.DeleteDetails;
 import se.iths.library.exception.NotFoundException;
 import se.iths.library.service.UserService;
-
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
+    @Autowired
     private UserService userService;
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/id/{id}")
     public Optional<User> getOneUserById(@PathVariable Long id){
        Optional<User> user = userService.getUserById(id);

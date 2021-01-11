@@ -17,6 +17,7 @@ import javax.annotation.security.RolesAllowed;
 
 @RestController
 @RequestMapping("/login")
+@PreAuthorize("permitAll()")
 public class LoginController {
     @Autowired
     LoginService loginService;
@@ -27,6 +28,7 @@ public class LoginController {
     public String login(){
         return "login";
     }
+
 
     @PostMapping("/create")
     public Login createNewLogin(@RequestBody Login login){

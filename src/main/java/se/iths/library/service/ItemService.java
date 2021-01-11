@@ -3,6 +3,7 @@ package se.iths.library.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.iths.library.entity.Item;
+import se.iths.library.exception.NotFoundException;
 import se.iths.library.repository.ItemRepository;
 
 import java.util.Optional;
@@ -36,5 +37,15 @@ public class ItemService {
     public Iterable<Item> findItemByAuthorName(String fullName){
         return itemRepository.findItemByAuthorName(fullName);
     }
-
+    public Item updateItem(Item newItem, Long id) {
+        return itemRepository.findById(id)
+                .map(item -> {
+                    item.setBarCode(newItem.getBarCode());
+                    item.setTitle(newItem.getTitle());
+                    item.setDescription(newItem.getDescription());
+                    return itemRepository.save(item);
+                })
+                .orElseThrow(() -> new NotFoundException("Item not found with id :" + id)
+                );
+    }
 }

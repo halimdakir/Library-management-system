@@ -28,18 +28,24 @@ public class UserController {
             throw new NotFoundException("User not found with id :" + id);
         }
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/all")
     public Iterable<User> getAllUsers(){
         return userService.getAllUsers();
     }
+
     @PostMapping("/new")
     public User createNewUser(@RequestBody User user) {
         return userService.createUser(user);
     }
+
     @PutMapping("/id/{id}")
     public User updateUser(@RequestBody User newUser, @PathVariable Long id) {
         return userService.updateUser(newUser, id);
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/id/{id}")
     public ResponseEntity<?> deleteUserById(@PathVariable Long id){
         var user = userService.getUserById(id);
@@ -50,6 +56,8 @@ public class UserController {
             throw new NotFoundException("User not found with id :" + id);
         }
     }
+
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/email/{email}")
     public String getOneUserByEmail(@PathVariable String email){
         User user =  userService.findUserByLoginEmail(email);

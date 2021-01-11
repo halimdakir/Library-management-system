@@ -1,7 +1,11 @@
 package se.iths.library.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.iths.library.entity.User;
+import se.iths.library.exception.DeleteDetails;
+import se.iths.library.exception.NotFoundException;
 import se.iths.library.service.UserService;
 
 import java.util.Optional;
@@ -17,7 +21,12 @@ public class UserController {
 
     @GetMapping("/id/{id}")
     public Optional<User> getOneUserById(@PathVariable Long id){
-        return userService.getUserById(id);
+       Optional<User> user = userService.getUserById(id);
+        if (user.isPresent()){
+            return user;
+        }else {
+            throw new NotFoundException("User not found with id :" + id);
+        }
     }
     @GetMapping("/all")
     public Iterable<User> getAllUsers(){
@@ -29,25 +38,20 @@ public class UserController {
     }
     @PutMapping("/id/{id}")
     public User updateUser(@RequestBody User newUser, @PathVariable Long id) {
-
-        return userService.getUserById(id)
-                .map(member -> {
-                    member.setFullName(newUser.getFullName());
-                    member.setBirthDate(newUser.getBirthDate());
-                    member.setAddress(newUser.getAddress());
-                    return userService.createUser(member);
-                })
-                .orElseGet(() -> {
-                    newUser.setId(id);
-                    return userService.createUser(newUser);
-                });
+        return userService.updateUser(newUser, id);
     }
     @DeleteMapping("/id/{id}")
-    public void deleteUserById(@PathVariable Long id){
-        userService.deleteUserById(id);
+    public ResponseEntity<?> deleteUserById(@PathVariable Long id){
+        var user = userService.getUserById(id);
+        if (user.isPresent()){
+            userService.deleteUserById(id);
+            return new ResponseEntity<>(new DeleteDetails("Delete request", "User with id :"+id+" is successfully deleted!"), HttpStatus.OK);
+        }else {
+            throw new NotFoundException("User not found with id :" + id);
+        }
     }
     @GetMapping("/email/{email}")
-    public String getOneUserById(@PathVariable String email){
+    public String getOneUserByEmail(@PathVariable String email){
         User user =  userService.findUserByLoginEmail(email);
         return user.getId()+" "+user.getFullName();
     }

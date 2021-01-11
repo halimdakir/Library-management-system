@@ -3,6 +3,7 @@ package se.iths.library.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.iths.library.dto.UserInfoDTO;
+import se.iths.library.exception.NotFoundException;
 import se.iths.library.models.Roles;
 import se.iths.library.entity.User;
 import se.iths.library.repository.UserRepository;
@@ -16,9 +17,6 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
     public User createUser(User user){
         return userRepository.save(user);
     }
@@ -30,10 +28,8 @@ public class UserService {
                     user.setAddress(newUser.getAddress());
                     return userRepository.save(user);
                 })
-                .orElseGet(() -> {
-                    newUser.setId(id);
-                    return userRepository.save(newUser);
-                });
+                .orElseThrow(() -> new NotFoundException("User not found with id :" + id)
+                );
     }
     public void deleteUserById(Long id){
         Optional<User> foundMember = userRepository.findById(id);

@@ -1,11 +1,13 @@
 package se.iths.library.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import se.iths.library.entity.Author;
-import se.iths.library.entity.Item;
-import se.iths.library.entity.User;
+import se.iths.library.exception.DeleteDetails;
+import se.iths.library.exception.NotFoundException;
 import se.iths.library.exception.UnprocessableEntityException;
 import se.iths.library.service.AuthorService;
 
@@ -24,7 +26,12 @@ public class AuthorController {
     @PreAuthorize("permitAll()")
     @GetMapping("/id/{id}")
     public Optional<Author> getOneAuthorById(@PathVariable Long id){
-        return authorService.getAuthorById(id);
+        var author =  authorService.getAuthorById(id);
+        if (author.isPresent()){
+            return author;
+        }else {
+            throw new NotFoundException("Author not found with id :" + id);
+        }
     }
 
     @PreAuthorize("permitAll()")
@@ -55,7 +62,13 @@ public class AuthorController {
 
     @Secured("ROLE_ADMIN")
     @DeleteMapping("/id/{id}")
-    public void deleteAuthorById(@PathVariable Long id){
-        authorService.deleteAuthorById(id);
+    public ResponseEntity<DeleteDetails> deleteAuthorById(@PathVariable Long id){
+        var author =  authorService.getAuthorById(id);
+        if (author.isPresent()){
+            authorService.deleteAuthorById(id);
+            return new ResponseEntity<>(new DeleteDetails("Delete request", "Author with id :"+id+" is successfully deleted!"), HttpStatus.OK);
+        }else {
+            throw new NotFoundException("Author not found with id :" + id);
+        }
     }
 }

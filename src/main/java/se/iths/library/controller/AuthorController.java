@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import se.iths.library.entity.Author;
 import se.iths.library.entity.Item;
 import se.iths.library.entity.User;
+import se.iths.library.exception.UnprocessableEntityException;
 import se.iths.library.service.AuthorService;
 
 import java.util.Optional;
@@ -35,7 +36,15 @@ public class AuthorController {
     @Secured("ROLE_ADMIN")
     @PostMapping("/new")
     public Author createNewAuthor(@RequestBody Author author) {
-        return authorService.createAuthor(author);
+        if (author.getBirthDate() != null && author.getFullName() != null){
+            if (author.getBirthDate().matches("^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$")){
+                return authorService.createAuthor(author);
+            }else {
+                throw new UnprocessableEntityException("Correct date format is : yyyy-MM-dd");
+            }
+        }else {
+            throw new UnprocessableEntityException("Full name & date of birth are required!");
+        }
     }
 
     @Secured("ROLE_ADMIN")

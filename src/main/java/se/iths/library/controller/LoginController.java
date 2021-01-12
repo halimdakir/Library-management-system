@@ -29,7 +29,7 @@ public class LoginController {
     }
 
 
-    @PostMapping("/create")
+    @PostMapping("/new")
     public Login createNewLogin(@RequestBody LoginDomain loginDomain){
         Login login = new Login();
 

@@ -1,5 +1,6 @@
 package se.iths.library.controller;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import se.iths.library.entity.User;
 import se.iths.library.exception.DeleteDetails;
 import se.iths.library.exception.NotFoundException;
+import se.iths.library.exception.UnprocessableEntityException;
 import se.iths.library.service.UserService;
+
+import javax.validation.constraints.NotEmpty;
 import java.util.Optional;
 
 @RestController
@@ -35,9 +39,18 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @PreAuthorize("permitAll()")
     @PostMapping("/new")
     public User createNewUser(@RequestBody User user) {
-        return userService.createUser(user);
+        if (user.getBirthDate() != null && user.getFullName() != null){
+            if (user.getBirthDate().matches("^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$")){
+                return userService.createUser(user);
+            }else {
+                throw new UnprocessableEntityException("Correct date format is : yyyy-MM-dd");
+            }
+        }else {
+            throw new UnprocessableEntityException("Full name & date of birth are required!");
+        }
     }
 
     @PutMapping("/id/{id}")

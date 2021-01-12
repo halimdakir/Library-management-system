@@ -26,12 +26,13 @@ public class GlobalExceptionHandler {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), errorMessageDesc, request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
     }
-
-    /*@ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> globalExceptionHandling(Exception exception, WebRequest request){
-        ErrorDetails errorDetails =
-                new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
-        return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
-    }*/
+    //Unprocessable Entity
+    @ExceptionHandler(UnprocessableEntityException.class)
+    public ResponseEntity<Object> unprocessableEntityExceptionHandling(UnprocessableEntityException exception, WebRequest request){
+        String errorMessageDesc = exception.getLocalizedMessage();
+        if (errorMessageDesc == null) errorMessageDesc=exception.toString();
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), errorMessageDesc, request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
 
 }

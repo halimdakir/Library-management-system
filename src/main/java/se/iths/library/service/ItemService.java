@@ -14,10 +14,6 @@ public class ItemService {
     @Autowired
     private ItemRepository itemRepository;
 
-    public ItemService(ItemRepository itemRepository){
-        this.itemRepository=itemRepository;
-           }
-
     public Item createItem(Item item){
         return itemRepository.save(item);
     }

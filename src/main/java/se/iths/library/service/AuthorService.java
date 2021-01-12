@@ -13,10 +13,6 @@ public class AuthorService {
     @Autowired
     AuthorRepository authorRepository;
 
-    public AuthorService(AuthorRepository authorRepository) {
-        this.authorRepository = authorRepository;
-    }
-
     public Author createAuthor(Author author){
         return authorRepository.save(author);
     }

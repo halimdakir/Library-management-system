@@ -1,38 +1,25 @@
 package se.iths.library.bean;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.DefaultRedirectStrategy;
-import org.springframework.security.web.RedirectStrategy;
 import org.springframework.stereotype.Component;
 import se.iths.library.dto.BorrowedItemsDTO;
+import se.iths.library.entity.ItemLending;
 import se.iths.library.entity.Login;
 import se.iths.library.entity.User;
+import se.iths.library.models.Roles;
+import se.iths.library.repository.ItemLendingRepository;
 import se.iths.library.securityJwt.controller.AuthenticationController;
 import se.iths.library.securityJwt.models.AuthenticationRequest;
-import se.iths.library.securityJwt.models.AuthenticationResponse;
 import se.iths.library.service.ItemLendingService;
+import se.iths.library.service.ItemService;
 import se.iths.library.service.LoginService;
 import se.iths.library.service.UserService;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -46,11 +33,14 @@ public class UserBean implements Serializable {
     private boolean Logged = false;
     private boolean LoggedOut = false;
     private String authenticatedUserFullName;
+    private boolean authenticatedUserRole;
+    private boolean authenticateAdminRole;
     private Long loggedId;
     private String email;
     private Long id;
     private List<BorrowedItemsDTO> borrowedItemList = new ArrayList<>();
     private List<BorrowedItemsDTO> borrowedItemListByUser = new ArrayList<>();
+    private List<BorrowedItemsDTO> reservedItemListByUser = new ArrayList<>();
     //TODO PERSONAL INFORMATION
     private Long userId;
     private Long loginId;
@@ -71,11 +61,15 @@ public class UserBean implements Serializable {
     private ItemLendingService itemLendingService;
     private LoginService loginService;
     private UserService userService;
+    private ItemService itemService;
+    private ItemLendingRepository itemLendingRepository;
 
-    public UserBean(ItemLendingService itemLendingService, LoginService loginService, UserService userService) {
+    public UserBean(ItemLendingService itemLendingService, LoginService loginService, UserService userService, ItemLendingRepository itemLendingRepository, ItemService itemService) {
         this.itemLendingService = itemLendingService;
         this.loginService = loginService;
         this.userService = userService;
+        this.itemService = itemService;
+        this.itemLendingRepository = itemLendingRepository;
     }
 
     public void getBorrowedItems(String email){
@@ -164,14 +158,54 @@ public class UserBean implements Serializable {
             setLogged(true);
             User user = userService.findUserByLoginEmail(this.getLoginUsername());
             setAuthenticatedUserFullName(user.getFullName());
+
+            var login = loginService.getLoginByEmail(this.getLoginUsername());
+            if (login.isPresent()){
+                if (login.get().getRoles() == Roles.ROLE_ADMIN){
+                    authenticateAdminRole = true;
+                    authenticatedUserRole = false;
+                }else if (login.get().getRoles() == Roles.ROLE_USER){
+                    authenticateAdminRole = false;
+                    authenticatedUserRole = true;
+                }
+            }
+
             FacesContext context = FacesContext.getCurrentInstance();
-            context.getExternalContext().redirect("/home");
+            context.getExternalContext().redirect("/connect");
 
         } catch (Exception e){
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), "");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
 
+    }
+    public void reserveItems(String itemBarCode){
+        var item = itemService.findItemByBarCode(itemBarCode);
+        var user = new User();
+        Login authenticatedUser = loginService.getAuthenticatedUserEmail();
+        if (authenticatedUser!=null){
+            user = userService.findUserByLoginEmail(authenticatedUser.getEmail());
+        }
+        itemLendingRepository.save(new ItemLending(java.time.LocalDate.now().toString(), java.time.LocalDate.now().plusDays(15).toString(), false, false, user, item));
+        getReservedItemList();
+    }
+    private void getReservedItemList(){
+        Login authenticatedUser = loginService.getAuthenticatedUserEmail();
+        if (authenticatedUser!=null){
+            User userInfo = userService.findUserByLoginEmail(authenticatedUser.getEmail());
+            reservedItemListByUser = itemLendingService.findReservedItemsAndCreationDueDateByUserId(userInfo.getId());
+        }
+    }
+    public void deleteReservedItems(Long reservedItemId){
+        itemLendingService.deleteReservedItem(reservedItemId);
+        getReservedItemList();
+    }
+
+    public String redirectToUserDashBoard(){
+        getBorrowedItemsByUserId();
+        getAuthenticatedUserInfo();
+        getReservedItemList();
+        return "user";
     }
     public void logout() throws IOException {
         setAuthenticatedUserFullName("");
@@ -351,6 +385,30 @@ public class UserBean implements Serializable {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public boolean isAuthenticatedUserRole() {
+        return authenticatedUserRole;
+    }
+
+    public void setAuthenticatedUserRole(boolean authenticatedUserRole) {
+        this.authenticatedUserRole = authenticatedUserRole;
+    }
+
+    public boolean isAuthenticateAdminRole() {
+        return authenticateAdminRole;
+    }
+
+    public void setAuthenticateAdminRole(boolean authenticateAdminRole) {
+        this.authenticateAdminRole = authenticateAdminRole;
+    }
+
+    public List<BorrowedItemsDTO> getReservedItemListByUser() {
+        return reservedItemListByUser;
+    }
+
+    public void setReservedItemListByUser(List<BorrowedItemsDTO> reservedItemListByUser) {
+        this.reservedItemListByUser = reservedItemListByUser;
     }
     //</editor-fold>
 }

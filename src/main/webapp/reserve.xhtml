@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Items</title>
+    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+    <style type="text/css">
+        [class^="item"] {
+            text-align: center;
+        }
+        .grid {
+            font-family: Calibri, monospace;
+            display: grid;
+            width:100%;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, auto);
+            grid-template-areas:
+            "header header header header"
+            "menu menu menu menu"
+            "sidebar sidebar sidebar sidebar"
+            "footer footer footer footer";
+            grid-auto-flow: dense;
+            grid-gap: 5px;
+        }
+        .item1 {
+            grid-area: header;
+            background-color: darkslategray;
+            text-align: center;
+        }
+
+        .item2 {
+            grid-area: menu;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .item3 {
+            grid-area: sidebar;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .item4 {
+            grid-area: footer;
+            height: 25px;
+            background-color: darkslategray;
+            text-align: center;
+        }
+        h1{
+            font-family: 'Times New Roman', serif;
+            color: wheat;
+        }
+        h2{
+            font-family: 'Times New Roman', serif;
+            color: gray;
+        }
+        .outputText{
+            font-family: 'Garamond', serif;
+            color: wheat;
+        }
+        .form{
+            position:absolute;
+            top:0;
+            right:0;
+            margin-top: 15px;
+            margin-right: 4px
+        }
+        .value {
+            font-weight: bold;
+        }
+        /*demo*/
+        .ui-dataview-list .ui-dataview-row {
+            border-bottom: 1px solid #A8A8A8;
+            padding: 25px 10px;
+            /* with the exported variables from Nova and Luna Themes*/
+            border-bottom-color: var(--input-border-color, #A8A8A8);
+        }
+
+        .MenuItem{
+            width: 200px;
+        }
+
+        .logo {
+            width: 5%;
+        }
+        .detail {
+            width: 85%;
+            padding-left: 25px;
+        }
+        .white-button.ui-button.ui-state-default {
+            background-color: #ffffff;
+            color: #222222;
+            border-color: #d6d6d6;
+            /* with the exported variables from Nova and Luna Themes*/
+            border-color: var(--input-border-color, #d6d6d6);
+        }
+
+        .white-button.ui-button.ui-state-default:enabled:hover,
+        .white-button.ui-button.ui-state-default:focus {
+            background-color: #f2f2f2;
+            border-color: #ccc;
+            color: #373a3c;
+            /* with the exported variables from Nova and Luna Themes*/
+            border-color: var(--input-hover-border-color, #ccc);
+        }
+
+    </style>
+</h:head>
+
+<h:body styleClass="grid">
+    <p:outputPanel styleClass="item1"><h1>LIBRARY MANAGEMENT SYSTEM</h1>
+        <h:form styleClass="form" style="" rendered="#{userBean.logged}">
+            <h:outputText styleClass="outputText" value="Hi: "/> <h:outputLabel styleClass="outputText" value="#{userBean.authenticatedUserFullName}"/><h:outputText value=" "/>
+            <p:commandButton actionListener="#{userBean.logout()}" style="width: 25px; height: 30px; color: darkslategray" icon="pi pi-sign-out" update="@this" ajax="false" />
+        </h:form>
+    </p:outputPanel>
+    <p:outputPanel styleClass="item2">
+        <h:form>
+            <p:tabMenu activeIndex="#{param.i}" style="text-align: center">
+                <p:menuitem value="Borrowed List" icon="pi pi-caret-right" url="user" styleClass="MenuItem">
+                    <f:param name="i" value="0" />
+                </p:menuitem>
+                <p:menuitem value="Personal Infos" icon="pi pi-caret-right" url="userInfo" styleClass="MenuItem">
+                    <f:param name="i" value="1" />
+                </p:menuitem>
+                <p:menuitem value="Reserve" icon="pi pi-caret-right" url="#" styleClass="MenuItem">
+                    <f:param name="i" value="2" />
+                </p:menuitem>
+            </p:tabMenu>
+        </h:form>
+    </p:outputPanel>
+    <p:outputPanel styleClass="item3">
+        <h:form id="form">
+
+            <h:panelGrid style="border: 2px solid darkgray; margin: 0 auto;">
+
+                <p:tabView orientation="center">
+                    <p:tab title="YOUR BORROWED ITEM LIST" titleStyle="width: 280px; height: 40px">
+
+                        <h:panelGrid columns="1" cellpadding="10">
+
+
+                                <p:dataTable var="item" value="#{userBean.reservedItemListByUser}">
+
+                                    <p:column headerText="ISBN">
+                                        <h:outputText value="#{item.barCode}" />
+                                    </p:column>
+
+                                    <p:column headerText="Title">
+                                        <h:outputText value="#{item.title}" />
+                                    </p:column>
+
+                                    <p:column headerText="Creation Date">
+                                        <h:outputText value="#{item.creationDate}" />
+                                    </p:column>
+
+                                    <p:column headerText="Due Date">
+                                        <h:outputText value="#{item.dueDate}" />
+                                    </p:column>
+                                    <p:column headerText="Delete" style="text-align: center">
+                                        <p:commandButton id="deleteBtn" action="#{userBean.deleteReservedItems(item.id)}" style="margin-right:20px;" icon="pi pi-trash" ajax="true" update="@form"/>
+                                    </p:column>
+
+                                </p:dataTable>
+
+
+                        </h:panelGrid>
+                    </p:tab>
+                </p:tabView>
+
+            </h:panelGrid>
+
+
+            <p:separator/>
+
+            <h:panelGrid style="border: 2px solid darkgray; margin: 0 auto;">
+                <p:selectOneRadio id="search" value="#{itemBean.search}" unselectable="true">
+                    <div class="ui-g ui-fluid">
+                        <div class="ui-g-12 ui-md-4">
+                            <div class="ui-inputgroup">
+                                <f:selectItem itemLabel="Title" itemValue="Title" />
+                            </div>
+                        </div>
+                        <div class="ui-g-12 ui-md-4">
+                            <div class="ui-inputgroup">
+                                <f:selectItem itemLabel="Author" itemValue="Author" />
+
+                            </div>
+                        </div>
+                        <div class="ui-g-12 ui-md-4">
+                            <div class="ui-inputgroup">
+                                <f:selectItem itemLabel="Category" itemValue="Category" />
+                            </div>
+                        </div>
+                    </div>
+                </p:selectOneRadio>
+            </h:panelGrid>
+            <div class="ui-g ui-fluid">
+                <div class="ui-g-12 ui-md-12">
+                    <div class="ui-inputgroup">
+                        <p:inputText placeholder="Keyword" value="#{itemBean.keyWord}"/>
+                        <p:commandButton actionListener="#{itemBean.getItemByTitle(itemBean.keyWord)}" update="@form" ajax="true" icon="pi pi-search"  styleClass="white-button"/>
+                    </div>
+                </div>
+            </div>
+
+
+            <p:dataView var="item" value="#{itemBean.itemList}"
+                        gridIcon="pi pi-th-large" listIcon="pi pi-bars">
+
+                <p:dataViewListItem>
+                    <h:panelGrid columns="4" style="width:100%" columnClasses="logo,detail">
+                        <h:graphicImage value="resources/images/#{item.barCode}.jpg" style="width:200px; height: 270px"/>
+                        <p:outputPanel>
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <h:outputText value="title:" />
+                                <h:outputText value="#{item.title}" style="font-weight: bold"/>
+                            </h:panelGrid>
+                        </p:outputPanel>
+
+                        <p:commandLink action="#{itemBean.getAuthors(item.id)}" update=":form:itemDetail" oncomplete="PF('itemDialog').show()" title="View Detail">
+                            <h:outputText styleClass="ui-icon pi pi-search" style="margin:0 auto;" />
+                            <f:setPropertyActionListener value="#{item}" target="#{itemBean.selectedItem}" />
+                        </p:commandLink>
+
+                        <p:commandLink action="#{userBean.reserveItems(item.barCode)}" update="@form" ajax="true">
+                            <h:outputText styleClass="ui-icon pi pi-plus-circle" style="margin:0 auto;" />
+                        </p:commandLink>
+                    </h:panelGrid>
+                </p:dataViewListItem>
+
+                <p:dataViewGridItem>
+                    <p:panel header="#{item.barCode}" style="text-align:center">
+                        <h:panelGrid columns="1" style="width:auto">
+                            <h:graphicImage value="resources/images/#{item.barCode}.jpg" style="width:200px; height: 270px"/>
+
+                            <h:outputText value="#{item.title}" />
+
+                            <p:commandLink action="#{itemBean.getAuthors(item.id)}" update=":form:itemDetail" oncomplete="PF('itemDialog').show()" title="View Detail">
+                                <h:outputText styleClass="ui-icon pi pi-search" style="margin:0 auto;" />
+                                <f:setPropertyActionListener value="#{item}" target="#{itemBean.selectedItem}" />
+                            </p:commandLink>
+
+                            <p:commandLink action="#{userBean.reserveItems(item.barCode)}" update="@form" ajax="true">
+                                <h:outputText styleClass="ui-icon pi pi-plus-circle" style="margin:0 auto;" />
+                            </p:commandLink>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:dataViewGridItem>
+
+
+            </p:dataView>
+
+            <p:dialog header="Item Info" widgetVar="itemDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                <p:outputPanel id="itemDetail" style="text-align:center;">
+                    <p:panelGrid  columns="2" rendered="#{not empty itemBean.selectedItem}" columnClasses="label,value">
+                        <f:facet name="header">
+                            <h:graphicImage value="resources/images/#{itemBean.selectedItem.barCode}.jpg" style="width:300px; height: 370px"/>
+                        </f:facet>
+
+                        <h:outputText value="ISBN" />
+                        <h:outputText value="#{itemBean.selectedItem.barCode}" />
+
+                        <h:outputText value="Title" />
+                        <h:outputText value="#{itemBean.selectedItem.title}" />
+
+                        <h:outputText value="Desc" />
+                        <h:outputText value="#{itemBean.selectedItem.description}" />
+                    </p:panelGrid>
+                    <h4>Author(s)</h4>
+                    <ui:repeat value="#{itemBean.authorList}" var="author">
+                        <p:panelGrid  columns="2" columnClasses="label,value" style="width: 100%">
+                            <h:outputText value="Name"/>
+                            <h:outputText value="#{author.fullName}" />
+
+                        </p:panelGrid>
+                    </ui:repeat>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+    </p:outputPanel>
+    <p:outputPanel styleClass="item4"></p:outputPanel>
+</h:body>
+</html>

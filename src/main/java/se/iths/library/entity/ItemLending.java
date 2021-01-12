@@ -15,9 +15,8 @@ public class ItemLending {
     @NotEmpty
     @JsonFormat(pattern = "yyyy-mm-dd", shape = JsonFormat.Shape.STRING)
     private String dueDate;
-    @NotEmpty
-    @JsonFormat(pattern = "yyyy-mm-dd", shape = JsonFormat.Shape.STRING)
-    private String returnDate;
+    private boolean isConfirmed;
+    private boolean isReturned;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
@@ -30,10 +29,12 @@ public class ItemLending {
     public ItemLending() {
     }
 
-    public ItemLending(@NotEmpty String creationDate, @NotEmpty String dueDate, @NotEmpty String returnDate, User user, Item item) {
+
+    public ItemLending(@NotEmpty String creationDate, @NotEmpty String dueDate, boolean isConfirmed, boolean isReturned, User user, Item item) {
         this.creationDate = creationDate;
         this.dueDate = dueDate;
-        this.returnDate = returnDate;
+        this.isConfirmed = isConfirmed;
+        this.isReturned = isReturned;
         this.user = user;
         this.item = item;
     }
@@ -50,11 +51,11 @@ public class ItemLending {
     public void setDueDate(String dueDate) {
         this.dueDate = dueDate;
     }
-    public String getReturnDate() {
-        return returnDate;
+    public boolean isReturned() {
+        return isReturned;
     }
-    public void setReturnDate(String returnDate) {
-        this.returnDate = returnDate;
+    public void setReturned(boolean returned) {
+        isReturned = returned;
     }
     public User getUser() {
         return user;
@@ -68,12 +69,16 @@ public class ItemLending {
     public void setId(Long id) {
         this.id = id;
     }
-
     public Item getItem() {
         return item;
     }
-
     public void setItem(Item item) {
         this.item = item;
+    }
+    public boolean isConfirmed() {
+        return isConfirmed;
+    }
+    public void setConfirmed(boolean confirmed) {
+        isConfirmed = confirmed;
     }
 }

@@ -1,6 +1,7 @@
 package se.iths.library.dto;
 
 public class BorrowedItemsDTO {
+    private Long id;
     private String title;
     private String barCode;
     private String creationDate;
@@ -11,6 +12,22 @@ public class BorrowedItemsDTO {
         this.barCode = barCode;
         this.creationDate = creationDate;
         this.dueDate = dueDate;
+    }
+
+    public BorrowedItemsDTO(Long id, String title, String barCode, String creationDate, String dueDate) {
+        this.id = id;
+        this.title = title;
+        this.barCode = barCode;
+        this.creationDate = creationDate;
+        this.dueDate = dueDate;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCreationDate() {

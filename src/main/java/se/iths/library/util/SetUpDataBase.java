@@ -77,9 +77,9 @@ public class SetUpDataBase {
                 userRepository.save(user2);
                 userRepository.save(user3);
 
-                itemLendingRepository.save(new ItemLending("2020/12/02", "2020/12/20", "2020/12/15", user1, item1));
-                itemLendingRepository.save(new ItemLending("2020/12/03", "2020/12/21", "2020/12/13", user1, item2));
-                itemLendingRepository.save(new ItemLending("2020/12/02", "2020/12/20", "2020/12/15", user3, item5));
+                itemLendingRepository.save(new ItemLending("2020/12/02", "2020/12/20", true, false, user1, item1));
+                itemLendingRepository.save(new ItemLending("2020/12/03", "2020/12/21", true, false, user1, item2));
+                itemLendingRepository.save(new ItemLending("2020/12/02", "2020/12/20", true, false, user3, item5));
 
                 libraryRepository.save(library1);
                 libraryRepository.save(library2);

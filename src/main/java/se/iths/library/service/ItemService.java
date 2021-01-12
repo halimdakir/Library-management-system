@@ -44,4 +44,7 @@ public class ItemService {
                 .orElseThrow(() -> new NotFoundException("Item not found with id :" + id)
                 );
     }
+    public Item findItemByBarCode(String barCode){
+        return itemRepository.findItemByBarCode(barCode);
+    }
 }

@@ -70,9 +70,7 @@
             margin-top: 15px;
             margin-right: 4px
         }
-        .value {
-            font-weight: bold;
-        }
+
         /*demo*/
         .ui-dataview-list .ui-dataview-row {
             border-bottom: 1px solid #A8A8A8;
@@ -81,13 +79,6 @@
             border-bottom-color: var(--input-border-color, #A8A8A8);
         }
 
-        .logo {
-            width: 5%;
-        }
-        .detail {
-            width: 85%;
-            padding-left: 25px;
-        }
         .MenuItem{
             width: 200px;
         }
@@ -111,7 +102,7 @@
                 <p:menuitem value="Personal Infos" icon="pi pi-caret-right" url="userInfo" styleClass="MenuItem" action="#{userBean.getAuthenticatedUserInfo()}">
                     <f:param name="i" value="1" />
                 </p:menuitem>
-                <p:menuitem value="Items" icon="pi pi-caret-right" url="item" styleClass="MenuItem">
+                <p:menuitem value="Reserve" icon="pi pi-caret-right" url="reserve" styleClass="MenuItem">
                     <f:param name="i" value="2" />
                 </p:menuitem>
             </p:tabMenu>
@@ -119,12 +110,11 @@
     </p:outputPanel>
     <p:outputPanel styleClass="item3">
         <p:tabView orientation="center">
-            <p:tab title="YOUR BORROWED ITEM LIST" titleStyle="width: 280px; height: 40px">
+            <p:tab title="YOUR RESERVE ITEM LIST" titleStyle="width: 280px; height: 40px">
 
                 <h:panelGrid columns="1" cellpadding="10">
                     <h:form>
-                        <p:commandButton value="refresh" action="#{userBean.getBorrowedItemsByUserId()}" icon="pi pi-refresh" update="@form" ajax="true"/>
-                        <p:separator/>
+
 
                         <p:dataTable var="item" value="#{userBean.borrowedItemListByUser}">
 
@@ -136,13 +126,10 @@
                                 <h:outputText value="#{item.title}" />
                             </p:column>
 
-                            <p:column headerText="Creation Date">
+                            <p:column headerText="Author">
                                 <h:outputText value="#{item.creationDate}" />
                             </p:column>
 
-                            <p:column headerText="Due Date">
-                                <h:outputText value="#{item.dueDate}" />
-                            </p:column>
 
                         </p:dataTable>
                     </h:form>

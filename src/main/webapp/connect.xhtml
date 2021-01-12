@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:th="https://www.thymeleaf.org">
+<h:head>
+    <title>Home</title>
+    <h:outputStylesheet name="style.css" library="css" />
+    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+    <style type="text/css">
+        [class^="item"] {
+            text-align: center;
+        }
+        .grid {
+            font-family: Calibri, monospace;
+            display: grid;
+            width:100%;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, auto);
+            grid-template-areas:
+            "header header header header"
+            "menu menu menu menu"
+            "sidebar sidebar sidebar sidebar"
+            "footer footer footer footer";
+            grid-auto-flow: dense;
+            grid-gap: 5px;
+        }
+        .item1 {
+            grid-area: header;
+            text-align: center;
+        }
+
+        .item2 {
+            grid-area: menu;
+            background-color: darkslategray;
+            text-align: center;
+        }
+
+        .item3 {
+            height: auto;
+            grid-area: sidebar;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        .item4 {
+            grid-area: footer;
+            height: 25px;
+            background-color: darkslategray;
+            text-align: center;
+        }
+        h1{
+            font-family: 'Times New Roman', serif;
+            color: wheat;
+        }
+        .outputText{
+            font-family: 'Garamond', serif;
+            color: wheat;
+        }
+        .form{
+            position:absolute;
+            top:0;
+            right:0;
+            margin-top: 15px;
+            margin-right: 4px
+        }
+
+
+        .btn-btn{
+            border: 3px solid rgb(11, 83, 31);
+            margin-bottom: 10px;
+            margin-top: 10px;
+            width: 210px;
+            background-color: #111324;
+            font-family: Calibri, monospace;
+            font-size: larger;
+            font-weight: bold;
+            color: #a19708;
+            height: 60px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+
+    </style>
+</h:head>
+
+<h:body styleClass="grid">
+
+    <p:outputPanel styleClass="item1"></p:outputPanel>
+    <p:outputPanel styleClass="item2">
+        <h1>LIBRARY MANAGEMENT SYSTEM</h1>
+        <h:form styleClass="form" style="" rendered="#{userBean.logged}">
+            <h:outputText styleClass="outputText" value="Hi: "/> <h:outputLabel styleClass="outputText" value="#{userBean.authenticatedUserFullName}"/><h:outputText value=" "/>
+            <p:commandButton actionListener="#{userBean.logout()}" style="width: 25px; height: 30px; color: darkslategray" icon="pi pi-sign-out" update="@this" ajax="false" />
+        </h:form>
+
+    </p:outputPanel>
+    <p:outputPanel styleClass="item3">
+
+        <h:form>
+            <p:outputPanel rendered="${userBean.authenticateAdminRole}">
+            <a href="${pageContext.request.contextPath}/admin">
+                <button class="btn-btn">
+                    <p:commandLink style="color: orange">
+                    <h:panelGrid styleClass="btnPanelGrid">TO ADMIN DASHBOARD</h:panelGrid>
+                    </p:commandLink>
+                </button>
+            </a>
+            </p:outputPanel>
+            <p:outputPanel rendered="${userBean.authenticatedUserRole}">
+                <h:commandLink action="${userBean.redirectToUserDashBoard()}" >
+                    <button class="btn-btn">
+                            <h:panelGrid styleClass="btnPanelGrid">TO USER DASHBOARD</h:panelGrid>
+                    </button>
+                </h:commandLink>
+            </p:outputPanel>
+
+        </h:form>
+    </p:outputPanel>
+    <p:outputPanel styleClass="item4"></p:outputPanel>
+</h:body>
+</html>

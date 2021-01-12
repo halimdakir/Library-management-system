@@ -16,5 +16,5 @@ public interface ItemRepository extends CrudRepository <Item,Long> {
     @Query("SELECT DISTINCT i FROM Item i INNER JOIN FETCH i.authors a WHERE a.fullName LIKE %:fullName%")
     Iterable<Item> findItemByAuthorName(@Param("fullName") String fullName);
 
-
+    Item findItemByBarCode(String barCode);
 }

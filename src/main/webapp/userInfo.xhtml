@@ -81,13 +81,6 @@
             border-bottom-color: var(--input-border-color, #A8A8A8);
         }
 
-        .logo {
-            width: 5%;
-        }
-        .detail {
-            width: 85%;
-            padding-left: 25px;
-        }
         .MenuItem{
             width: 200px;
         }
@@ -124,7 +117,7 @@
                 <p:menuitem value="Personal Infos" icon="pi pi-caret-right" url="#" styleClass="MenuItem">
                     <f:param name="i" value="1" />
                 </p:menuitem>
-                <p:menuitem value="Items" icon="pi pi-caret-right" url="item" styleClass="MenuItem">
+                <p:menuitem value="Reserve" icon="pi pi-caret-right" url="reserve" styleClass="MenuItem">
                     <f:param name="i" value="2" />
                 </p:menuitem>
             </p:tabMenu>
@@ -136,8 +129,7 @@
                 <h:panelGrid columns="1" cellpadding="10" styleClass="motherPanelGrid">
 
                     <h:form style="width: 100%">
-                        <p:commandButton value="refresh" action="#{userBean.getAuthenticatedUserInfo()}" icon="pi pi-refresh" update="@form" ajax="true"/>
-                        <p:separator/>
+
                         <p:messages />
                         <p:panelGrid columns="2"  columnClasses="label , value" styleClass="outerPanelGrid">
 

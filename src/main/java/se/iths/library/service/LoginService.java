@@ -66,5 +66,8 @@ public class LoginService {
         String authenticatedUsername = authentication.getName();
         return loginRepository.findLoginByEmail(authenticatedUsername);
     }
+    public Optional<Login> getLoginByEmail(String email){
+        return loginRepository.findByEmail(email);
+    }
 
 }

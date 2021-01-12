@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import se.iths.library.entity.Login;
 import se.iths.library.exception.UnauthorizedException;
+import se.iths.library.exception.UnprocessableEntityException;
 import se.iths.library.models.EmailJsonFormat;
 import se.iths.library.service.LoginService;
 
@@ -32,7 +33,15 @@ public class LoginController {
 
     @PostMapping("/create")
     public Login createNewLogin(@RequestBody Login login){
-        return loginService.createLogin(login);
+        if (login.getEmail() != null && login.getPassword() != null && login.getRoles() != null) {
+            if (login.getEmail().matches("\"^(.+)@(.+)$\"")){
+                return loginService.createLogin(login);
+            }else {
+                throw new UnprocessableEntityException("Enter a valid email!");
+            }
+        }else {
+            throw new UnprocessableEntityException("Email, Password & Role are required!");
+        }
     }
 
     @PreAuthorize("isAuthenticated()")

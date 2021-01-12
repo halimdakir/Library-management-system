@@ -3,6 +3,7 @@ package se.iths.library.entity;
 import se.iths.library.models.Roles;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
@@ -12,10 +13,12 @@ public class Login {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @NotEmpty
+    @Email
     private String email;
     @NotEmpty
     private String password;
     private boolean active;
+    @NotEmpty
     @Enumerated(EnumType.STRING)
     private Roles roles;
 

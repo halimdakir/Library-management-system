@@ -18,13 +18,12 @@ public class Login {
     @NotEmpty
     private String password;
     private boolean active;
-    @NotEmpty
     @Enumerated(EnumType.STRING)
     private Roles roles;
 
 
     @OneToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")  //ID is not nullabe @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
 

@@ -5,6 +5,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import se.iths.library.dto.BorrowedItemsDTO;
+import se.iths.library.dto.ReservedItemDTO;
 import se.iths.library.entity.ItemLending;
 import se.iths.library.entity.Login;
 import se.iths.library.entity.User;
@@ -41,6 +42,7 @@ public class UserBean implements Serializable {
     private List<BorrowedItemsDTO> borrowedItemList = new ArrayList<>();
     private List<BorrowedItemsDTO> borrowedItemListByUser = new ArrayList<>();
     private List<BorrowedItemsDTO> reservedItemListByUser = new ArrayList<>();
+    private List<ReservedItemDTO> reservedAllItemListByAdmin = new ArrayList<>();
     //TODO PERSONAL INFORMATION
     private Long userId;
     private Long loginId;
@@ -196,6 +198,9 @@ public class UserBean implements Serializable {
             reservedItemListByUser = itemLendingService.findReservedItemsAndCreationDueDateByUserId(userInfo.getId());
         }
     }
+    public void getAllReservedItemList(){
+        reservedAllItemListByAdmin = itemLendingService.getAllReservedItems();
+    }
     public void deleteReservedItems(Long reservedItemId){
         itemLendingService.deleteReservedItem(reservedItemId);
         getReservedItemList();
@@ -205,6 +210,7 @@ public class UserBean implements Serializable {
         getBorrowedItemsByUserId();
         getAuthenticatedUserInfo();
         getReservedItemList();
+        getAllReservedItemList();
         return "user";
     }
     public void logout() throws IOException {
@@ -409,6 +415,14 @@ public class UserBean implements Serializable {
 
     public void setReservedItemListByUser(List<BorrowedItemsDTO> reservedItemListByUser) {
         this.reservedItemListByUser = reservedItemListByUser;
+    }
+
+    public List<ReservedItemDTO> getReservedAllItemListByAdmin() {
+        return reservedAllItemListByAdmin;
+    }
+
+    public void setReservedAllItemListByAdmin(List<ReservedItemDTO> reservedAllItemListByAdmin) {
+        this.reservedAllItemListByAdmin = reservedAllItemListByAdmin;
     }
     //</editor-fold>
 }

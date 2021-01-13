@@ -144,7 +144,7 @@
                         <h:panelGrid columns="1" cellpadding="10">
 
 
-                            <p:dataTable var="item" value="#{userBean.reservedItemListByUser}">
+                            <p:dataTable var="item" value="#{userBean.reservedAllItemListByAdmin}">
 
                                 <p:column headerText="ISBN">
                                     <h:outputText value="#{item.barCode}" />
@@ -155,7 +155,7 @@
                                 </p:column>
 
                                 <p:column headerText="Member">
-                                    <h:outputText value="#{item.creationDate}" />
+                                    <h:outputText value="#{item.fullName}" />
                                 </p:column>
 
                                 <p:column headerText="Accept" style="text-align: center">

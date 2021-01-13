@@ -25,5 +25,5 @@ public interface ItemLendingRepository extends CrudRepository<ItemLending, Long>
     ItemLending findByItem_BarCode(@Param("barCode")String barCode);
 
     @Query("SELECT new se.iths.library.dto.ReservedItemDTO( il.id, i.title, i.barCode, u.fullName) FROM ItemLending il INNER JOIN il.item i INNER JOIN il.user u WHERE il.isConfirmed = FALSE")
-    List<ReservedItemDTO> findByAllReservedItemByUserId(Long id);
+    List<ReservedItemDTO> findByAllReservedItemByUserId();
 }

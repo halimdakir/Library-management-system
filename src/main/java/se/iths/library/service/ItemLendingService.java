@@ -3,6 +3,7 @@ package se.iths.library.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.iths.library.dto.BorrowedItemsDTO;
+import se.iths.library.dto.ReservedItemDTO;
 import se.iths.library.entity.ItemLending;
 import se.iths.library.entity.User;
 import se.iths.library.repository.ItemLendingRepository;
@@ -32,5 +33,8 @@ public class ItemLendingService {
         if (itemLending.isPresent()){
             itemLendingRepository.deleteById(id);
         }
+    }
+    public List<ReservedItemDTO> getAllReservedItems(){
+        return itemLendingRepository.findByAllReservedItemByUserId();
     }
 }

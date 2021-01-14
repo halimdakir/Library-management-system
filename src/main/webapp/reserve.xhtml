@@ -91,21 +91,20 @@
             width: 85%;
             padding-left: 25px;
         }
-        .white-button.ui-button.ui-state-default {
-            background-color: #ffffff;
-            color: #222222;
-            border-color: #d6d6d6;
-            /* with the exported variables from Nova and Luna Themes*/
-            border-color: var(--input-border-color, #d6d6d6);
+        h4{
+            font-family: 'Times New Roman', serif;
+            color: #085350;
         }
-
-        .white-button.ui-button.ui-state-default:enabled:hover,
-        .white-button.ui-button.ui-state-default:focus {
-            background-color: #f2f2f2;
-            border-color: #ccc;
-            color: #373a3c;
-            /* with the exported variables from Nova and Luna Themes*/
-            border-color: var(--input-hover-border-color, #ccc);
+        .outerPanelGrid>tbody>tr{
+            border: none !important;
+        }
+        .outerPanelGrid>tbody>tr>td{
+            border: none !important;
+        }
+        .outputTextI{
+            font-family: Calibri, monospace;
+            font-weight: normal;
+            font-size: large;
         }
 
     </style>
@@ -263,19 +262,18 @@
                         </f:facet>
 
                         <h:outputText value="ISBN" />
-                        <h:outputText value="#{itemBean.selectedItem.barCode}" />
+                        <h:outputText styleClass="outputTextI" value="#{itemBean.selectedItem.barCode}" />
 
                         <h:outputText value="Title" />
-                        <h:outputText value="#{itemBean.selectedItem.title}" />
+                        <h:outputText styleClass="outputTextI" value="#{itemBean.selectedItem.title}" />
 
                         <h:outputText value="Desc" />
-                        <h:outputText value="#{itemBean.selectedItem.description}" />
+                        <h:outputText styleClass="outputTextI" value="#{itemBean.selectedItem.description}" />
                     </p:panelGrid>
-                    <h4>Author(s)</h4>
+                    <h4>Name of Author(s)</h4>
                     <ui:repeat value="#{itemBean.authorList}" var="author">
                         <p:panelGrid  columns="2" columnClasses="label,value" style="width: 100%">
-                            <h:outputText value="Name"/>
-                            <h:outputText value="#{author.fullName}" />
+                            <h:outputText styleClass="outputTextI" value="#{author.fullName}" />
 
                         </p:panelGrid>
                     </ui:repeat>

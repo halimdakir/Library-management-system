@@ -30,6 +30,9 @@ public class Item {
     @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Stock> stockSet;
 
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Category> categorySet;
+
 
     public Item(){
     }

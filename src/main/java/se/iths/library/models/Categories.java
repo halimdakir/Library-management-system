@@ -1,4 +1,10 @@
 package se.iths.library.models;
 
-public class Categories {
+public enum Categories {
+    BOOK,
+    DVD,
+    IMAGE,
+    DIGITAL_BOOK
+
+
 }

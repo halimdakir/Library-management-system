@@ -6,6 +6,7 @@ import se.iths.library.entity.Item;
 import se.iths.library.exception.NotFoundException;
 import se.iths.library.repository.ItemRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,5 +47,8 @@ public class ItemService {
     }
     public Item findItemByBarCode(String barCode){
         return itemRepository.findItemByBarCode(barCode);
+    }
+    public Item findItemById(Long id){
+        return itemRepository.findItemById(id);
     }
 }

@@ -58,6 +58,10 @@
             font-family: 'Times New Roman', serif;
             color: gray;
         }
+        h4{
+            font-family: 'Times New Roman', serif;
+            color: #085350;
+        }
         .value {
             font-weight: bold;
         }
@@ -76,22 +80,19 @@
             width: 85%;
             padding-left: 25px;
         }
-        .white-button.ui-button.ui-state-default {
-            background-color: #ffffff;
-            color: #222222;
-            border-color: #d6d6d6;
-            /* with the exported variables from Nova and Luna Themes*/
-            border-color: var(--input-border-color, #d6d6d6);
+        .outerPanelGrid>tbody>tr{
+            border: none !important;
+        }
+        .outerPanelGrid>tbody>tr>td{
+            border: none !important;
+        }
+        .outputTextI{
+            font-family: Calibri, monospace;
+            font-weight: normal;
+            font-size: large;
         }
 
-        .white-button.ui-button.ui-state-default:enabled:hover,
-        .white-button.ui-button.ui-state-default:focus {
-            background-color: #f2f2f2;
-            border-color: #ccc;
-            color: #373a3c;
-            /* with the exported variables from Nova and Luna Themes*/
-            border-color: var(--input-hover-border-color, #ccc);
-        }
+
 
     </style>
 </h:head>
@@ -102,10 +103,11 @@
         <h1>LIBRARY MANAGEMENT SYSTEM</h1>
     </p:outputPanel>
     <p:outputPanel styleClass="item3">
-        <h:form id="form">
-            <h2>Find an item</h2>
+        <h:form id="form" >
+            <p:panel id="panelIdForDemonstration" header="Find an item" style="width: 991px">
             <h:panelGrid style="border: 2px solid darkgray; margin: 0 auto;">
-                            <p:selectOneRadio id="search" value="#{itemBean.search}" unselectable="true">
+
+                            <p:selectOneRadio id="search" value="#{itemBean.search}" unselectable="false">
                                 <div class="ui-g ui-fluid">
                                     <div class="ui-g-12 ui-md-4">
                                         <div class="ui-inputgroup">
@@ -124,8 +126,25 @@
                                         </div>
                                     </div>
                                 </div>
+                                <f:ajax process="search"   update="panelIdForDemonstration" />
                             </p:selectOneRadio>
             </h:panelGrid>
+
+            <p:panelGrid styleClass="outerPanelGrid" rendered="#{itemBean.search eq 'Category'}">
+                <div class="ui-g ui-fluid">
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-inputgroup">
+                                <p:selectOneMenu id="categorySelected" value="#{itemBean.category}" style="width: 96%">
+                                    <f:selectItem itemLabel="Select Category" itemValue="" noSelectionOption="true" />
+                                    <f:selectItems value="#{itemBean.categories}" />
+                                </p:selectOneMenu>
+                                <p:commandButton actionListener="#{itemBean.getItemByTitle(itemBean.category)}" id="getItems" style="margin-right:20px;" icon="pi pi-search" update="@form" ajax="true"/>
+                        </div>
+                    </div>
+                </div>
+            </p:panelGrid>
+
+            <p:panelGrid styleClass="outerPanelGrid" rendered="#{itemBean.search eq 'Author' or itemBean.search eq 'Title'}">
                 <div class="ui-g ui-fluid">
                     <div class="ui-g-12 ui-md-12">
                         <div class="ui-inputgroup">
@@ -134,14 +153,15 @@
                         </div>
                     </div>
                 </div>
+            </p:panelGrid>
+            </p:panel>
 
 
-            <p:dataView var="item" value="#{itemBean.itemList}"
-                        gridIcon="pi pi-th-large" listIcon="pi pi-bars">
+            <p:dataView var="item" value="#{itemBean.itemList}" gridIcon="pi pi-th-large" listIcon="pi pi-bars" style="width: 1000px">
 
                 <p:dataViewListItem>
                     <h:panelGrid columns="3" style="width:100%" columnClasses="logo,detail">
-                        <h:graphicImage value="resources/images/#{item.barCode}.jpg" style="width:200px; height: 270px"/>
+                        <h:graphicImage value="resources/images/#{item.barCode}.jpg" style="width:160px; height: 230px"/>
                         <p:outputPanel>
                             <h:panelGrid columns="2" cellpadding="5">
                                 <h:outputText value="title:" />
@@ -158,8 +178,8 @@
 
                 <p:dataViewGridItem>
                     <p:panel header="#{item.barCode}" style="text-align:center">
-                        <h:panelGrid columns="1" style="width:auto">
-                            <h:graphicImage value="resources/images/#{item.barCode}.jpg" style="width:200px; height: 270px"/>
+                        <h:panelGrid columns="1" style="width:auto;  margin: 0 auto">
+                            <h:graphicImage value="resources/images/#{item.barCode}.jpg" style="width:160px; height: 230px"/>
 
                             <h:outputText value="#{item.title}" />
 
@@ -182,19 +202,18 @@
                             </f:facet>
 
                             <h:outputText value="ISBN" />
-                            <h:outputText value="#{itemBean.selectedItem.barCode}" />
+                            <h:outputText styleClass="outputTextI" value="#{itemBean.selectedItem.barCode}" />
 
                             <h:outputText value="Title" />
-                            <h:outputText value="#{itemBean.selectedItem.title}" />
+                            <h:outputText styleClass="outputTextI" value="#{itemBean.selectedItem.title}" />
 
                             <h:outputText value="Desc" />
-                            <h:outputText value="#{itemBean.selectedItem.description}" />
+                            <h:outputText styleClass="outputTextI" value="#{itemBean.selectedItem.description}" />
                         </p:panelGrid>
-                        <h4>Author(s)</h4>
+                        <h4>Name of Author(s)</h4>
                         <ui:repeat value="#{itemBean.authorList}" var="author">
                                 <p:panelGrid  columns="2" columnClasses="label,value" style="width: 100%">
-                                    <h:outputText value="Name"/>
-                                    <h:outputText value="#{author.fullName}" />
+                                    <h:outputText styleClass="outputTextI" value="#{author.fullName}" />
 
                                 </p:panelGrid>
                         </ui:repeat>

@@ -18,4 +18,6 @@ public interface ItemRepository extends CrudRepository <Item,Long> {
 
     Item findItemByBarCode(String barCode);
 
+    Item findItemById(Long id);
+
 }

@@ -30,12 +30,12 @@ public class SetUpDataBase {
 
 
                 var user1 = new User("Halim Dakir", "2000/11/11", "Maroc");
-                var user2 = new User("Salim Salim", "2000/11/11", "Maroc");
-                var user3 = new User("Dimo Simo", "2000/11/11", "Maroc");
+                var user2 = new User("Salim Maroc", "2000/11/11", "Maroc");
+                var user3 = new User("Simo Elyou", "2000/11/11", "Maroc");
 
-                var login1 = new Login("Halim@gmail.com", "123456",true, Roles.ROLE_USER);
-                var login2 = new Login("Salim@gmail.com", "654789", true, Roles.ROLE_ADMIN);
-                var login3 = new Login("Dimo@gmail.com", "9514862", false, Roles.ROLE_USER);
+                var login1 = new Login("halim@gmail.com", "123456",true, Roles.ROLE_USER);
+                var login2 = new Login("salim@gmail.com", "654789", true, Roles.ROLE_ADMIN);
+                var login3 = new Login("simo@gmail.com", "123456", false, Roles.ROLE_USER);
 
                 var library1 = new Library("The big library", "Strängnäsgatan 3,41871 Göteborg");
                 var library2 = new Library("The 300m2 library", "Brunnsparken 12, 44160 Göteborg");
@@ -77,9 +77,9 @@ public class SetUpDataBase {
                 userRepository.save(user2);
                 userRepository.save(user3);
 
-                itemLendingRepository.save(new ItemLending("2020/12/02", "2020/12/20", true, false, user1, item1));
-                itemLendingRepository.save(new ItemLending("2020/12/03", "2020/12/21", true, false, user1, item2));
-                itemLendingRepository.save(new ItemLending("2020/12/02", "2020/12/20", true, false, user3, item5));
+                itemLendingRepository.save(new ItemLending("2020-12-02", "2020-12-20", true, false, user1, item1));
+                itemLendingRepository.save(new ItemLending("2020-12-03", "2020-12-21", true, false, user1, item2));
+                itemLendingRepository.save(new ItemLending("2020-12-02", "2020-12-20", true, false, user3, item5));
 
                 libraryRepository.save(library1);
                 libraryRepository.save(library2);

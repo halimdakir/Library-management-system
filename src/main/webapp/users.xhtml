@@ -81,13 +81,6 @@
             border-bottom-color: var(--input-border-color, #A8A8A8);
         }
 
-        .logo {
-            width: 5%;
-        }
-        .detail {
-            width: 85%;
-            padding-left: 25px;
-        }
         .motherPanelGrid{
             margin: 0 auto;
         }
@@ -127,7 +120,7 @@
                 <p:menuitem value="Items" icon="pi pi-caret-right" url="item.xhtml" styleClass="MenuItem">
                     <f:param name="i" value="2" />
                 </p:menuitem>
-                <p:menuitem value="Infos" icon="pi pi-caret-right" styleClass="MenuItem">
+                <p:menuitem value="Reserve" icon="pi pi-caret-right" url="reserveAdmin" styleClass="MenuItem">
                     <f:param name="i" value="3" />
                 </p:menuitem>
                 <p:menuitem value="Register" icon="pi pi-caret-right" url="registerAdmin" styleClass="MenuItem">
@@ -146,6 +139,36 @@
                             <p:commandButton id="getItems" actionListener="#{userBean.getBorrowedItems(userBean.email)}" style="margin-right:20px;" icon="pi pi-search" update="@form" ajax="true"/>
                         </p:panelGrid>
 
+
+                        <p:dialog header="UPDATE RESERVED ITEM" widgetVar="dlg3" showEffect="explode" hideEffect="bounce" height="250" width="350">
+
+                            <p:panelGrid columns="2"  columnClasses="label , value" rendered="#{userBean.toReturn}">
+
+                                <h:outputText value="ISBN " />
+                                <h:outputText  label="IBSN" value="#{userBean.selectedBorrowedItemsDTO.barCode}"/>
+
+                                <h:outputText value="Title " />
+                                <h:outputText  label="title" value="#{userBean.selectedBorrowedItemsDTO.title}"/>
+
+                                <h:outputText value="Member " />
+                                <h:outputText  label="title" value="#{userBean.email}"/>
+
+                                <h:outputText value="Return " />
+                                <p:selectBooleanCheckbox value="#{userBean.selectedReservedItem.returned}" />
+
+                                <p:inputText  label="reserveId" value="#{userBean.selectedReservedItem.id}" type="hidden"/>
+                                <p:inputText  label="reserveDtoId" value="#{userBean.selectedBorrowedItemsDTO.id}" type="hidden"/>
+
+
+                                <p:commandButton id="cancelBtn" value="Cancel"  style="margin-right:20px; background-color: #f60723; color: black" icon="pi pi-times-circle" update="@form" ajax="true" action="#{userBean.cancelReturnReservedItem()}"/>
+
+                                <p:commandButton id="saveBtn" value="Confirm" style="margin-right:20px; background-color: #0378dc; color: black" icon="pi pi-save" update="@form" ajax="true" action="#{userBean.returnReservedItem(userBean.selectedReservedItem.id)}"/>
+
+                            </p:panelGrid>
+                        </p:dialog>
+
+
+
                         <p:dataTable var="item" value="#{userBean.borrowedItemList}">
 
                             <p:column headerText="ISBN">
@@ -162,6 +185,10 @@
 
                             <p:column headerText="Due Date">
                                 <h:outputText value="#{item.dueDate}" />
+                            </p:column>
+
+                            <p:column headerText="Return" style="text-align: center">
+                                <p:commandButton id="deleteBtn" action="#{userBean.preReturnReservedItemD(item.id)}" style="margin-right:20px;" icon="pi pi-minus-circle" ajax="true" update="@form" oncomplete="PF('dlg3').show();"/>
                             </p:column>
 
                         </p:dataTable>

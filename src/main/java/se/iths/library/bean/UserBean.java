@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @ViewScoped
@@ -36,6 +37,8 @@ public class UserBean implements Serializable {
     private String authenticatedUserFullName;
     private boolean authenticatedUserRole;
     private boolean authenticateAdminRole;
+    private boolean toAccept;
+    private boolean toReturn;
     private Long loggedId;
     private String email;
     private Long id;
@@ -56,6 +59,9 @@ public class UserBean implements Serializable {
     private String address;
     private String token;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private ItemLending selectedReservedItem;
+    private ReservedItemDTO selectedReservedItemDTO;
+    private BorrowedItemsDTO selectedBorrowedItemsDTO;
 
 
 
@@ -213,6 +219,56 @@ public class UserBean implements Serializable {
         getAllReservedItemList();
         return "user";
     }
+    public String redirectToAdminDashBoard(){
+        getAllReservedItemList();
+        return "admin";
+    }
+    public void preAcceptReservedItemD(Long id){
+        setToAccept(true);
+        selectedReservedItem = itemLendingService.getReservedItemById(id);
+        List<ReservedItemDTO> filterList = reservedAllItemListByAdmin.stream()
+                .filter(e -> e.getId().equals(id))
+                .collect(Collectors.toList());
+        if (filterList.size() !=0){
+            selectedReservedItemDTO = reservedAllItemListByAdmin.get(0);
+        }
+    }
+    public void acceptReservedItem(Long selectedReservedItemId){
+        selectedReservedItem = itemLendingService.getReservedItemById(selectedReservedItemId);
+        if (selectedReservedItem != null){
+            selectedReservedItem.setConfirmed(true);
+            itemLendingService.updateBorrowedItem(selectedReservedItem, selectedReservedItemId);
+        }
+        setToAccept(false);
+        getAllReservedItemList();
+    }
+    public void cancelAcceptReservedItem(){
+        setToAccept(false);
+    }
+
+    public void cancelReturnReservedItem(){
+        setToReturn(false);
+    }
+    public void preReturnReservedItemD(Long id){
+        setToReturn(true);
+        selectedReservedItem = itemLendingService.getReservedItemById(id);
+        List<BorrowedItemsDTO> filterList = borrowedItemList.stream()
+                .filter(e -> e.getId().equals(id))
+                .collect(Collectors.toList());
+        if (filterList.size() !=0){
+            selectedBorrowedItemsDTO = borrowedItemList.get(0);
+        }
+    }
+    public void returnReservedItem(Long selectedReservedItemId){
+        selectedReservedItem = itemLendingService.getReservedItemById(selectedReservedItemId);
+        if (selectedReservedItem != null){
+            selectedReservedItem.setReturned(true);
+            itemLendingService.updateBorrowedItem(selectedReservedItem, selectedReservedItemId);
+        }
+        setToReturn(false);
+        getBorrowedItems(email);
+    }
+
     public void logout() throws IOException {
         setAuthenticatedUserFullName("");
         setLogged(false);
@@ -423,6 +479,46 @@ public class UserBean implements Serializable {
 
     public void setReservedAllItemListByAdmin(List<ReservedItemDTO> reservedAllItemListByAdmin) {
         this.reservedAllItemListByAdmin = reservedAllItemListByAdmin;
+    }
+
+    public ItemLending getSelectedReservedItem() {
+        return selectedReservedItem;
+    }
+
+    public void setSelectedReservedItem(ItemLending selectedReservedItem) {
+        this.selectedReservedItem = selectedReservedItem;
+    }
+
+    public ReservedItemDTO getSelectedReservedItemDTO() {
+        return selectedReservedItemDTO;
+    }
+
+    public void setSelectedReservedItemDTO(ReservedItemDTO selectedReservedItemDTO) {
+        this.selectedReservedItemDTO = selectedReservedItemDTO;
+    }
+
+    public boolean isToAccept() {
+        return toAccept;
+    }
+
+    public void setToAccept(boolean toAccept) {
+        this.toAccept = toAccept;
+    }
+
+    public boolean isToReturn() {
+        return toReturn;
+    }
+
+    public void setToReturn(boolean toReturn) {
+        this.toReturn = toReturn;
+    }
+
+    public BorrowedItemsDTO getSelectedBorrowedItemsDTO() {
+        return selectedBorrowedItemsDTO;
+    }
+
+    public void setSelectedBorrowedItemsDTO(BorrowedItemsDTO selectedBorrowedItemsDTO) {
+        this.selectedBorrowedItemsDTO = selectedBorrowedItemsDTO;
     }
     //</editor-fold>
 }

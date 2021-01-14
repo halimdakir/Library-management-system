@@ -99,10 +99,10 @@
                 <p:menuitem value="Borrowed List" icon="pi pi-caret-right" url="#" styleClass="MenuItem">
                     <f:param name="i" value="0" />
                 </p:menuitem>
-                <p:menuitem value="Personal Infos" icon="pi pi-caret-right" url="userInfo" styleClass="MenuItem" action="#{userBean.getAuthenticatedUserInfo()}">
+                <p:menuitem value="Reserve List" icon="pi pi-caret-right" url="reserve" styleClass="MenuItem">
                     <f:param name="i" value="1" />
                 </p:menuitem>
-                <p:menuitem value="Reserve" icon="pi pi-caret-right" url="reserve" styleClass="MenuItem">
+                <p:menuitem value="Personal Infos" icon="pi pi-caret-right" url="userInfo" styleClass="MenuItem" action="#{userBean.getAuthenticatedUserInfo()}">
                     <f:param name="i" value="2" />
                 </p:menuitem>
             </p:tabMenu>
@@ -110,7 +110,7 @@
     </p:outputPanel>
     <p:outputPanel styleClass="item3">
         <p:tabView orientation="center">
-            <p:tab title="YOUR RESERVE ITEM LIST" titleStyle="width: 280px; height: 40px">
+            <p:tab title="YOUR BORREWED ITEM LIST" titleStyle="width: 280px; height: 40px">
 
                 <h:panelGrid columns="1" cellpadding="10">
                     <h:form>
@@ -126,8 +126,12 @@
                                 <h:outputText value="#{item.title}" />
                             </p:column>
 
-                            <p:column headerText="Author">
+                            <p:column headerText="Creation Date">
                                 <h:outputText value="#{item.creationDate}" />
+                            </p:column>
+
+                            <p:column headerText="Due Date">
+                                <h:outputText value="#{item.dueDate}" />
                             </p:column>
 
 

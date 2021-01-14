@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:th="https://www.thymeleaf.org">
+>
 <h:head>
     <title>Home</title>
-    <h:outputStylesheet name="style.css" library="css" />
     <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
     <style type="text/css">
         [class^="item"] {
@@ -102,15 +99,15 @@
     <p:outputPanel styleClass="item3">
 
         <h:form>
+
             <p:outputPanel rendered="${userBean.authenticateAdminRole}">
-            <a href="${pageContext.request.contextPath}/admin">
-                <button class="btn-btn">
-                    <p:commandLink style="color: orange">
-                    <h:panelGrid styleClass="btnPanelGrid">TO ADMIN DASHBOARD</h:panelGrid>
-                    </p:commandLink>
-                </button>
-            </a>
+                <h:commandLink action="${userBean.redirectToAdminDashBoard()}" >
+                    <button class="btn-btn">
+                        <h:panelGrid styleClass="btnPanelGrid">TO ADMIN DASHBOARD</h:panelGrid>
+                    </button>
+                </h:commandLink>
             </p:outputPanel>
+
             <p:outputPanel rendered="${userBean.authenticatedUserRole}">
                 <h:commandLink action="${userBean.redirectToUserDashBoard()}" >
                     <button class="btn-btn">
@@ -120,6 +117,7 @@
             </p:outputPanel>
 
         </h:form>
+
     </p:outputPanel>
     <p:outputPanel styleClass="item4"></p:outputPanel>
 </h:body>

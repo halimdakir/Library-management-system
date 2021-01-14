@@ -83,31 +83,6 @@
         .MenuItem{
             width: 200px;
         }
-
-        .logo {
-            width: 5%;
-        }
-        .detail {
-            width: 85%;
-            padding-left: 25px;
-        }
-        .white-button.ui-button.ui-state-default {
-            background-color: #ffffff;
-            color: #222222;
-            border-color: #d6d6d6;
-            /* with the exported variables from Nova and Luna Themes*/
-            border-color: var(--input-border-color, #d6d6d6);
-        }
-
-        .white-button.ui-button.ui-state-default:enabled:hover,
-        .white-button.ui-button.ui-state-default:focus {
-            background-color: #f2f2f2;
-            border-color: #ccc;
-            color: #373a3c;
-            /* with the exported variables from Nova and Luna Themes*/
-            border-color: var(--input-hover-border-color, #ccc);
-        }
-
     </style>
 </h:head>
 
@@ -121,14 +96,20 @@
     <p:outputPanel styleClass="item2">
         <h:form>
             <p:tabMenu activeIndex="#{param.i}" style="text-align: center">
-                <p:menuitem value="Borrowed List" icon="pi pi-caret-right" url="user" styleClass="MenuItem">
+                <p:menuitem value="Members" icon="pi pi-caret-right" url="admin" styleClass="MenuItem">
                     <f:param name="i" value="0" />
                 </p:menuitem>
-                <p:menuitem value="Personal Infos" icon="pi pi-caret-right" url="userInfo" styleClass="MenuItem">
+                <p:menuitem value="Lend" icon="pi pi-caret-right" url="users" styleClass="MenuItem">
                     <f:param name="i" value="1" />
                 </p:menuitem>
-                <p:menuitem value="Reserve" icon="pi pi-caret-right" url="#" styleClass="MenuItem">
+                <p:menuitem value="Items" icon="pi pi-caret-right" url="item" styleClass="MenuItem">
                     <f:param name="i" value="2" />
+                </p:menuitem>
+                <p:menuitem value="Reserve" icon="pi pi-caret-right" url="#" styleClass="MenuItem">
+                    <f:param name="i" value="3" />
+                </p:menuitem>
+                <p:menuitem value="Register" icon="pi pi-caret-right" url="registerAdmin" styleClass="MenuItem">
+                    <f:param name="i" value="4" />
                 </p:menuitem>
             </p:tabMenu>
         </h:form>
@@ -138,8 +119,37 @@
 
             <h:panelGrid style="border: 2px solid darkgray; margin: 0 auto;">
 
+
                 <p:tabView orientation="center">
                     <p:tab title="YOUR BORROWED ITEM LIST" titleStyle="width: 280px; height: 40px">
+
+                        <p:dialog header="UPDATE RESERVED ITEM" widgetVar="dlg3" showEffect="explode" hideEffect="bounce" height="250" width="340">
+
+                            <p:panelGrid columns="2"  columnClasses="label , value" styleClass="outerPanelGrid" rendered="#{userBean.toAccept}">
+
+                                <h:outputText value="ISBN " />
+                                <h:outputText  label="IBSN" value="#{userBean.selectedReservedItemDTO.barCode}"/>
+
+                                <h:outputText value="Title " />
+                                <h:outputText  label="title" value="#{userBean.selectedReservedItemDTO.title}"/>
+
+                                <h:outputText value="Membre " />
+                                <h:outputText label="fullname" value="#{userBean.selectedReservedItemDTO. fullName}"/>
+                                <h:outputText value="Accept " />
+                                <p:selectBooleanCheckbox value="#{userBean.selectedReservedItem.confirmed}" />
+
+                                <p:inputText  label="reserveId" value="#{userBean.selectedReservedItem.id}" type="hidden"/>
+                                <p:inputText  label="reserveDtoId" value="#{userBean.selectedReservedItemDTO.id}" type="hidden"/>
+
+
+                                <p:commandButton id="cancelBtn" value="Cancel"  style="margin-right:20px; background-color: #f60723; color: black" icon="pi pi-times-circle" update="@form" ajax="true" action="#{userBean.cancelAcceptReservedItem()}"/>
+
+                                <p:commandButton id="saveBtn" value="Confirm" style="margin-right:20px; background-color: #0378dc; color: black" icon="pi pi-save" update="@form" ajax="true" action="#{userBean.acceptReservedItem(userBean.selectedReservedItem.id)}"/>
+
+                            </p:panelGrid>
+
+                        </p:dialog>
+
 
                         <h:panelGrid columns="1" cellpadding="10">
 
@@ -159,7 +169,7 @@
                                 </p:column>
 
                                 <p:column headerText="Accept" style="text-align: center">
-                                    <p:commandButton id="deleteBtn" action="#{userBean.deleteReservedItems(item.id)}" style="margin-right:20px;" icon="pi pi-check" ajax="true" update="@form"/>
+                                    <p:commandButton id="deleteBtn" action="#{userBean.preAcceptReservedItemD(item.id)}" style="margin-right:20px;" icon="pi pi-check-circle" ajax="true" update="@form" oncomplete="PF('dlg3').show();"/>
                                 </p:column>
 
                             </p:dataTable>
@@ -167,7 +177,6 @@
                         </h:panelGrid>
                     </p:tab>
                 </p:tabView>
-
             </h:panelGrid>
 
         </h:form>

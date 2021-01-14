@@ -84,14 +84,20 @@ public class SetUpDataBase {
                 libraryRepository.save(library1);
                 libraryRepository.save(library2);
 
-                stockRepository.save(new Stock(20, item1, library1));
+                /*stockRepository.save(new Stock(20, item1, library1));
                 stockRepository.save(new Stock(10, item1, library2));
                 stockRepository.save(new Stock(15, item2, library2));
                 stockRepository.save(new Stock(30, item3, library1));
                 stockRepository.save(new Stock(30, item3, library2));
                 stockRepository.save(new Stock(8, item4, library1));
                 stockRepository.save(new Stock(11, item5, library1));
-                stockRepository.save(new Stock(16, item5, library2));
+                stockRepository.save(new Stock(16, item5, library2));*/
+
+                stockRepository.save(new Stock(20, item1));
+                stockRepository.save(new Stock(15, item2));
+                stockRepository.save(new Stock(30, item3));
+                stockRepository.save(new Stock(8, item4));
+                stockRepository.save(new Stock(16, item5));
 
             }
         };

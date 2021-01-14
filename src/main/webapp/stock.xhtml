@@ -6,7 +6,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 <h:head>
-    <title>Manage Borrowed Items</title>
+    <title>Manage Stock</title>
     <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
     <style type="text/css">
         [class^="item"] {
@@ -49,9 +49,6 @@
             background-color: darkslategray;
             text-align: center;
         }
-        .item-body{
-
-        }
         .grid {
             width:100%;
         }
@@ -80,7 +77,6 @@
             /* with the exported variables from Nova and Luna Themes*/
             border-bottom-color: var(--input-border-color, #A8A8A8);
         }
-
         .motherPanelGrid{
             margin: 0 auto;
         }
@@ -110,14 +106,14 @@
     </p:outputPanel>
     <p:outputPanel styleClass="item2">
         <h:form>
-            <p:tabMenu activeIndex="#{param.i}">
+            <p:tabMenu activeIndex="#{param.i}" style="text-align: center">
                 <p:menuitem value="Members" icon="pi pi-caret-right" url="admin" styleClass="MenuItem">
                     <f:param name="i" value="0" />
                 </p:menuitem>
-                <p:menuitem value="Lend" icon="pi pi-caret-right" url="#" styleClass="MenuItem">
+                <p:menuitem value="Lend" icon="pi pi-caret-right" url="users" styleClass="MenuItem">
                     <f:param name="i" value="1" />
                 </p:menuitem>
-                <p:menuitem value="Stock" icon="pi pi-caret-right" url="stock" styleClass="MenuItem">
+                <p:menuitem value="Stock" icon="pi pi-caret-right" url="#" styleClass="MenuItem">
                     <f:param name="i" value="2" />
                 </p:menuitem>
                 <p:menuitem value="Reserve" icon="pi pi-caret-right" url="reserveAdmin" styleClass="MenuItem">
@@ -131,65 +127,60 @@
     </p:outputPanel>
     <p:outputPanel styleClass="item3">
         <p:tabView orientation="center">
-            <p:tab title="BORROWED ITEM BY USER" titleStyle="width: 250px; height: 40px">
+            <p:tab title="MANAGE MEMBERS" titleStyle="width: 250px; height: 40px">
                 <h:panelGrid columns="1" cellpadding="10" styleClass="motherPanelGrid">
                     <h:form>
-                        <p:panelGrid columns="2" styleClass="outerPanelGrid">
-                            <p:inputText  label="id" value="#{userBean.email}" placeholder="user email" style="width: 100%"/>
-                            <p:commandButton id="getItems" actionListener="#{userBean.getBorrowedItems(userBean.email)}" style="margin-right:20px;" icon="pi pi-search" update="@form" ajax="true"/>
-                        </p:panelGrid>
 
 
-                        <p:dialog header="UPDATE RESERVED ITEM" widgetVar="dlg3" showEffect="explode" hideEffect="bounce" height="250" width="350">
+                        <h:panelGrid style="border: 2px solid darkgray; margin: 0 auto;">
+                            <p:selectOneRadio id="search" value="#{itemBean.search}" unselectable="true">
+                                <div class="ui-g ui-fluid">
+                                    <div class="ui-g-12 ui-md-4">
+                                        <div class="ui-inputgroup">
+                                            <f:selectItem itemLabel="Title" itemValue="Title" />
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-4">
+                                        <div class="ui-inputgroup">
+                                            <f:selectItem itemLabel="Author" itemValue="Author" />
 
-                            <p:panelGrid columns="2"  columnClasses="label , value" rendered="#{userBean.toReturn}">
-
-                                <h:outputText value="ISBN " />
-                                <h:outputText  label="IBSN" value="#{userBean.selectedBorrowedItemsDTO.barCode}"/>
-
-                                <h:outputText value="Title " />
-                                <h:outputText  label="title" value="#{userBean.selectedBorrowedItemsDTO.title}"/>
-
-                                <h:outputText value="Member " />
-                                <h:outputText  label="title" value="#{userBean.email}"/>
-
-                                <h:outputText value="Return " />
-                                <p:selectBooleanCheckbox value="#{userBean.return}" />
-
-                                <p:inputText  label="reserveId" value="#{userBean.selectedReservedItem.id}" type="hidden"/>
-                                <p:inputText  label="reserveDtoId" value="#{userBean.selectedBorrowedItemsDTO.id}" type="hidden"/>
-
-
-                                <p:commandButton id="cancelBtn" value="Cancel"  style="margin-right:20px; background-color: #f60723; color: black" icon="pi pi-times-circle" update="@form" ajax="true" action="#{userBean.cancelReturnReservedItem()}"/>
-
-                                <p:commandButton id="saveBtn" value="Confirm" style="margin-right:20px; background-color: #0378dc; color: black" icon="pi pi-save" update="@form" ajax="true" action="#{userBean.returnReservedItem(userBean.selectedReservedItem.id)}"/>
-
-                            </p:panelGrid>
-                        </p:dialog>
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-4">
+                                        <div class="ui-inputgroup">
+                                            <f:selectItem itemLabel="Category" itemValue="Category" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </p:selectOneRadio>
+                        </h:panelGrid>
+                        <div class="ui-g ui-fluid">
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-inputgroup">
+                                    <p:inputText placeholder="Keyword" value="#{itemBean.keyWord}"/>
+                                    <p:commandButton actionListener="#{itemBean.getItemStockBy(itemBean.keyWord)}" update="@form" ajax="true" icon="pi pi-search"  styleClass="white-button"/>
+                                </div>
+                            </div>
+                        </div>
 
 
 
-                        <p:dataTable var="item" value="#{userBean.borrowedItemList}">
+                        <p:dataTable var="stock" value="#{itemBean.stockDTOList}">
+
 
                             <p:column headerText="ISBN">
-                                <h:outputText value="#{item.barCode}" />
+                                <h:outputText value="#{stock.barCode}" />
                             </p:column>
 
                             <p:column headerText="Title">
-                                <h:outputText value="#{item.title}" />
+                                <h:outputText value="#{stock.title}" />
                             </p:column>
 
-                            <p:column headerText="Creation Date">
-                                <h:outputText value="#{item.creationDate}" />
+                            <p:column headerText="Quantity">
+                                <h:outputText value="#{stock.quantity}" />
                             </p:column>
 
-                            <p:column headerText="Due Date">
-                                <h:outputText value="#{item.dueDate}" />
-                            </p:column>
 
-                            <p:column headerText="Return" style="text-align: center">
-                                <p:commandButton id="deleteBtn" action="#{userBean.preReturnReservedItemD(item.id)}" style="margin-right:20px;" icon="pi pi-minus-circle" ajax="true" update="@form" oncomplete="PF('dlg3').show();"/>
-                            </p:column>
 
                         </p:dataTable>
                     </h:form>

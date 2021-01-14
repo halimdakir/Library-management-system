@@ -143,6 +143,21 @@ public class RegisterBean implements Serializable {
                 getUsers();
                 hide();
         }
+        public void saveUpdatedUser(Long userId, Long loginId){
+                User user = new User(getFullName(), getBirthDate(), getAddress());
+                Login login;
+
+                if (role.equals("User")){
+                        login = new Login(getEmail(), isActive(), Roles.ROLE_USER);
+                }else {
+                        login = new Login(getEmail(), isActive(), Roles.ROLE_ADMIN);
+                }
+
+                userService.updateUser(user, userId);
+                loginService.activateLogin(login, loginId);
+                getUsers();
+                hide();
+        }
         public void cancelUpdate(){
                 hide();
         }

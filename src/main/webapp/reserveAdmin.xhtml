@@ -6,7 +6,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 <h:head>
-    <title>Items</title>
+    <title>Manage Reserved Items</title>
     <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
     <style type="text/css">
         [class^="item"] {
@@ -102,7 +102,7 @@
                 <p:menuitem value="Lend" icon="pi pi-caret-right" url="users" styleClass="MenuItem">
                     <f:param name="i" value="1" />
                 </p:menuitem>
-                <p:menuitem value="Items" icon="pi pi-caret-right" url="item" styleClass="MenuItem">
+                <p:menuitem value="Stock" icon="pi pi-caret-right" url="stock" styleClass="MenuItem">
                     <f:param name="i" value="2" />
                 </p:menuitem>
                 <p:menuitem value="Reserve" icon="pi pi-caret-right" url="#" styleClass="MenuItem">
@@ -136,7 +136,7 @@
                                 <h:outputText value="Membre " />
                                 <h:outputText label="fullname" value="#{userBean.selectedReservedItemDTO. fullName}"/>
                                 <h:outputText value="Accept " />
-                                <p:selectBooleanCheckbox value="#{userBean.selectedReservedItem.confirmed}" />
+                                <p:selectBooleanCheckbox value="#{userBean.accept}" />
 
                                 <p:inputText  label="reserveId" value="#{userBean.selectedReservedItem.id}" type="hidden"/>
                                 <p:inputText  label="reserveDtoId" value="#{userBean.selectedReservedItemDTO.id}" type="hidden"/>

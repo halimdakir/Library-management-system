@@ -113,7 +113,7 @@
                 <p:menuitem value="Lend" icon="pi pi-caret-right" url="users" styleClass="MenuItem">
                     <f:param name="i" value="1" />
                 </p:menuitem>
-                <p:menuitem value="Items" icon="pi pi-caret-right" url="item" styleClass="MenuItem">
+                <p:menuitem value="Stock" icon="pi pi-caret-right" url="stock" styleClass="MenuItem">
                     <f:param name="i" value="2" />
                 </p:menuitem>
                 <p:menuitem value="Reserve" icon="pi pi-caret-right" url="reserveAdmin" styleClass="MenuItem">
@@ -178,7 +178,7 @@
                                     <p:commandButton id="cancelBtn" value="Cancel" actionListener="#{registerBean.cancelUpdate()}" style="margin-right:20px; background-color: #f60723; color: black" icon="pi pi-times-circle" update="@form" ajax="true">
                                         <f:ajax execute="@form" render="@form"/>
                                     </p:commandButton>
-                                    <p:commandButton id="saveBtn" value="Save" actionListener="#{registerBean.saveUser(registerBean.id, registerBean.loginId)}" style="margin-right:20px; background-color: #0378dc; color: black" icon="pi pi-save" update="@form" ajax="true">
+                                    <p:commandButton id="saveBtn" value="Save" actionListener="#{registerBean.saveUpdatedUser(registerBean.id, registerBean.loginId)}" style="margin-right:20px; background-color: #0378dc; color: black" icon="pi pi-save" update="@form" ajax="true">
                                         <f:ajax execute="@form" render="@form"/>
                                     </p:commandButton>
 

@@ -13,17 +13,17 @@ public class Stock {
     @JoinColumn(name = "item_id", nullable = false)
     private Item item;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    /*@ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "library_id", nullable = false)
-    private Library library;
+    private Library library;*/
 
     public Stock() {
     }
 
-    public Stock(int quantity, Item item, Library library) {
+    public Stock(int quantity, Item item) {
         this.quantity = quantity;
         this.item = item;
-        this.library = library;
+
     }
 
     public Long getId() {
@@ -50,11 +50,5 @@ public class Stock {
         this.item = item;
     }
 
-    public Library getLibrary() {
-        return library;
-    }
 
-    public void setLibrary(Library library) {
-        this.library = library;
-    }
 }

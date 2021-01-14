@@ -13,8 +13,8 @@ public class Library {
     private String name;
     private String address;
 
-    @OneToMany(mappedBy = "library", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Stock> stockSet;
+    /*@OneToMany(mappedBy = "library", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Stock> stockSet;*/
 
     public Library() {
     }

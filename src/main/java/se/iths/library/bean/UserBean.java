@@ -13,10 +13,7 @@ import se.iths.library.models.Roles;
 import se.iths.library.repository.ItemLendingRepository;
 import se.iths.library.securityJwt.controller.AuthenticationController;
 import se.iths.library.securityJwt.models.AuthenticationRequest;
-import se.iths.library.service.ItemLendingService;
-import se.iths.library.service.ItemService;
-import se.iths.library.service.LoginService;
-import se.iths.library.service.UserService;
+import se.iths.library.service.*;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -37,6 +34,8 @@ public class UserBean implements Serializable {
     private String authenticatedUserFullName;
     private boolean authenticatedUserRole;
     private boolean authenticateAdminRole;
+    private boolean isAccept;
+    private boolean isReturn;
     private boolean toAccept;
     private boolean toReturn;
     private Long loggedId;
@@ -71,13 +70,15 @@ public class UserBean implements Serializable {
     private UserService userService;
     private ItemService itemService;
     private ItemLendingRepository itemLendingRepository;
+    private StockService stockService;
 
-    public UserBean(ItemLendingService itemLendingService, LoginService loginService, UserService userService, ItemLendingRepository itemLendingRepository, ItemService itemService) {
+    public UserBean(ItemLendingService itemLendingService, LoginService loginService, UserService userService, ItemLendingRepository itemLendingRepository, ItemService itemService, StockService stockService) {
         this.itemLendingService = itemLendingService;
         this.loginService = loginService;
         this.userService = userService;
         this.itemService = itemService;
         this.itemLendingRepository = itemLendingRepository;
+        this.stockService = stockService;
     }
 
     public void getBorrowedItems(String email){
@@ -161,7 +162,7 @@ public class UserBean implements Serializable {
 
         try {
             token = authenticationController.createAuthenticationToken(new AuthenticationRequest(this.getLoginUsername(), this.getLoginPassword()));
-            System.out.println(" TOKEN :" +token);
+            System.out.println(" TOKEN : " +token);
             setLoggedOut(false);
             setLogged(true);
             User user = userService.findUserByLoginEmail(this.getLoginUsername());
@@ -236,19 +237,27 @@ public class UserBean implements Serializable {
     public void acceptReservedItem(Long selectedReservedItemId){
         selectedReservedItem = itemLendingService.getReservedItemById(selectedReservedItemId);
         if (selectedReservedItem != null){
-            selectedReservedItem.setConfirmed(true);
+            selectedReservedItem.setConfirmed(isAccept());
+            //Update stock quantity
+            var stock = stockService.getStockByItemId(selectedReservedItem.getItem().getId());
+            if (stock != null) {
+                int newQuantity = stock.getQuantity() - 1;
+                stockService.updateStockQuantity(newQuantity, stock.getId());
+            }
             itemLendingService.updateBorrowedItem(selectedReservedItem, selectedReservedItemId);
         }
         setToAccept(false);
+        setAccept(false);
         getAllReservedItemList();
     }
+
     public void cancelAcceptReservedItem(){
         setToAccept(false);
     }
-
     public void cancelReturnReservedItem(){
         setToReturn(false);
     }
+
     public void preReturnReservedItemD(Long id){
         setToReturn(true);
         selectedReservedItem = itemLendingService.getReservedItemById(id);
@@ -262,10 +271,18 @@ public class UserBean implements Serializable {
     public void returnReservedItem(Long selectedReservedItemId){
         selectedReservedItem = itemLendingService.getReservedItemById(selectedReservedItemId);
         if (selectedReservedItem != null){
-            selectedReservedItem.setReturned(true);
+            selectedReservedItem.setReturned(isReturn());
+            //Update stock quantity
+            var stock = stockService.getStockByItemId(selectedReservedItem.getItem().getId());
+            if (stock != null){
+                int newQuantity = stock.getQuantity() + 1;
+                stockService.updateStockQuantity(newQuantity, stock.getId());
+
+            }
             itemLendingService.updateBorrowedItem(selectedReservedItem, selectedReservedItemId);
         }
         setToReturn(false);
+        setReturn(false);
         getBorrowedItems(email);
     }
 
@@ -512,13 +529,24 @@ public class UserBean implements Serializable {
     public void setToReturn(boolean toReturn) {
         this.toReturn = toReturn;
     }
-
     public BorrowedItemsDTO getSelectedBorrowedItemsDTO() {
         return selectedBorrowedItemsDTO;
     }
-
     public void setSelectedBorrowedItemsDTO(BorrowedItemsDTO selectedBorrowedItemsDTO) {
         this.selectedBorrowedItemsDTO = selectedBorrowedItemsDTO;
     }
+    public boolean isAccept() {
+        return isAccept;
+    }
+    public void setAccept(boolean accept) {
+        isAccept = accept;
+    }
+    public boolean isReturn() {
+        return isReturn;
+    }
+    public void setReturn(boolean aReturn) {
+        isReturn = aReturn;
+    }
+
     //</editor-fold>
 }

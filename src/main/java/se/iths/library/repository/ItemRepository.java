@@ -17,4 +17,5 @@ public interface ItemRepository extends CrudRepository <Item,Long> {
     Iterable<Item> findItemByAuthorName(@Param("fullName") String fullName);
 
     Item findItemByBarCode(String barCode);
+
 }

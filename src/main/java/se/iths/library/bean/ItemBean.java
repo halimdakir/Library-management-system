@@ -2,10 +2,12 @@ package se.iths.library.bean;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import se.iths.library.dto.StockDTO;
 import se.iths.library.entity.Author;
 import se.iths.library.entity.Item;
 import se.iths.library.service.AuthorService;
 import se.iths.library.service.ItemService;
+import se.iths.library.service.StockService;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
@@ -25,6 +27,7 @@ public class ItemBean {
     private Item selectedItem;
     private String search;
     private String keyWord;
+    private List<StockDTO> stockDTOList = new ArrayList<>();
 
 
 
@@ -32,6 +35,8 @@ public class ItemBean {
     ItemService itemService;
     @Autowired
     AuthorService authorService;
+    @Autowired
+    StockService stockService;
 
 
     public ItemBean(ItemService itemService) {
@@ -77,6 +82,27 @@ public class ItemBean {
                 break;
         }
     }
+    public void getItemStockBy(String word){
+        switch (search) {
+            case "Title":
+                if (word == null || word.equals("")) {
+                    stockDTOList = stockService.getAllItemStocks();
+                } else {
+                    stockDTOList = stockService.getItemStockByTitle(word);
+                }
+                break;
+            case "Author":
+                if (word == null || word.equals("")) {
+                    stockDTOList = stockService.getAllItemStocks();
+                } else {
+                    stockDTOList = stockService.findItemStockByAuthorName(word);
+                }
+
+            case "Category":
+
+                break;
+        }
+    }
     public void getAuthors(Long id){
         Iterable<Author> iterable = authorService.findAuthorByItemsId(id);
         authorList = StreamSupport.stream(iterable.spliterator(), false)
@@ -85,6 +111,14 @@ public class ItemBean {
 
     //<editor-fold desc="Getter & Setter">
 
+
+    public List<StockDTO> getStockDTOList() {
+        return stockDTOList;
+    }
+
+    public void setStockDTOList(List<StockDTO> stockDTOList) {
+        this.stockDTOList = stockDTOList;
+    }
 
     public String getKeyWord() {
         return keyWord;

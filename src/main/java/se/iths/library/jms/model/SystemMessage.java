@@ -5,35 +5,36 @@ import java.io.Serializable;
 public class SystemMessage implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private String senderEmail;
-    private String receiverEmail;
+
+    private String emailFrom;
+    private String emailTo;
     private String msgObject;
     private String message;
 
     public SystemMessage() {
     }
 
-    public SystemMessage(String senderEmail, String receiverEmail, String msgObject, String message) {
-        this.senderEmail = senderEmail;
-        this.receiverEmail = receiverEmail;
+    public SystemMessage(String emailFrom, String emailTo, String msgObject, String message) {
+        this.emailFrom = emailFrom;
+        this.emailTo = emailTo;
         this.msgObject = msgObject;
         this.message = message;
     }
 
-    public String getSenderEmail() {
-        return senderEmail;
+    public String getEmailFrom() {
+        return emailFrom;
     }
 
-    public void setSenderEmail(String senderEmail) {
-        this.senderEmail = senderEmail;
+    public void setEmailFrom(String emailFrom) {
+        this.emailFrom = emailFrom;
     }
 
-    public String getReceiverEmail() {
-        return receiverEmail;
+    public String getEmailTo() {
+        return emailTo;
     }
 
-    public void setReceiverEmail(String receiverEmail) {
-        this.receiverEmail = receiverEmail;
+    public void setEmailTo(String emailTo) {
+        this.emailTo = emailTo;
     }
 
     public String getMsgObject() {
@@ -55,8 +56,8 @@ public class SystemMessage implements Serializable {
     @Override
     public String toString() {
         return "SystemMessage{" +
-                "senderEmail='" + senderEmail + '\'' +
-                ", receiverEmail='" + receiverEmail + '\'' +
+                "emailFrom='" + emailFrom + '\'' +
+                ", emailTo='" + emailTo + '\'' +
                 ", msgObject='" + msgObject + '\'' +
                 ", message='" + message + '\'' +
                 '}';

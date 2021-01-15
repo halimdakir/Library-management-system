@@ -9,6 +9,7 @@ import se.iths.library.dto.ReservedItemDTO;
 import se.iths.library.entity.ItemLending;
 import se.iths.library.entity.Login;
 import se.iths.library.entity.User;
+import se.iths.library.jms.component.MessageConsumer;
 import se.iths.library.jms.model.SystemMessage;
 import se.iths.library.models.Roles;
 import se.iths.library.repository.ItemLendingRepository;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -69,6 +71,8 @@ public class UserBean implements Serializable {
     private String contactFromEmail;
     private String contactSubject;
     private String contactMessage;
+    //Message
+    private List<SystemMessage> systemMessageList = new ArrayList<>();
 
 
 
@@ -106,8 +110,8 @@ public class UserBean implements Serializable {
         }
     }
     public void sendMessageByUser(){
-        setContactToEmail("salim@gmail.com");
         try {
+            setContactToEmail("salim@gmail.com");
             String message = jmsPublishService.publishMessage(new SystemMessage(getContactFromEmail(), getContactToEmail(), getContactSubject(), getContactMessage()));
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, message, "");
             FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -118,6 +122,12 @@ public class UserBean implements Serializable {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), "");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
+    }
+    public void getJmsMessages(){
+       systemMessageList = MessageConsumer.list.stream()
+                .filter(e -> e.getEmailTo().equals(this.getLoginUsername()))
+               .collect(Collectors.toList());
+
     }
     public void getBorrowedItems(String email){
         borrowedItemList = itemLendingService.findBorrowedItemsAndCreationDueDateByUserEmail(email);
@@ -612,6 +622,14 @@ public class UserBean implements Serializable {
 
     public void setContactFromEmail(String contactFromEmail) {
         this.contactFromEmail = contactFromEmail;
+    }
+
+    public List<SystemMessage> getSystemMessageList() {
+        return systemMessageList;
+    }
+
+    public void setSystemMessageList(List<SystemMessage> systemMessageList) {
+        this.systemMessageList = systemMessageList;
     }
     //</editor-fold>
 }

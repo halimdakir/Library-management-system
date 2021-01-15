@@ -116,8 +116,11 @@
                 <p:menuitem value="Personal Infos" icon="pi pi-caret-right" url="userInfo" styleClass="MenuItem" action="#{userBean.getAuthenticatedUserInfo()}">
                     <f:param name="i" value="2" />
                 </p:menuitem>
-                <p:menuitem value="Contact" icon="pi pi-caret-right" url="#" styleClass="MenuItem" action="#{userBean.getAuthenticatedUserInfo()}">
+                <p:menuitem value="Messages" icon="pi pi-caret-right" url="messageUser" styleClass="MenuItem" action="#{userBean.getJmsMessages()}">
                     <f:param name="i" value="3" />
+                </p:menuitem>
+                <p:menuitem value="Contact" icon="pi pi-caret-right" url="#" styleClass="MenuItem" action="#{userBean.getAuthenticatedUserInfo()}">
+                    <f:param name="i" value="4" />
                 </p:menuitem>
             </p:tabMenu>
         </h:form>
@@ -127,7 +130,7 @@
             <p:tab title="Contact Form" titleStyle="width: 250px; height: 40px">
                 <h:panelGrid columns="1" cellpadding="10" styleClass="motherPanelGrid">
                     <h:form prependId="false">
-                        <p:messages />
+                        <p:messages display="text"/>
                         <h:panelGrid columns="2">
 
                             <h:outputText value="Subject: " />
@@ -135,7 +138,7 @@
                             <h:outputText value="Address: " />
                             <p:inputTextarea label="address" value="#{userBean.contactMessage}" style="width: 200px"/>
 
-                            <p:commandButton id="contact" value="Send" actionListener="#{userBean.sendMessage()}" style="margin-right:20px; background-color: #0378dc; color: black" update="@this" ajax="false"/>
+                            <p:commandButton id="contact" value="Send" actionListener="#{userBean.sendMessageByUser}" style="margin-right:20px; background-color: #0378dc; color: black" update="@this" ajax="false"/>
                         </h:panelGrid>
                     </h:form>
                 </h:panelGrid>

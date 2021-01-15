@@ -129,6 +129,12 @@
                 <p:menuitem value="Personal Infos" icon="pi pi-caret-right" url="userInfo" styleClass="MenuItem">
                     <f:param name="i" value="2" />
                 </p:menuitem>
+                <p:menuitem value="Messages" icon="pi pi-caret-right" url="messageUser" styleClass="MenuItem" action="#{userBean.getJmsMessages()}">
+                    <f:param name="i" value="3" />
+                </p:menuitem>
+                <p:menuitem value="Contact" icon="pi pi-caret-right" url="contactUser" styleClass="MenuItem" action="#{userBean.getAuthenticatedUserInfo()}">
+                    <f:param name="i" value="4" />
+                </p:menuitem>
             </p:tabMenu>
         </h:form>
     </p:outputPanel>

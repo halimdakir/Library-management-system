@@ -13,7 +13,7 @@ import java.util.List;
 @Component
 public class MessageConsumer {
 
-    final static List<SystemMessage> list = new ArrayList<>();
+    public static List<SystemMessage> list = new ArrayList<>();
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageConsumer.class);
 
 

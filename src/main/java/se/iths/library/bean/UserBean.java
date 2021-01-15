@@ -9,6 +9,7 @@ import se.iths.library.dto.ReservedItemDTO;
 import se.iths.library.entity.ItemLending;
 import se.iths.library.entity.Login;
 import se.iths.library.entity.User;
+import se.iths.library.jms.model.SystemMessage;
 import se.iths.library.models.Roles;
 import se.iths.library.repository.ItemLendingRepository;
 import se.iths.library.securityJwt.controller.AuthenticationController;
@@ -18,6 +19,7 @@ import se.iths.library.service.*;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.validation.constraints.Email;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -61,7 +63,12 @@ public class UserBean implements Serializable {
     private ItemLending selectedReservedItem;
     private ReservedItemDTO selectedReservedItemDTO;
     private BorrowedItemsDTO selectedBorrowedItemsDTO;
-
+    //Contact
+    @Email(regexp = "[\\w\\.-]*[a-zA-Z0-9_]@[\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]" )
+    private String contactToEmail;
+    private String contactFromEmail;
+    private String contactSubject;
+    private String contactMessage;
 
 
 
@@ -71,6 +78,9 @@ public class UserBean implements Serializable {
     private ItemService itemService;
     private ItemLendingRepository itemLendingRepository;
     private StockService stockService;
+    @Autowired
+    JmsPublishServiceImpl jmsPublishService;
+
 
     public UserBean(ItemLendingService itemLendingService, LoginService loginService, UserService userService, ItemLendingRepository itemLendingRepository, ItemService itemService, StockService stockService) {
         this.itemLendingService = itemLendingService;
@@ -81,6 +91,34 @@ public class UserBean implements Serializable {
         this.stockService = stockService;
     }
 
+    public void sendMessage(){
+        var systemMessage = new SystemMessage(getContactFromEmail(), getContactToEmail(), getContactSubject(), getContactMessage());
+        try {
+            String message = jmsPublishService.publishMessage(systemMessage);
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, message, "");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            setContactToEmail(null);
+            setContactSubject(null);
+            setContactMessage(null);
+        }catch (Exception e){
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), "");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
+    public void sendMessageByUser(){
+        setContactToEmail("salim@gmail.com");
+        try {
+            String message = jmsPublishService.publishMessage(new SystemMessage(getContactFromEmail(), getContactToEmail(), getContactSubject(), getContactMessage()));
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, message, "");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            setContactToEmail(null);
+            setContactSubject(null);
+            setContactMessage(null);
+        }catch (Exception e){
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), "");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
     public void getBorrowedItems(String email){
         borrowedItemList = itemLendingService.findBorrowedItemsAndCreationDueDateByUserEmail(email);
     }
@@ -167,6 +205,7 @@ public class UserBean implements Serializable {
             setLogged(true);
             User user = userService.findUserByLoginEmail(this.getLoginUsername());
             setAuthenticatedUserFullName(user.getFullName());
+            setContactFromEmail(this.getLoginUsername());
 
             var login = loginService.getLoginByEmail(this.getLoginUsername());
             if (login.isPresent()){
@@ -548,5 +587,31 @@ public class UserBean implements Serializable {
         isReturn = aReturn;
     }
 
+    public String getContactToEmail() {
+        return contactToEmail;
+    }
+    public void setContactToEmail(String contactToEmail) {
+        this.contactToEmail = contactToEmail;
+    }
+    public String getContactSubject() {
+        return contactSubject;
+    }
+    public void setContactSubject(String contactSubject) {
+        this.contactSubject = contactSubject;
+    }
+    public String getContactMessage() {
+        return contactMessage;
+    }
+    public void setContactMessage(String contactMessage) {
+        this.contactMessage = contactMessage;
+    }
+
+    public String getContactFromEmail() {
+        return contactFromEmail;
+    }
+
+    public void setContactFromEmail(String contactFromEmail) {
+        this.contactFromEmail = contactFromEmail;
+    }
     //</editor-fold>
 }

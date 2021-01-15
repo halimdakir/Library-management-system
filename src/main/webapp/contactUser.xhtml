@@ -6,7 +6,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 <h:head>
-    <title>Register User</title>
+    <title>Contact</title>
     <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
     <style type="text/css">
         [class^="item"] {
@@ -77,7 +77,13 @@
             /* with the exported variables from Nova and Luna Themes*/
             border-bottom-color: var(--input-border-color, #A8A8A8);
         }
-
+        .motherPanelGrid{
+            margin: 0 auto;
+        }
+        .outerPanelGrid{
+            width: 50%;
+            margin: 0 auto;
+        }
         .outerPanelGrid>tbody>tr{
             border: none !important;
         }
@@ -98,72 +104,39 @@
             <p:commandButton actionListener="#{userBean.logout()}" style="width: 25px; height: 30px; color: darkslategray" icon="pi pi-sign-out" update="@this" ajax="false" />
         </h:form>
     </p:outputPanel>
-
     <p:outputPanel styleClass="item2">
         <h:form>
-            <p:tabMenu activeIndex="#{param.i}">
-                <p:menuitem value="Members" icon="pi pi-caret-right" url="admin" styleClass="MenuItem">
+            <p:tabMenu activeIndex="#{param.i}" style="text-align: center">
+                <p:menuitem value="Borrowed List" icon="pi pi-caret-right" url="user" styleClass="MenuItem">
                     <f:param name="i" value="0" />
                 </p:menuitem>
-                <p:menuitem value="Lend" icon="pi pi-caret-right" url="users" styleClass="MenuItem">
+                <p:menuitem value="Reserve List" icon="pi pi-caret-right" url="reserve" styleClass="MenuItem">
                     <f:param name="i" value="1" />
                 </p:menuitem>
-                <p:menuitem value="Stock" icon="pi pi-caret-right" url="stock" styleClass="MenuItem">
+                <p:menuitem value="Personal Infos" icon="pi pi-caret-right" url="userInfo" styleClass="MenuItem" action="#{userBean.getAuthenticatedUserInfo()}">
                     <f:param name="i" value="2" />
                 </p:menuitem>
-                <p:menuitem value="Reserve" icon="pi pi-caret-right" url="reserveAdmin" styleClass="MenuItem">
+                <p:menuitem value="Contact" icon="pi pi-caret-right" url="#" styleClass="MenuItem" action="#{userBean.getAuthenticatedUserInfo()}">
                     <f:param name="i" value="3" />
-                </p:menuitem>
-                <p:menuitem value="Register" icon="pi pi-caret-right" url="#" styleClass="MenuItem">
-                    <f:param name="i" value="4" />
-                </p:menuitem>
-                <p:menuitem value="Contact" icon="pi pi-caret-right" url="contact" styleClass="MenuItem">
-                    <f:param name="i" value="5" />
                 </p:menuitem>
             </p:tabMenu>
         </h:form>
     </p:outputPanel>
-
-    <p:outputPanel styleClass="item3" style="width: 100%">
+    <p:outputPanel styleClass="item3">
         <p:tabView orientation="center">
-            <p:tab title="CREATE NEW ADMIN / USER" titleStyle="width: 250px; height: 40px">
-                <h:panelGrid columns="1" cellpadding="10" style="margin: 0 auto;">
-                    <h:form>
+            <p:tab title="Contact Form" titleStyle="width: 250px; height: 40px">
+                <h:panelGrid columns="1" cellpadding="10" styleClass="motherPanelGrid">
+                    <h:form prependId="false">
                         <p:messages />
-                        <p:panelGrid columns="2"  columnClasses="label , value" styleClass="outerPanelGrid">
-                                <h:outputText value="Email " />
-                                <p:inputText  label="email" value="#{registerBean.email}"/>
-                                <h:outputText value="Password " />
-                                <p:password  label="password" value="#{registerBean.password}"/>
-                                <h:outputText value="Role " />
-                                <p:selectOneRadio id="search" value="#{registerBean.role}" unselectable="true">
-                                    <div class="ui-g ui-fluid">
-                                        <div class="ui-g-12 ui-md-6">
-                                            <div class="ui-inputgroup">
-                                                <f:selectItem itemLabel="User" itemValue="User" />
-                                            </div>
-                                        </div>
-                                        <div class="ui-g-12 ui-md-6">
-                                            <div class="ui-inputgroup">
-                                                <f:selectItem itemLabel="Admin" itemValue="Admin" />
+                        <h:panelGrid columns="2">
 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </p:selectOneRadio>
+                            <h:outputText value="Subject: " />
+                            <p:inputText label="subject" value="#{userBean.contactSubject}" style="width: 200px" required="true" requiredMessage="Subject required!"/>
+                            <h:outputText value="Address: " />
+                            <p:inputTextarea label="address" value="#{userBean.contactMessage}" style="width: 200px"/>
 
-                                <h:outputText value="Fullname " />
-                                <p:inputText  label="fullName" value="#{registerBean.fullName}"/>
-                                <h:outputText value="Date of birth " />
-                                <p:inputText label="birthDate" value="#{registerBean.birthDate}"/>
-                                <h:outputText value="Address " />
-                                <p:inputText label="address" value="#{registerBean.address}"/>
-
-
-                            <p:commandButton id="saveBtn" value="Save" action="#{registerBean.addUserByAdmin()}" process="@this" ajax="false" style="margin-right:20px; background-color: #0378dc; color: black" icon="pi pi-save"/>
-                        </p:panelGrid>
-
-
+                            <p:commandButton id="contact" value="Send" actionListener="#{userBean.sendMessage()}" style="margin-right:20px; background-color: #0378dc; color: black" update="@this" ajax="false"/>
+                        </h:panelGrid>
                     </h:form>
                 </h:panelGrid>
             </p:tab>

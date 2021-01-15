@@ -127,11 +127,10 @@
     </p:outputPanel>
     <p:outputPanel styleClass="item3">
         <p:tabView orientation="center">
-            <p:tab title="MANAGE MEMBERS" titleStyle="width: 250px; height: 40px">
+            <p:tab title="INBOX" titleStyle="width: 250px; height: 40px">
                 <h:panelGrid columns="1" cellpadding="10" styleClass="motherPanelGrid">
                     <h:form>
 
-                        <p:commandButton action="#{userBean.getJmsMessages()}" style="margin-right:20px;" icon="pi pi-refresh" update="@form" ajax="true"/>
                         <p:dataTable var="message" value="#{userBean.systemMessageList}">
 
 

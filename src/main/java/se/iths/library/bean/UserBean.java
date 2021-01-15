@@ -267,10 +267,12 @@ public class UserBean implements Serializable {
         getAuthenticatedUserInfo();
         getReservedItemList();
         getAllReservedItemList();
+        getJmsMessages();
         return "user";
     }
     public String redirectToAdminDashBoard(){
         getAllReservedItemList();
+        getJmsMessages();
         return "admin";
     }
     public void preAcceptReservedItemD(Long id){

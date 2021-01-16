@@ -35,6 +35,13 @@ public class User {
         this.address = address;
     }
 
+    public User(@NotEmpty String fullName, @NotEmpty String birthDate, String address, Login login) {
+        this.fullName = fullName;
+        this.birthDate = birthDate;
+        this.address = address;
+        this.login = login;
+    }
+
     public Long getId() {
         return id;
     }

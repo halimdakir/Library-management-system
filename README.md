@@ -12,17 +12,34 @@
 ### `ENDPOINTS:`
 
 ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) `USER :`
+      
+   - POST   Since the Login id can not be null because of relationship between tables so: 
+            The endpoint: `/user/new` and Json body for creating will be like that:
+            `{
+                 "fullName": "Halim Dakir",
+                 "birthDate": "2000-02-11",
+                 "address": "Maroc",
+                 "loginDomain": {
+                                 "email": "halim.dk@test.tr",
+                                 "password": "halim121",
+                                 "roles": "USER"
+                                 }
+            }`
+     Roles: {USER, ADMIN} (it does not matter if upper or lower case).
+
+
    - Json body :`{"fullName":"Halim Dakir","birthDate": "20/11/1970","address":"Rabat, Maroc"}`
-   - POST   : /user/new
    - GET one: /user/id/{id}
    - GET all: /user/all
    - DELETE : /user/id/{id}
    - PUT    : /user/id/{id}
      
 ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) `LOGIN :`
-- Json body :`{"email": "halim.dakir@test.tr","password": "123456","roles": "USER"}`
-- POST   : /login/new
-- GET authenticated user's email: /login/authenticated
+
+    - POST   : see above in `USER's POST` endpoint.
+    - Json body :`{"email": "halim.dakir@test.tr","password": "123456","roles": "USER"}`
+    - GET authenticated user's email: /login/authenticated
+
 Other mapping request are exist in service which we implemented them in the **beans** .
 
 ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) `ITEM :`

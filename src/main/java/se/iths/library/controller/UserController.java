@@ -5,11 +5,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import se.iths.library.entity.Login;
 import se.iths.library.entity.User;
 import se.iths.library.exception.DeleteDetails;
 import se.iths.library.exception.NotFoundException;
 import se.iths.library.exception.UnprocessableEntityException;
+import se.iths.library.models.LoginDomain;
+import se.iths.library.models.Roles;
+import se.iths.library.models.UserDomain;
 import se.iths.library.service.UserService;
 
 import javax.validation.constraints.NotEmpty;
@@ -18,6 +23,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
     private UserService userService;
@@ -41,16 +47,37 @@ public class UserController {
 
     @PreAuthorize("permitAll()")
     @PostMapping("/new")
-    public User createNewUser(@RequestBody User user) {
-        if (user.getBirthDate() != null && user.getFullName() != null){
-            if (user.getBirthDate().matches("^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$")){
+    public User createNewUser(@RequestBody UserDomain userDomain) {
+        User user = new User();
+        Login login = new Login();
+
+        if (userDomain.getBirthDate() != null && userDomain.getFullName() != null){
+            if (userDomain.getBirthDate().matches("^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$")){
+
+                if (userDomain.getLoginDomain().getRoles().equalsIgnoreCase("ADMIN")){
+                        login.setRoles(Roles.ROLE_ADMIN);
+                }else if (userDomain.getLoginDomain().getRoles().equalsIgnoreCase("USER")){
+                        login.setRoles(Roles.ROLE_USER);
+                }
+
+                login.setEmail(userDomain.getLoginDomain().getEmail());
+                login.setPassword(passwordEncoder.encode(userDomain.getLoginDomain().getPassword()));
+
+                user.setFullName(userDomain.getFullName());
+                user.setBirthDate(userDomain.getBirthDate());
+                user.setAddress(userDomain.getAddress());
+
+                user.setLogin(login);
+                login.setUser(user);
                 return userService.createUser(user);
+
             }else {
                 throw new UnprocessableEntityException("Correct date format is : yyyy-MM-dd");
             }
         }else {
             throw new UnprocessableEntityException("Full name & date of birth are required!");
         }
+
     }
 
     @PutMapping("/id/{id}")

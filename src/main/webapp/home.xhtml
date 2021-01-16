@@ -30,20 +30,20 @@
         }
         .item1 {
             grid-area: header;
+            background-color: darkslategray;
             text-align: center;
         }
 
         .item2 {
             grid-area: menu;
-            background-color: darkslategray;
+            margin: 0 auto;
             text-align: center;
         }
 
         .item3 {
-            height: auto;
             grid-area: sidebar;
-            text-align: center;
             margin: 0 auto;
+            display: block;
         }
 
         .item4 {
@@ -67,35 +67,22 @@
             margin-top: 15px;
             margin-right: 4px
         }
-
-        .value {
-            font-weight: bold;
-        }
-        .MenuItem{
-            margin-right:50px;
-            margin-left:50px;
-            margin-top: 50px;
-            width: 150px;
-            height: 80px;
-        }
-
-
         .btn{
             position: relative;
-            border: 3px solid rgb(0, 10, 10);
+            border: 3px solid rgb(96, 102, 38);
             margin-bottom: 10px;
             margin-top: 10px;
-            width: 200px;
+            width: 150px;
             background-color: #0f122d;
             font-family: Calibri, monospace;
             font-size: larger;
             font-weight: bold;
             color: #02b3b3;
-            height: 200px;
+            height: 180px;
             text-align: center;
         }
         .btn:hover {
-            border: 3px solid #0a7272;
+            border: 3px solid #02b3b3;
             background-color: #000000;
             color: wheat;
             cursor: pointer;
@@ -120,7 +107,7 @@
         }
 
         .btn:hover .btnPanelGrid{
-            width: 200px;
+            width: 140px;
             padding: 6px 6px;
             visibility: visible;
             opacity: 0.6;
@@ -131,17 +118,15 @@
 
 <h:body styleClass="grid">
 
-    <p:outputPanel styleClass="item1"></p:outputPanel>
-    <p:outputPanel styleClass="item2">
+    <p:outputPanel styleClass="item1">
         <h1>LIBRARY MANAGEMENT SYSTEM</h1>
         <h:form styleClass="form" style="" rendered="#{userBean.logged}">
             <h:outputText styleClass="outputText" value="Hi: "/> <h:outputLabel styleClass="outputText" value="#{userBean.authenticatedUserFullName}"/><h:outputText value=" "/>
             <p:commandButton actionListener="#{userBean.logout()}" style="width: 25px; height: 30px; color: darkslategray" icon="pi pi-sign-out" update="@this" ajax="false" />
         </h:form>
-
     </p:outputPanel>
+    <p:outputPanel styleClass="item2"></p:outputPanel>
     <p:outputPanel styleClass="item3">
-
 
         <a href="${pageContext.request.contextPath}/item">
             <button class="btn">
@@ -150,7 +135,7 @@
             </button>
         </a>
         <a href="${pageContext.request.contextPath}/login">
-            <button class="btn" onclick="login">
+            <button class="btn">
                 <img class="icon-desktop" src="resources/images/icon/login.png" alt="login"/>
                 <h:panelGrid styleClass="btnPanelGrid">LOG IN</h:panelGrid>
             </button>

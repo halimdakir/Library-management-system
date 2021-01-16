@@ -1,4 +1,4 @@
-package se.iths.library.service;
+package se.iths.library.jms.service;
 
 import se.iths.library.jms.model.SystemMessage;
 

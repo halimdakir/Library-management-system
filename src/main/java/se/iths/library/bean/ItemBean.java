@@ -145,6 +145,7 @@ public class ItemBean {
                 .collect(Collectors.toList());
     }
 
+
     //<editor-fold desc="Getter & Setter">
 
 
@@ -245,4 +246,5 @@ public class ItemBean {
         this.categoryList = categoryList;
     }
     //</editor-fold>
+
 }

@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui" xmlns:form="http://java.sun.com/jsf/html"
-      xmlns:th="https://www.thymeleaf.org">
+      xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title>Login</title>
     <h:outputStylesheet name="style.css" library="css" />
@@ -30,21 +29,20 @@
         }
         .item1 {
             grid-area: header;
+            background-color: darkslategray;
             text-align: center;
         }
 
         .item2 {
             grid-area: menu;
-            background-color: darkslategray;
+            margin: 0 auto;
             text-align: center;
         }
 
         .item3 {
-            height: auto;
             grid-area: sidebar;
             margin: 0 auto;
             display: block;
-
         }
 
         .item4 {
@@ -79,15 +77,33 @@
             font-family: 'Georgia', cursive;
             color: #b10526;
         }
+        .MenuItem{
+            width: 200px;
+        }
 
     </style>
 </h:head>
 
 <h:body styleClass="grid">
 
-    <p:outputPanel styleClass="item1"></p:outputPanel>
+    <p:outputPanel styleClass="item1"><h1>LIBRARY MANAGEMENT SYSTEM</h1></p:outputPanel>
     <p:outputPanel styleClass="item2">
-        <h1>LIBRARY MANAGEMENT SYSTEM</h1>
+        <h:form>
+            <p:tabMenu activeIndex="2" style="text-align: center">
+                <p:menuitem value="Home" icon="pi pi-caret-right" url="home" styleClass="MenuItem">
+                    <f:param name="i" value="0" />
+                </p:menuitem>
+                <p:menuitem value="Item" icon="pi pi-caret-right" url="item" styleClass="MenuItem">
+                    <f:param name="i" value="1" />
+                </p:menuitem>
+                <p:menuitem value="Login" icon="pi pi-caret-right" url="#" styleClass="MenuItem" action="#{userBean.getAuthenticatedUserInfo()}">
+                    <f:param name="i" value="2" />
+                </p:menuitem>
+                <p:menuitem value="Register" icon="pi pi-caret-right" url="register" styleClass="MenuItem" action="#{userBean.getJmsMessages()}">
+                    <f:param name="i" value="3" />
+                </p:menuitem>
+            </p:tabMenu>
+        </h:form>
     </p:outputPanel>
     <p:outputPanel styleClass="item3">
         <p:outputPanel styleClass="item3-body">

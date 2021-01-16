@@ -1,7 +1,6 @@
 package se.iths.library.bean;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import se.iths.library.dto.BorrowedItemsDTO;
@@ -11,6 +10,7 @@ import se.iths.library.entity.Login;
 import se.iths.library.entity.User;
 import se.iths.library.jms.component.MessageConsumer;
 import se.iths.library.jms.model.SystemMessage;
+import se.iths.library.jms.service.JmsPublishServiceImpl;
 import se.iths.library.models.Roles;
 import se.iths.library.repository.ItemLendingRepository;
 import se.iths.library.securityJwt.controller.AuthenticationController;
@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -49,7 +48,7 @@ public class UserBean implements Serializable {
     private List<BorrowedItemsDTO> borrowedItemListByUser = new ArrayList<>();
     private List<BorrowedItemsDTO> reservedItemListByUser = new ArrayList<>();
     private List<ReservedItemDTO> reservedAllItemListByAdmin = new ArrayList<>();
-    //TODO PERSONAL INFORMATION
+    //User info
     private Long userId;
     private Long loginId;
     private String mail;
@@ -75,25 +74,22 @@ public class UserBean implements Serializable {
     private List<SystemMessage> systemMessageList = new ArrayList<>();
 
 
-
+    @Autowired
     private ItemLendingService itemLendingService;
+    @Autowired
     private LoginService loginService;
+    @Autowired
     private UserService userService;
+    @Autowired
     private ItemService itemService;
+    @Autowired
     private ItemLendingRepository itemLendingRepository;
+    @Autowired
     private StockService stockService;
     @Autowired
-    JmsPublishServiceImpl jmsPublishService;
+    private JmsPublishServiceImpl jmsPublishService;
 
 
-    public UserBean(ItemLendingService itemLendingService, LoginService loginService, UserService userService, ItemLendingRepository itemLendingRepository, ItemService itemService, StockService stockService) {
-        this.itemLendingService = itemLendingService;
-        this.loginService = loginService;
-        this.userService = userService;
-        this.itemService = itemService;
-        this.itemLendingRepository = itemLendingRepository;
-        this.stockService = stockService;
-    }
 
     public void sendMessage(){
         var systemMessage = new SystemMessage(getContactFromEmail(), getContactToEmail(), getContactSubject(), getContactMessage());
@@ -165,6 +161,7 @@ public class UserBean implements Serializable {
             setConfirmPassword("");
             setBirthDate(user.get().getBirthDate());
             setAddress(user.get().getAddress());
+
         }
     }
     public void saveUser(Long userId, Long loginId){
@@ -188,26 +185,10 @@ public class UserBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
-    @Autowired
-    private AuthenticationManager authenticationManager;
+
     @Autowired
     private AuthenticationController authenticationController;
-
-    public void loginAction() throws Exception {
-        /*try {
-            Authentication request = new UsernamePasswordAuthenticationToken(this.getLoginUsername(), this.getLoginPassword());
-            Authentication result = authenticationManager.authenticate(request);
-            SecurityContextHolder.getContext().setAuthentication(result);
-            FacesContext context = FacesContext.getCurrentInstance();
-            context.getExternalContext().redirect("/home");
-
-        } catch (AuthenticationException e) {
-            e.printStackTrace();
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Bad Credentials!", "");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        }*/
-
-
+    public void loginAction(){
         try {
             token = authenticationController.createAuthenticationToken(new AuthenticationRequest(this.getLoginUsername(), this.getLoginPassword()));
             System.out.println(" TOKEN : " +token);
@@ -247,6 +228,7 @@ public class UserBean implements Serializable {
         itemLendingRepository.save(new ItemLending(java.time.LocalDate.now().toString(), java.time.LocalDate.now().plusDays(15).toString(), false, false, user, item));
         getReservedItemList();
     }
+
     private void getReservedItemList(){
         Login authenticatedUser = loginService.getAuthenticatedUserEmail();
         if (authenticatedUser!=null){
@@ -254,9 +236,11 @@ public class UserBean implements Serializable {
             reservedItemListByUser = itemLendingService.findReservedItemsAndCreationDueDateByUserId(userInfo.getId());
         }
     }
+
     public void getAllReservedItemList(){
         reservedAllItemListByAdmin = itemLendingService.getAllReservedItems();
     }
+
     public void deleteReservedItems(Long reservedItemId){
         itemLendingService.deleteReservedItem(reservedItemId);
         getReservedItemList();
@@ -270,11 +254,13 @@ public class UserBean implements Serializable {
         getJmsMessages();
         return "user";
     }
+
     public String redirectToAdminDashBoard(){
         getAllReservedItemList();
         getJmsMessages();
         return "admin";
     }
+
     public void preAcceptReservedItemD(Long id){
         setToAccept(true);
         selectedReservedItem = itemLendingService.getReservedItemById(id);
@@ -285,6 +271,7 @@ public class UserBean implements Serializable {
             selectedReservedItemDTO = reservedAllItemListByAdmin.get(0);
         }
     }
+
     public void acceptReservedItem(Long selectedReservedItemId){
         selectedReservedItem = itemLendingService.getReservedItemById(selectedReservedItemId);
         if (selectedReservedItem != null){
@@ -345,6 +332,7 @@ public class UserBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().redirect("/login");
     }
+
 
     //<editor-fold desc="Getter & Setter">
 

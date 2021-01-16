@@ -70,7 +70,7 @@ public class UserController {
         }
     }
 
-    //@PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/email/{email}")
     public String getOneUserByEmail(@PathVariable String email){
         User user =  userService.findUserByLoginEmail(email);

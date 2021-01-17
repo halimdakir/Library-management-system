@@ -19,8 +19,8 @@ public class StockService {
         return stockRepository.save(stock);
     }
 
-    public void updateStockQuantity(int newQuantity, Long id){
-        stockRepository.findById(id)
+    public Stock updateStockQuantity(int newQuantity, Long id){
+        return stockRepository.findById(id)
                 .map(stock -> {
                     stock.setQuantity(newQuantity);
                     return stockRepository.save(stock);

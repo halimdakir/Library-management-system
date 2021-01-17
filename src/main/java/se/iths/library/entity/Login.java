@@ -1,11 +1,9 @@
 package se.iths.library.entity;
 
 import se.iths.library.models.Roles;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import java.util.Set;
 
 @Entity
 public class Login {
@@ -22,8 +20,7 @@ public class Login {
     private Roles roles;
 
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")  //ID is not nullabe @JoinColumn(name = "user_id", nullable = false)
+    @OneToOne(fetch = FetchType.LAZY, cascade =  CascadeType.ALL, mappedBy = "login")
     private User user;
 
 
@@ -50,12 +47,7 @@ public class Login {
         this.roles = roles;
     }
 
-    public Login(@NotEmpty String email, @NotEmpty String password, Roles roles, User user) {
-        this.email = email;
-        this.password = password;
-        this.roles = roles;
-        this.user = user;
-    }
+
 
     public Login(@NotEmpty String password) {
         this.password = password;
@@ -100,14 +92,4 @@ public class Login {
     public void setRoles(Roles roles) {
         this.roles = roles;
     }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-
 }

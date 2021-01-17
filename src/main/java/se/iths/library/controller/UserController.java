@@ -1,6 +1,5 @@
 package se.iths.library.controller;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,12 +11,11 @@ import se.iths.library.entity.User;
 import se.iths.library.exception.DeleteDetails;
 import se.iths.library.exception.NotFoundException;
 import se.iths.library.exception.UnprocessableEntityException;
-import se.iths.library.models.LoginDomain;
 import se.iths.library.models.Roles;
 import se.iths.library.models.UserDomain;
 import se.iths.library.service.UserService;
 
-import javax.validation.constraints.NotEmpty;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -41,7 +39,7 @@ public class UserController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/all")
-    public Iterable<User> getAllUsers(){
+    public Iterable<User>getAllUsers(){
         return userService.getAllUsers();
     }
 
@@ -51,35 +49,47 @@ public class UserController {
         User user = new User();
         Login login = new Login();
 
-        if (userDomain.getBirthDate() != null && userDomain.getFullName() != null){
+        if (userDomain.getBirthDate() != null && userDomain.getFullName() != null && userDomain.getLoginDomain().getEmail() != null && userDomain.getLoginDomain().getPassword() != null){
+
             if (userDomain.getBirthDate().matches("^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$")){
 
-                if (userDomain.getLoginDomain().getRoles().equalsIgnoreCase("ADMIN")){
+                if (userDomain.getLoginDomain().getEmail().matches("^(.+)@(.+)$")){
+
+                    if (userDomain.getLoginDomain().getRoles().equalsIgnoreCase("ADMIN")){
                         login.setRoles(Roles.ROLE_ADMIN);
-                }else if (userDomain.getLoginDomain().getRoles().equalsIgnoreCase("USER")){
+
+                    }else if (userDomain.getLoginDomain().getRoles().equalsIgnoreCase("USER")){
                         login.setRoles(Roles.ROLE_USER);
+
+                    }else {
+                        throw new UnprocessableEntityException("Role are required! Please choose between ADMIN & USER");
+                    }
+
+                    login.setEmail(userDomain.getLoginDomain().getEmail());
+                    login.setPassword(passwordEncoder.encode(userDomain.getLoginDomain().getPassword()));
+
+                    user.setFullName(userDomain.getFullName());
+                    user.setBirthDate(userDomain.getBirthDate());
+                    user.setAddress(userDomain.getAddress());
+
+
+                    User user1 = new User(user.getFullName(), user.getBirthDate(), user.getAddress(), new Login(login.getEmail(), login.getPassword(), login.getRoles()));
+
+                    return userService.createUser(user1);
+
+                }else {
+                    throw new UnprocessableEntityException("Enter a valid email!");
                 }
-
-                login.setEmail(userDomain.getLoginDomain().getEmail());
-                login.setPassword(passwordEncoder.encode(userDomain.getLoginDomain().getPassword()));
-
-                user.setFullName(userDomain.getFullName());
-                user.setBirthDate(userDomain.getBirthDate());
-                user.setAddress(userDomain.getAddress());
-
-                user.setLogin(login);
-                login.setUser(user);
-                return userService.createUser(user);
-
             }else {
                 throw new UnprocessableEntityException("Correct date format is : yyyy-MM-dd");
             }
         }else {
-            throw new UnprocessableEntityException("Full name & date of birth are required!");
+            throw new UnprocessableEntityException("Full name, Email, Password & date of birth are required!");
         }
 
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/id/{id}")
     public User updateUser(@RequestBody User newUser, @PathVariable Long id) {
         return userService.updateUser(newUser, id);

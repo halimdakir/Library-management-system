@@ -29,13 +29,10 @@ public class SetUpDataBase {
                 var author4 = new Author("Anneli Furmark", "1962/04/01");
 
 
-                var user1 = new User("Halim Dakir", "2000/11/11", "Maroc");
-                var user2 = new User("Salim Maroc", "2000/11/11", "Maroc");
-                var user3 = new User("Simo Elyou", "2000/11/11", "Maroc");
+                var user1 = new User("Halim Dakir", "2000/11/11", "Maroc", new Login("halim@gmail.com", passwordEncoder.encode("123456"),true, Roles.ROLE_USER));
+                var user2 = new User("Salim Maroc", "2000/11/11", "Maroc", new Login("salim@gmail.com", passwordEncoder.encode("654789"), true, Roles.ROLE_ADMIN));
+                var user3 = new User("Simo Elyou", "2000/11/11", "Maroc", new Login("simo@gmail.com", passwordEncoder.encode("123456"), false, Roles.ROLE_USER));
 
-                var login1 = new Login("halim@gmail.com", "123456",true, Roles.ROLE_USER);
-                var login2 = new Login("salim@gmail.com", "654789", true, Roles.ROLE_ADMIN);
-                var login3 = new Login("simo@gmail.com", "123456", false, Roles.ROLE_USER);
 
 
                 item1.getAuthors().add(author3);
@@ -52,17 +49,6 @@ public class SetUpDataBase {
                 author4.getItems().add(item3);
                 author3.getItems().add(item5);
 
-                login1.setPassword(passwordEncoder.encode(login1.getPassword()));
-                login2.setPassword(passwordEncoder.encode(login2.getPassword()));
-                login3.setPassword(passwordEncoder.encode(login3.getPassword()));
-
-
-                user1.setLogin(login1);
-                login1.setUser(user1);
-                user2.setLogin(login2);
-                login2.setUser(user2);
-                user3.setLogin(login3);
-                login3.setUser(user3);
 
                 itemRepository.save(item1);
                 itemRepository.save(item2);

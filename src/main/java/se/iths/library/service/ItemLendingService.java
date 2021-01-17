@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import se.iths.library.dto.BorrowedItemsDTO;
 import se.iths.library.dto.ReservedItemDTO;
 import se.iths.library.entity.ItemLending;
-import se.iths.library.entity.User;
 import se.iths.library.exception.NotFoundException;
 import se.iths.library.repository.ItemLendingRepository;
 import java.util.List;
@@ -51,8 +50,19 @@ public class ItemLendingService {
                     itemLending1.setConfirmed(itemLending.isConfirmed());
                     return itemLendingRepository.save(itemLending1);
                 })
-                .orElseThrow(() -> new NotFoundException("User not found with id :" + id)
+                .orElseThrow(() -> new NotFoundException("The borrowed item not found with id :" + id)
                 );
+    }
+    public ItemLending findItemLendingById(Long id){
+        return itemLendingRepository.findItemLendingById(id);
+    }
+    public void returnBorrowedItem(Long id){
+      itemLendingRepository.findById(id)
+                .map(itemLending1 -> {
+                    itemLending1.setReturned(true);
+                     return itemLendingRepository.save(itemLending1);
+                })
+                .orElseThrow(() -> new NotFoundException("The borrowed item not found with id :" + id));
     }
 
 }

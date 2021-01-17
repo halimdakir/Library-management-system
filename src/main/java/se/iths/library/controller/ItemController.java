@@ -22,7 +22,7 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
 
-    @Secured("permitAll()")
+    @PreAuthorize("permitAll()")
     @GetMapping("/id/{id}")
     public Optional<Item> getOneItemById(@PathVariable Long id){
         var item = itemService.getItemById(id);

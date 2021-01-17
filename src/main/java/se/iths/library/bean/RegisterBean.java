@@ -55,13 +55,11 @@ public class RegisterBean implements Serializable {
 
         //Add User by user
         public void addUser(){
-                var user = new User(getFullName(), getBirthDate(), getAddress());
-                String encodePassword = passwordEncoder.encode(getPassword());
+
                 boolean exist = loginService.checkEmailIfExist(getEmail());
                 if (!exist){
-                        var login = new Login(getEmail(), encodePassword, false, Roles.ROLE_USER);
-                        user.setLogin(login);
-                        login.setUser(user);
+                        String encodePassword = passwordEncoder.encode(getPassword());
+                        var user = new User(getFullName(), getBirthDate(), getAddress(), new Login(getEmail(), encodePassword, false, Roles.ROLE_USER));
                         userService.createUser(user);
                         FacesMessage msg = new FacesMessage("Successful", "Welcome :" + user.getFullName());
                         FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -82,19 +80,18 @@ public class RegisterBean implements Serializable {
         }
         //Add Admin or User by admin
         public void addUserByAdmin(){
-                User user = new User(getFullName(), getBirthDate(), getAddress());
-                Login login;
-                String encodePassword = passwordEncoder.encode(getPassword());
                 boolean exist = loginService.checkEmailIfExist(getEmail());
                 if (!exist){
+                        User  user;
+                        String encodePassword = passwordEncoder.encode(getPassword());
                         if (role.equals("User")){
-                                login = new Login(getEmail(), encodePassword, true, Roles.ROLE_USER);
+
+                                user = new User(getFullName(), getBirthDate(), getAddress(), new Login(getEmail(), encodePassword, true, Roles.ROLE_USER));
 
                         }else {
-                                login = new Login(getEmail(), encodePassword, true, Roles.ROLE_ADMIN);
+                                user = new User(getFullName(), getBirthDate(), getAddress(), new Login(getEmail(), encodePassword, true, Roles.ROLE_ADMIN));
                         }
-                        user.setLogin(login);
-                        login.setUser(user);
+
                         userService.createUser(user);
                         FacesMessage msg = new FacesMessage("Successful", "Welcome :" + user.getFullName());
                         FacesContext.getCurrentInstance().addMessage(null, msg);

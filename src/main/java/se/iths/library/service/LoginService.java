@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import se.iths.library.entity.Login;
+import se.iths.library.exception.NotFoundException;
 import se.iths.library.repository.LoginRepository;
 
 import java.util.Optional;
@@ -28,10 +29,6 @@ public class LoginService {
         Optional<Login> foundLogin = loginRepository.findById(id);
         loginRepository.deleteById(foundLogin.get().getId());
     }
-    public Login createLogin(Login login){
-        login.setPassword(passwordEncoder.encode(login.getPassword()));
-        return loginRepository.save(login);
-    }
     public boolean checkEmailIfExist(String email){
         Optional<Login> login = loginRepository.findByEmail(email);
         if (login.isPresent()){
@@ -40,8 +37,8 @@ public class LoginService {
             return false;
         }
     }
-    public void updateLogin(Login newLogin, Long id){
-        loginRepository.findById(id)
+    public Login updateLogin(Login newLogin, Long id){
+        return loginRepository.findById(id)
                 .map(login -> {
                     login.setEmail(newLogin.getEmail());
                     login.setPassword(newLogin.getPassword());
@@ -49,23 +46,25 @@ public class LoginService {
                     login.setRoles(newLogin.getRoles());
                     return loginRepository.save(login);
                 })
-                .orElseGet(() -> {
-                    newLogin.setId(id);
-                    return loginRepository.save(newLogin);
-                });
+                .orElseThrow(() -> new NotFoundException("Login not found with id :" + id));
     }
-    public void activateLogin(Login newLogin, Long id){
-        loginRepository.findById(id)
+    public Login activateLogin(Login newLogin, Long id){
+        return loginRepository.findById(id)
                 .map(login -> {
                     login.setEmail(newLogin.getEmail());
                     login.setActive(newLogin.isActive());
                     login.setRoles(newLogin.getRoles());
                     return loginRepository.save(login);
                 })
-                .orElseGet(() -> {
-                    newLogin.setId(id);
-                    return loginRepository.save(newLogin);
-                });
+                .orElseThrow(() -> new NotFoundException("Login not found with id :" + id));
+    }
+    public Login activateUser(Long id){
+        return loginRepository.findById(id)
+                .map(login -> {
+                    login.setActive(true);
+                    return loginRepository.save(login);
+                })
+                .orElseThrow(() -> new NotFoundException("Login not found with id :" + id));
     }
     public void updateLoginByUser(String password, Long id){
         loginRepository.findById(id)

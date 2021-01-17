@@ -29,6 +29,12 @@ public class ItemLending {
     public ItemLending() {
     }
 
+    public ItemLending(@NotEmpty String creationDate, @NotEmpty String dueDate, boolean isConfirmed, boolean isReturned) {
+        this.creationDate = creationDate;
+        this.dueDate = dueDate;
+        this.isConfirmed = isConfirmed;
+        this.isReturned = isReturned;
+    }
 
     public ItemLending(@NotEmpty String creationDate, @NotEmpty String dueDate, boolean isConfirmed, boolean isReturned, User user, Item item) {
         this.creationDate = creationDate;

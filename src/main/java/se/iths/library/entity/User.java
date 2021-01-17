@@ -18,9 +18,8 @@ public class User {
     private String birthDate;
     private String address;
 
-    @OneToOne(fetch = FetchType.LAZY,
-            cascade =  CascadeType.ALL,
-            mappedBy = "user")
+    @OneToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "login_id")  //ID is not nullabe @JoinColumn(name = "user_id", nullable = false)
     private Login login;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -74,19 +73,7 @@ public class User {
         this.address = address;
     }
 
-    public Login getLogin() {
-        return login;
-    }
-
     public void setLogin(Login login) {
         this.login = login;
-    }
-
-    public Set<ItemLending> getItemLendingSet() {
-        return itemLendingSet;
-    }
-
-    public void setItemLendingSet(Set<ItemLending> itemLendingSet) {
-        this.itemLendingSet = itemLendingSet;
     }
 }

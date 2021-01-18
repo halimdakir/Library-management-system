@@ -1,6 +1,6 @@
 # ****`Library Management System`****
 
-#`SET UP THE APP`
+#`SET UP THE PROJECT`
 
     - Java version : 15
 

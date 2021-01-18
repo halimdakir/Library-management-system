@@ -13,9 +13,6 @@ public class Stock {
     @JoinColumn(name = "item_id", nullable = false)
     private Item item;
 
-    /*@ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "library_id", nullable = false)
-    private Library library;*/
 
     public Stock() {
     }

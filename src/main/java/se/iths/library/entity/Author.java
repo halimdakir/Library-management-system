@@ -1,6 +1,8 @@
 package se.iths.library.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -18,8 +20,10 @@ public class Author {
     @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
     private String birthDate;
 
+    //@JsonIgnore
+    @JsonBackReference
     @ManyToMany(mappedBy = "authors", cascade = { CascadeType.ALL })
-    Set<Item> items = new HashSet<>();
+    public Set<Item> items = new HashSet<>();
 
     public Author() {
     }
@@ -56,6 +60,7 @@ public class Author {
     public Set<Item> getItems() {
         return items;
     }
+
     public void setItems(Set<Item> items) {
         this.items = items;
     }

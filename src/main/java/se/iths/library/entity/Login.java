@@ -1,5 +1,7 @@
 package se.iths.library.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import se.iths.library.models.Roles;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -19,7 +21,8 @@ public class Login {
     @Enumerated(EnumType.STRING)
     private Roles roles;
 
-
+    //@JsonIgnore
+    @JsonBackReference
     @OneToOne(fetch = FetchType.LAZY, cascade =  CascadeType.ALL, mappedBy = "login")
     private User user;
 
@@ -91,5 +94,13 @@ public class Login {
 
     public void setRoles(Roles roles) {
         this.roles = roles;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

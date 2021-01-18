@@ -1,5 +1,7 @@
 package se.iths.library.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.HashSet;
@@ -17,11 +19,10 @@ public class Item {
     private String title;
     private String description;
 
+
+    @JsonManagedReference
     @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = "items_authors",
-            joinColumns = @JoinColumn(name = "item_id"),
-            inverseJoinColumns = @JoinColumn(name = "author_id"))
+    @JoinTable(name = "items_authors", joinColumns = @JoinColumn(name = "item_id"), inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<Author> authors = new HashSet<>();
 
     @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -43,12 +44,7 @@ public class Item {
         this.description = description;
     }
 
-    public Item(@NotEmpty String barCode, @NotEmpty String title, String description, Set<Author> authors) {
-        this.barCode = barCode;
-        this.title = title;
-        this.description = description;
-        this.authors = authors;
-    }
+
 
 
     public Long getId() {

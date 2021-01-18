@@ -1,16 +1,34 @@
 # ****`Library Management System`****
 
 #`SET UP THE APP`
+
     - Java version : 15
+
     - Install Apache ActiveMQ, and create a queue with the name 'library_queue'
+
     - Install MySQL(it is okey if a client) and create an user with username: root & password: 482403.
       and create a database with name 'library'.
+
     - Install ModHeader : Browser extension to add Authorization to HTTP request headers.
+
+    - Native MySQL Query to create a VIEW before run app : 
+        
+        CREATE VIEW view AS select item.id AS item_id, item.bar_code, item.title, 
+        COUNT(item_lending.item_id) AS quantity FROM item INNER JOIN item_lending 
+        ON item.id = item_lending.item_id GROUP BY item.id;
+
+    - Native MySQL Query to check if the view has been created :
+
+        SHOW FULL TABLES IN library WHERE TABLE_TYPE LIKE 'VIEW';
 
 ### `DATABASE DIAGRAM:`
 ![db](https://user-images.githubusercontent.com/3110131/104819865-e0e96a00-5830-11eb-9745-6c78bd4b79b7.jpg)
 
 ### `ENDPOINTS:`
+
+![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) ` - SQL VIEW - COUNT BORROWED ITEM AND REGROUP BY ITEM :`
+
+- GET   : /view/all
 
 ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) `USER :`
       

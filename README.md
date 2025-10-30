@@ -6,7 +6,7 @@
 
     - Install Apache ActiveMQ, and create a queue with the name 'library_queue'
 
-    - Install MySQL(it is okey if a client) and create an user with username: root & password: 482403.
+    - Install MySQL(it is okey if a client) and create an user with username: root & password: 1234.
       and create a database with name 'library'.
 
     - Install ModHeader : Browser extension to add Authorization to HTTP request headers.
